@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Lost Property</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        /* Flash messages */
+        .alert {
+            padding: 12px 20px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error, .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .form-header {
+            padding: 2rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .form-header h1 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+
+        .form-header ul {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .form-header li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .form-header li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #007bff;
+        }
+
+        .submit-btn-top {
+            background-color: transparent;
+            border: 2px solid #6c757d;
+            color: #6c757d;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn-top:hover {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .form-note {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .form-content {
+            padding: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        .help-text {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+            font-style: italic;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+            background-color: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        }
+
+        .form-control::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .date-input, .time-input {
+            position: relative;
+        }
+
+        .date-input input, .time-input input {
+            padding-right: 40px;
+        }
+
+        .date-input::after, .time-input::after {
+            content: "";
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            background-size: contain;
+            pointer-events: none;
+        }
+
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 4px;
+            padding: 3rem 2rem;
+            text-align: center;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .upload-area:hover {
+            border-color: #007bff;
+            background-color: #f0f8ff;
+        }
+
+        .upload-area.dragover {
+            border-color: #007bff;
+            background-color: #e3f2fd;
+        }
+
+        .upload-icon {
+            width: 48px;
+            height: 48px;
+            background-color: #007bff;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .upload-text {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .hidden-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        /* Location Information Section */
+        .location-section {
+            background: #f8f9fa;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .location-section h2 {
+            font-size: 1.4rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+
+        .map-container {
+            width: 100%;
+            height: 150px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin: 1rem 0;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Contact Information Section */
+        .contact-section {
+            background: white;
+            padding: 2rem;
+        }
+
+        .contact-section h2 {
+            font-size: 1.4rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+
+        .phone-input {
+            display: flex;
+            align-items: center;
+        }
+
+        .country-code {
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+            border-right: none;
+            padding: 10px 12px;
+            border-radius: 4px 0 0 4px;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .phone-input input {
+            border-radius: 0 4px 4px 0;
+            flex: 1;
+        }
+
+        .final-submit {
+            text-align: center;
+            padding: 2rem;
+            background-color: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .btn-submit-final {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 48px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-submit-final:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+
+            .form-content, .location-section, .contact-section {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    {%include "header.html"%}
+    
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'danger' if category == 'error' else category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="container">
+        <div class="form-container">
+            <!-- Form Header -->
+            <div class="form-header">
+                <h1>Submit Lost Property</h1>
+                <ul>
+                    <li>Our Matching System Finds Lost Property</li>
+                    <li>Receive Notifications of Matching Found Items</li>
+                    <li>Extended Reach Out with Local Networks</li>
+                </ul>
+                <button type="button" class="submit-btn-top">Submit Lost Item</button>
+                
+                <div class="form-note">
+                    <strong>*</strong> Please be descriptive when submitting your lost property report, the more information you give us the better chance you have of retrieving your items.
+                </div>
+            </div>
+
+            <!-- Single Form Containing All Sections -->
+            <form id="lostPropertyForm" action="{{ url_for('views.submit_detailed_lost') }}" method="POST" enctype="multipart/form-data">
+                
+                <!-- Hidden field to track if this is an update -->
+                {% if initial_data %}
+                <input type="hidden" name="item_id" value="{{ initial_data._id }}">
+                {% endif %}
+
+                <!-- Main Form Content -->
+                <div class="form-content">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="whatLost">What was Lost <span class="required">*</span></label>
+                            <div class="help-text">(Dog, Jacket, Smartphone, Wallet, etc.) This field may auto-populate</div>
+                            <input type="text" id="whatLost" name="whatLost" class="form-control" 
+                                   value="{{ initial_data.itemType if initial_data else '' }}"
+                                   placeholder="Bag With Formal Shirt, Scarf And Gloves" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="dateLost">Date Lost <span class="required">*</span></label>
+                            <div class="help-text">Please add the approximate date of when the item was lost</div>
+                            <div class="date-input">
+                                <input type="date" id="dateLost" name="dateLost" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="category">Category <span class="required">*</span></label>
+                            <div class="help-text">(Clothes/Pets, Clothing, Electronics, Personal Accessories etc.) This field is required</div>
+                            <select id="category" name="category" class="form-control" required>
+                                <option value="">Select Category</option>
+                                <option value="Clothing">Clothing</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Personal Accessories">Personal Accessories</option>
+                                <option value="Bags">Bags</option>
+                                <option value="Jewelry">Jewelry</option>
+                                <option value="Keys">Keys</option>
+                                <option value="Documents">Documents</option>
+                                <option value="Pets">Pets</option>
+                                <option value="Sports Equipment">Sports Equipment</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="timeLost">Time Lost <span class="required">*</span></label>
+                            <div class="help-text">Please add the approximate time of day, the item was lost</div>
+                            <div class="time-input">
+                                <input type="time" id="timeLost" name="timeLost" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="brand">Brand</label>
+                            <div class="help-text">(Ralph Lauren, Samsung, Kitchenaid, etc.)</div>
+                            <input type="text" id="brand" name="brand" class="form-control" placeholder="Search For Brands...">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="imageUpload">Upload Image</label>
+                            <div class="help-text">(This image will display on the "Item Website")</div>
+                            <div class="upload-area" onclick="document.getElementById('imageUpload').click()">
+                                <div class="upload-icon">📤</div>
+                                <div class="upload-text">Click to upload or drag and drop</div>
+                                <input type="file" id="imageUpload" name="imageUpload" class="hidden-input" accept="image/*">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="primaryColor">Primary Color</label>
+                            <div class="help-text">Please add the color that best represents the lost property (Black, Red, Blue, etc.)</div>
+                            <input type="text" id="primaryColor" name="primaryColor" class="form-control" placeholder="Search Primary Color">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="additionalInfo">Additional Information</label>
+                            <div class="help-text">Please provide any additional detailed description of your lost property</div>
+                            <textarea id="additionalInfo" name="additionalInfo" class="form-control" placeholder="Additional Information..." rows="4"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="secondaryColor">Secondary Item Color</label>
+                            <div class="help-text">Please add a color that exists as a less dominant (Leave blank if not applicable.)</div>
+                            <input type="text" id="secondaryColor" name="secondaryColor" class="form-control" placeholder="Search Secondary Color">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location Information Section -->
+                <div class="location-section">
+                    <h2>Location Information</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="whereLost">Where Lost <span class="required">*</span></label>
+                            <div class="help-text">Please provide an approximate location of the lost property (Bar, Restaurant, Park, etc.)</div>
+                            <select id="whereLost" name="whereLost" class="form-control" required>
+                                <option value="">Select Location</option>
+                                <option value="Airport" {{ 'selected' if initial_data and initial_data.location == 'Airport' else '' }}>Airport</option>
+                                <option value="Bar" {{ 'selected' if initial_data and initial_data.location == 'Bar' else '' }}>Bar</option>
+                                <option value="Hotel" {{ 'selected' if initial_data and initial_data.location == 'Hotel' else '' }}>Hotel</option>
+                                <option value="Restaurant" {{ 'selected' if initial_data and initial_data.location == 'Restaurant' else '' }}>Restaurant</option>
+                                <option value="Park" {{ 'selected' if initial_data and initial_data.location == 'Park' else '' }}>Park</option>
+                                <option value="Public Transit" {{ 'selected' if initial_data and initial_data.location == 'Public Transit' else '' }}>Public Transit</option>
+                                <option value="Taxi" {{ 'selected' if initial_data and initial_data.location == 'Taxi' else '' }}>Taxi</option>
+                                <option value="University" {{ 'selected' if initial_data and initial_data.location == 'University' else '' }}>University</option>
+                                <option value="College/University" {{ 'selected' if initial_data and initial_data.location == 'College/University' else '' }}>College/University</option>
+                                <option value="Mall" {{ 'selected' if initial_data and initial_data.location == 'Mall' else '' }}>Mall</option>
+                                <option value="Beach" {{ 'selected' if initial_data and initial_data.location == 'Beach' else '' }}>Beach</option>
+                                <option value="Animal/Pet" {{ 'selected' if initial_data and initial_data.location == 'Animal/Pet' else '' }}>Animal/Pet Care Center</option>
+                                <option value="Venue" {{ 'selected' if initial_data and initial_data.location == 'Venue' else '' }}>Venue</option>
+                                <option value="Rental Car" {{ 'selected' if initial_data and initial_data.location == 'Rental Car' else '' }}>Rental Car</option>
+                                <option value="Museum" {{ 'selected' if initial_data and initial_data.location == 'Museum' else '' }}>Museum</option>
+                                <option value="Other" {{ 'selected' if initial_data and initial_data.location == 'Other' else '' }}>Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="zipCode">Zip Code</label>
+                            <div class="help-text">Please provide your zip code (10024, 10028, 10022, etc.) This field may auto-populate</div>
+                            <input type="text" id="zipCode" name="zipCode" class="form-control" placeholder="Enter Zip Code">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="locationName">Name/Location</label>
+                        <input type="text" id="locationName" name="locationName" class="form-control" placeholder="Bar Name">
+                    </div>
+
+                    
+                                        <!-- Map Container -->
+                    <div class="map-container">
+                    <div class="map-placeholder">
+                        <img src="static/assets/6.png" alt="Icon" style="width: 100px; height: 100px;" />
+                        <h3>Select Location on Map</h3>
+                        <p>Click below to open the interactive map and pinpoint where you lost your item</p>
+                        
+                        <a href="{{ url_for('views.map_page') }}">Open Map</a>
+                    </div>
+                </div>
+
+                <!-- Contact Information Section -->
+                <div class="contact-section">
+                    <h2>Contact Information</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name <span class="required">*</span></label>
+                            <div class="help-text">Please enter your first name(This will appear on your submission)</div>
+                            <input type="text" id="firstName" name="firstName" class="form-control" placeholder="First Name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastName">Last Name <span class="required">*</span></label>
+                            <div class="help-text">Please enter your last name(This will appear on your submission)</div>
+                            <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Last Name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phoneNumber">Phone Number <span class="required">*</span></label>
+                            <div class="help-text">Please enter the phone number to contact on your submission</div>
+                            <div class="phone-input">
+                                <span class="country-code">+1</span>
+                                <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control" placeholder="Phone Number" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email <span class="required">*</span></label>
+                            <div class="help-text">Please enter your email(This will appear on your submission)</div>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Email Address" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Final Submit Button -->
+                <div class="final-submit">
+                    <button type="submit" class="btn-submit-final">Submit Lost Property Report</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Form submission handler with client-side validation
+        document.getElementById('lostPropertyForm').addEventListener('submit', function(e) {
+            // Client-side validation
+            const requiredFields = ['whatLost', 'dateLost', 'category', 'timeLost', 'whereLost', 'firstName', 'lastName', 'phoneNumber', 'email'];
+            
+            for (let field of requiredFields) {
+                const element = document.getElementById(field);
+                if (!element.value.trim()) {
+                    alert(`Please fill in the ${field.replace(/([A-Z])/g, ' $1').toLowerCase()} field`);
+                    element.focus();
+                    e.preventDefault();
+                    return false;
+                }
+            }
+            
+            // Email validation
+            const email = document.getElementById('email').value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Please enter a valid email address');
+                document.getElementById('email').focus();
+                e.preventDefault();
+                return false;
+            }
+            
+            // Form will submit normally to Flask if validation passes
+        });
+
+        // File upload handling
+        const uploadArea = document.querySelector('.upload-area');
+        const fileInput = document.getElementById('imageUpload');
+
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', function() {
+            this.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        });
+
+        fileInput.addEventListener('change', function() {
+            handleFiles(this.files);
+        });
+
+        function handleFiles(files) {
+            if (files.length > 0) {
+                const uploadText = document.querySelector('.upload-text');
+                const file = files[0];
+                
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    alert('Please upload an image file');
+                    return;
+                }
+                
+                // Validate file size (5MB limit)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size must be less than 5MB');
+                    return;
+                }
+                
+                uploadText.textContent = `Selected: ${file.name}`;
+                
+                // Preview image
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const uploadIcon = document.querySelector('.upload-icon');
+                    uploadIcon.innerHTML = '<img src="' + e.target.result + '" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;">';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Auto-populate category based on what was lost
+        document.getElementById('whatLost').addEventListener('input', function() {
+            const value = this.value.toLowerCase();
+            const categorySelect = document.getElementById('category');
+            
+            if (value.includes('bag') || value.includes('backpack') || value.includes('purse')) {
+                categorySelect.value = 'Bags';
+            } else if (value.includes('phone') || value.includes('laptop') || value.includes('tablet')) {
+                categorySelect.value = 'Electronics';
+            } else if (value.includes('shirt') || value.includes('jacket') || value.includes('scarf') || value.includes('gloves')) {
+                categorySelect.value = 'Clothing';
+            } else if (value.includes('watch') || value.includes('ring') || value.includes('necklace')) {
+                categorySelect.value = 'Personal Accessories';
+            } else if (value.includes('key')) {
+                categorySelect.value = 'Keys';
+            } else if (value.includes('dog') || value.includes('cat') || value.includes('pet')) {
+                categorySelect.value = 'Pets';
+            }
+        });
+
+        // Initialize with current date and time
+        window.addEventListener('load', function() {
+            // Set current date as default if not pre-populated
+            const dateInput = document.getElementById('dateLost');
+            if (!dateInput.value) {
+                const today = new Date();
+                const dateString = today.toISOString().split('T')[0];
+                dateInput.value = dateString;
+            }
+            
+            // Set current time as default
+            const timeInput = document.getElementById('timeLost');
+            if (!timeInput.value) {
+                const now = new Date();
+                const timeString = now.toTimeString().slice(0, 5);
+                timeInput.value = timeString;
+            }
+        });
+    </script>
+   {%include "footer.html"%}
+</body>
+</html>

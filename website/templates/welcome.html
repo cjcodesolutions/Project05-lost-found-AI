@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost and Found Forum</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Flash messages */
+        .alert {
+            padding: 12px 20px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error, .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Header */
+        .header {
+            background:#2b3f99 ;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Browse Items Section */
+        .browse-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .browse-section h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .browse-intro {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .browse-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .browse-card {
+            background: linear-gradient(135deg, #4a90a4 0%, #2c5aa0 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            height: 50px;
+            width: 200px;
+        }
+
+        .browse-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            text-decoration: none;
+            color: white;
+        }
+
+        .browse-card.found {
+            background: linear-gradient(135deg, #4a90a4 0%, #2c5aa0 100%);
+        }
+
+        .browse-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .browse-card h3 {
+            font-size: 1rem;
+            margin:auto;
+        }
+
+        .browse-card p {
+            font-size: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .browse-stats {
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            opacity: 0.8;
+        }
+
+        /* Lost and Found Form */
+        .lost-found-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .lost-found-section h2 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .lost-found-section .subtitle {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .lost-found-section .description {
+            color: #333;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group .required {
+            color: #e74c3c;
+        }
+
+        .form-group .help-text {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        select.form-control {
+            cursor: pointer;
+            background-color: white;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #4a90a4;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #3a7a8a;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: #4a90a4;
+            border: 2px solid #4a90a4;
+        }
+
+        .btn-secondary:hover {
+            background-color: #4a90a4;
+            color: white;
+        }
+
+        /* Industries Served Section */
+        .industries-section {
+            margin-top: 3rem;
+        }
+
+        .industries-section h2 {
+            color: #4a90a4;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .industries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .industry-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            max-width: 250px; 
+            margin: 0 auto;  
+        }
+
+        .industry-card:hover {
+            border-color: #4a90a4;
+            box-shadow: 0 4px 12px rgba(74, 144, 164, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .industry-icon {
+            width: 60px;
+            height: 60px;
+            background: #4a90a4;
+            border-radius: 10px;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .industry-card h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .industry-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .industry-image {
+            width: 250px;
+            height: auto;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .browse-buttons {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .industries-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    {%include "header.html"%}
+    
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'danger' if category == 'error' else category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    
+
+
+    <div class="container">
+        <!-- Lost and Found Form Section -->
+        <div class="lost-found-section">
+            <h2>Online Lost and Found,</h2>
+            <p class="subtitle">Locate lost or found items!</p>
+            <p class="description">Our Online Lost & Found can Help you Find what you are Looking For!</p>
+
+            <form id="lostFoundForm" action="{{ url_for('views.submit_initial_lost') }}" method="POST">
+                <div class="form-group">
+                    <label for="itemType">What was Lost or Found <span class="required">*</span></label>
+                    <p class="help-text">(Dog, Jacket, Smartphone, Wallet, etc.) This field may auto-populate</p>
+                    <input type="text" id="itemType" name="itemType" class="form-control" placeholder="Bag" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="location">Where Lost or Found <span class="required">*</span></label>
+                    <p class="help-text">Please provide an approximate location of the lost property (Bar, Restaurant, Park, etc.)</p>
+                    <select id="location" name="location" class="form-control" required>
+                        <option value="">Select Location...</option>
+                        <option value="Airport">Airport</option>
+                        <option value="Hotel">Hotel</option>
+                        <option value="Animal/Pet">Animal/Pet Care Center</option>
+                        <option value="College/University">College/University</option>
+                        <option value="Taxi">Taxi</option>
+                        <option value="Venue">Venue</option>
+                        <option value="Public Transit">Public Transit</option>
+                        <option value="Bar">Bar</option>
+                        <option value="Restaurant">Restaurant</option>
+                        <option value="Rental Car">Rental Car</option>
+                        <option value="Museum">Museum</option>
+                        <option value="Park">Park</option>
+                    </select>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">Submit Lost Item</button>
+                    <a href="/submit-found" class="btn btn-secondary">Submit Found Item</a>
+                </div>
+            </form>
+        </div>
+        <!-- Browse Items Section -->
+        <div class="browse-section">
+            <h2>Browse Lost & Found Items</h2>
+            <p class="browse-intro">
+                Search through our comprehensive database of lost and found items. Whether you're looking for something you lost 
+                or want to help someone find their belongings, start your search here.
+            </p>
+            
+            <div class="browse-buttons">
+                <a href="/lost-items" class="btn btn-primary">
+                   
+                    <h3>View Lost Items</h3>
+            
+                </a>
+                
+                <a href="/found-items" class="btn btn-primary">
+                    <h3>View Found Items</h3>
+                </a>
+            </div>
+        </div>
+
+        
+        <!-- Industries Served Section -->
+        <div class="industries-section">
+            <h2>Industries Served</h2>
+            <div class="industries-grid">
+                <div class="industry-card" onclick="selectIndustry('Airport')">
+                    <img src="static/assets/9.png" alt="Airport Icon" class="industry-image" />
+                    <h3>Airport</h3>
+                    <p>Lost and Found</p>
+                </div>
+
+                <div class="industry-card" onclick="selectIndustry('Hotel')">
+                    <img src="static/assets/1.png" alt="Hotel Icon" class="industry-image" />
+                    <h3>Hotel</h3>
+                    <p>Lost and Found</p>
+                </div>
+
+                <div class="industry-card" onclick="selectIndustry('Animal/Pet')">
+                    <img src="static/assets/8.png" alt="Pet Icon" class="industry-image" />
+                    <h3>Animal/Pet</h3>
+                    <p>Lost and Found</p>
+                </div>
+
+                <div class="industry-card" onclick="selectIndustry('College/University')">
+                    <img src="static/assets/4.png" alt="University Icon" class="industry-image" />
+                    <h3>College/University</h3>
+                    <p>Lost and Found</p>
+                </div>
+
+                <div class="industry-card" onclick="selectIndustry('Taxi')">
+                    <img src="static/assets/6.png" alt="Taxi Icon" class="industry-image" />
+                    <h3>Taxi</h3>
+                    <p>Lost and Found</p>
+                </div>
+
+                <div class="industry-card" onclick="selectIndustry('Venue')">
+                    <img src="static/assets/3.png" alt="Venue Icon" class="industry-image" />
+                    <h3>Venue</h3>
+                    <p>Lost and Found</p>
+                </div>
+
+                <div class="industry-card" onclick="selectIndustry('Public Transit')">
+                    <img src="static/assets/2.png" alt="Transit Icon" class="industry-image" />
+                    <h3>Public Transit</h3>
+                    <p>Lost and Found</p>
+                </div>
+
+                <div class="industry-card" onclick="selectIndustry('Bar')">
+                    <img src="static/assets/11.png" alt="Bar Icon" class="industry-image" />
+                    <h3>Bar</h3>
+                    <p>Lost and Found</p>
+                </div>
+
+                <div class="industry-card" onclick="selectIndustry('Restaurant')">
+                    <img src="static/assets/13.png" alt="Restaurant Icon" class="industry-image" />
+                    <h3>Restaurant</h3>
+                    <p>Lost and Found</p>
+                </div>
+
+                <div class="industry-card" onclick="selectIndustry('Rental Car')">
+                    <img src="static/assets/16.png" alt="Religious Place Icon" class="industry-image" />
+                    <h3>Religious Place</h3>
+                    <p>Lost and Found</p>
+                </div>
+
+                <div class="industry-card" onclick="selectIndustry('Museum')">
+                    <img src="static/assets/14.png" alt="Museum Icon" class="industry-image" />
+                    <h3>Museum</h3>
+                    <p>Lost and Found</p>
+                </div>
+
+                <div class="industry-card" onclick="selectIndustry('Park')">
+                    <img src="static/assets/12.png" alt="Park Icon" class="industry-image" />
+                    <h3>Park</h3>
+                    <p>Lost and Found</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Industry card selection function
+        function selectIndustry(industry) {
+            document.getElementById('location').value = industry;
+            
+            // Smooth scroll to form
+            document.querySelector('.lost-found-section').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+            
+            // Highlight the selected location dropdown
+            const locationSelect = document.getElementById('location');
+            locationSelect.style.borderColor = '#667eea';
+            locationSelect.style.boxShadow = '0 0 0 3px rgba(102, 126, 234, 0.1)';
+            
+            setTimeout(() => {
+                locationSelect.style.borderColor = '#ddd';
+                locationSelect.style.boxShadow = 'none';
+            }, 2000);
+        }
+
+        // Auto-populate suggestions for item types
+        const commonItems = [
+            'Bag', 'Backpack', 'Wallet', 'Phone', 'Keys', 'Jacket', 'Sunglasses',
+            'Watch', 'Laptop', 'Headphones', 'Book', 'Umbrella', 'Ring', 'Necklace',
+            'Purse', 'Camera', 'Tablet', 'Credit Card', 'Driver License'
+        ];
+
+        const itemTypeInput = document.getElementById('itemType');
+        let currentSuggestions = [];
+
+        itemTypeInput.addEventListener('input', function() {
+            const value = this.value.toLowerCase();
+            if (value.length > 0) {
+                currentSuggestions = commonItems.filter(item => 
+                    item.toLowerCase().includes(value)
+                );
+            } else {
+                currentSuggestions = [];
+            }
+        });
+
+        // Add interactive animations to industry cards
+        document.querySelectorAll('.industry-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Add interactive animations to browse cards
+        document.querySelectorAll('.browse-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Add a ripple effect
+                const ripple = document.createElement('div');
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(255,255,255,0.3)';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 0.6s linear';
+                ripple.style.left = (e.clientX - this.offsetLeft) + 'px';
+                ripple.style.top = (e.clientY - this.offsetTop) + 'px';
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Client-side form validation
+        document.getElementById('lostFoundForm').addEventListener('submit', function(e) {
+            const itemType = document.getElementById('itemType').value.trim();
+            const location = document.getElementById('location').value;
+            
+            if (!itemType || !location) {
+                e.preventDefault();
+                alert('Please fill in all required fields.');
+                
+                if (!itemType) {
+                    document.getElementById('itemType').focus();
+                } else if (!location) {
+                    document.getElementById('location').focus();
+                }
+                return false;
+            }
+        });
+
+        // Add CSS for ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+            .browse-card {
+                position: relative;
+                overflow: hidden;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    {%include "footer.html"%}
+</body>
+</html>
