@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost Items List</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .item-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 200px;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .item-card:hover .item-image img {
+            transform: scale(1.05);
+        }
+
+        .no-image {
+            color: #bdc3c7;
+            font-size: 3rem;
+        }
+
+        .item-content {
+            padding: 15px;
+        }
+
+        .item-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
+
+        .item-location {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .item-location::before {
+            content: "📍";
+            margin-right: 8px;
+        }
+
+        .item-basic-info {
+            margin-bottom: 10px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            font-size: 0.8rem;
+        }
+
+        .info-label {
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge.active {
+            background-color: #d5f4e6;
+            color: #27ae60;
+        }
+
+        .status-badge.incomplete {
+            background-color: #fef9e7;
+            color: #f39c12;
+        }
+
+        .status-badge.found {
+            background-color: #e8f5e8;
+            color: #28a745;
+        }
+
+        .view-more-btn {
+            width: 100%;
+            padding: 8px;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .view-more-btn:hover {
+            background: linear-gradient(45deg, #2980b9, #3498db);
+            transform: translateY(-2px);
+        }
+
+        .detailed-info {
+            display: none;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            animation: slideDown 0.3s ease;
+        }
+
+        .detailed-info.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 500px;
+            }
+        }
+
+        .detail-row {
+            display: flex;
+            margin-bottom: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #34495e;
+            min-width: 120px;
+        }
+
+        .detail-value {
+            color: #2c3e50;
+            flex: 1;
+        }
+
+        .no-items {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            margin-top: 60px;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            max-width: 500px;
+            margin: 60px auto;
+        }
+
+        .no-items-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 4px 20px rgba(231, 76, 60, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(231, 76, 60, 0.4);
+        }
+
+        @media (max-width: 1200px) {
+            .items-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .items-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .items-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .back-btn {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>View Items Registry</h1>
+        <p>Help reunite lost items with their owners</p>
+    </div>
+    
+    {% if lost_items %}
+    <div class="items-grid">
+        {% for item in lost_items %}
+        <div class="item-card">
+            <div class="item-image">
+                {% if item.imageUrl %}
+                    <img src="{{ item.imageUrl }}" alt="Lost Item Image" loading="lazy">
+                {% else %}
+                    <div class="no-image">📷</div>
+                {% endif %}
+            </div>
+            
+            <div class="item-content">
+                <h3 class="item-title">
+                    {% if item.whatLost %}
+                        {{ item.whatLost }}
+                    {% elif item.itemType %}
+                        {{ item.itemType }}
+                    {% else %}
+                        Unknown Item
+                    {% endif %}
+                </h3>
+                
+                <div class="item-location">
+                    {% if item.whereLost %}
+                        {{ item.whereLost }}
+                    {% elif item.location %}
+                        {{ item.location }}
+                    {% else %}
+                        Unknown Location
+                    {% endif %}
+                </div>
+                
+                <div class="item-basic-info">
+                    <div class="info-row">
+                        <span class="info-label">Status:</span>
+                        <span class="status-badge {{ item.status }}">{{ item.status }}</span>
+                    </div>
+                    
+                    {% if item.dateLost %}
+                    <div class="info-row">
+                        <span class="info-label">Date Lost:</span>
+                        <span class="info-value">{{ item.dateLost }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if item.category %}
+                    <div class="info-row">
+                        <span class="info-label">Category:</span>
+                        <span class="info-value">{{ item.category }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if item.primaryColor %}
+                    <div class="info-row">
+                        <span class="info-label">Color:</span>
+                        <span class="info-value">
+                            {{ item.primaryColor }}
+                            {% if item.secondaryColor %}
+                                / {{ item.secondaryColor }}
+                            {% endif %}
+                        </span>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <button class="view-more-btn" onclick="toggleDetails(this)">
+                    View Details
+                </button>
+            </div>
+            
+            <div class="detailed-info">
+                {% if item.timeLost %}
+                <div class="detail-row">
+                    <span class="detail-label">Time Lost:</span>
+                    <span class="detail-value">{{ item.timeLost }}</span>
+                </div>
+                {% endif %}
+                
+                {% if item.brand %}
+                <div class="detail-row">
+                    <span class="detail-label">Brand:</span>
+                    <span class="detail-value">{{ item.brand }}</span>
+                </div>
+                {% endif %}
+                
+                {% if item.additionalInfo %}
+                <div class="detail-row">
+                    <span class="detail-label">Additional Info:</span>
+                    <span class="detail-value">{{ item.additionalInfo }}</span>
+                </div>
+                {% endif %}
+                
+                {% if item.firstName and item.lastName %}
+                <div class="detail-row">
+                    <span class="detail-label">Contact:</span>
+                    <span class="detail-value">{{ item.firstName }} {{ item.lastName }}</span>
+                </div>
+                {% endif %}
+                
+                {% if item.phoneNumber %}
+                <div class="detail-row">
+                    <span class="detail-label">Phone:</span>
+                    <span class="detail-value">{{ item.phoneNumber }}</span>
+                </div>
+                {% endif %}
+                
+                <div class="detail-row">
+                    <span class="detail-label">Submitted:</span>
+                    <span class="detail-value">
+                        {{ item.submissionTime.strftime('%Y-%m-%d at %H:%M') if item.submissionTime else 'Unknown' }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-items">
+        <div class="no-items-icon">🔍</div>
+        <h2>No Lost Items Found</h2>
+        <p>Be the first to report a lost item</p>
+        <br>
+        <a href="{{ url_for('views.welcome') }}" style="color: #3498db; text-decoration: none; font-weight: 600;">Report a Lost Item →</a>
+    </div>
+    {% endif %}
+    
+    <a href="{{ url_for('views.home') }}" class="back-btn">← Back to Home</a>
+
+    <script>
+        function toggleDetails(button) {
+            const detailedInfo = button.parentNode.nextElementSibling;
+            const isVisible = detailedInfo.classList.contains('show');
+            
+            if (isVisible) {
+                detailedInfo.classList.remove('show');
+                button.textContent = 'View Details';
+                button.style.background = 'linear-gradient(45deg, #3498db, #2980b9)';
+            } else {
+                detailedInfo.classList.add('show');
+                button.textContent = 'Hide Details';
+                button.style.background = 'linear-gradient(45deg, #95a5a6, #7f8c8d)';
+            }
+        }
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add loading animation for images
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('load', function() {
+                this.style.opacity = '1';
+            });
+            img.style.opacity = '0';
+            img.style.transition = 'opacity 0.3s ease';
+        });
+    </script>
+</body>
+</html>

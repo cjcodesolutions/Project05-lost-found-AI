@@ -1,0 +1,33 @@
+# Python Bytecode
+*.pyc
+*.pyo
+__pycache__/
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# Environment Variables
+.env
+*.env
+
+# Flask Debugging and Logs
+instance/
+*.log
+
+# IDE/Editor Files
+.vscode/
+.idea/
+*.sublime-workspace
+
+# OS-Specific Files
+.DS_Store
+Thumbs.db
+
+# Python egg and dist
+*.egg-info/
+*.dist-info/
+
+# Backup Files
+*.bak

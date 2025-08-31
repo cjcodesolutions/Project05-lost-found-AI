@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost & Found - AI-Powered Item Recovery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 0;
+        }
+
+        /* Header */
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: rgb(26, 103, 116);
+            border: 2px solid white;
+        }
+
+        .btn-primary {
+            background: rgb(49, 101, 131);
+            color: white;
+            border: 2px solid rgb(49, 101, 131);
+        }
+
+        .btn-primary:hover {
+            background: rgb(35, 72, 94);
+            border: 2px solid rgb(35, 72, 94);
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 80px;
+            padding:  0;
+        }
+
+        .hero {
+            text-align: center;
+            color: #000000;
+            margin-bottom: 4rem;
+            padding: 2rem 0;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            color: #000000;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            color: #000000;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 4px;
+        }
+
+        /* Features Section */
+        .features {
+            background: #f5f5f5;
+            padding: 3rem 2rem;
+            margin: 4rem 0;
+        }
+
+        .features h2 {
+            text-align: center;
+            color: rgb(49, 101, 131);
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            font-weight: 600;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            border-radius: 10px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid rgb(49, 101, 131);
+            border-radius: 10px;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-card h3 {
+            color:rgb(49, 101, 131);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #000000;
+            line-height: 1.6;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            margin: 4rem 0;
+            text-align: center;
+            padding: 0 2rem;
+            
+        }
+
+        .how-it-works h2 {
+            color: rgb(49, 101, 131);
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            font-weight: 600;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .step {
+            background: white;
+            padding: 2rem;
+            position: relative;
+            border: 2px solid #000000;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgb(49, 101, 131);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .step h3 {
+            color: #000000;
+            margin: 1rem 0;
+            font-weight: 600;
+        }
+
+        .step p {
+            color: #000000;
+        }
+
+        /* Process Section */
+        .process-section {
+            margin: 60px 0;
+            background: #f5f5f5;
+            padding: 3rem 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: rgb(49, 101, 131);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .process-steps {
+            display: grid;
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 25px;
+            border: 2px solid rgb(49, 101, 131);
+        }
+
+        .step-item .step-number {
+            width: 40px;
+            height: 40px;
+            background: rgb(49, 101, 131);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-right: 20px;
+            flex-shrink: 0;
+            position: relative;
+            top: 0;
+            left: 0;
+            transform: none;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-text {
+            font-size: 1.1rem;
+            color: #000000;
+            font-weight: 500;
+        }
+
+        /* Industries Section */
+        .industries-section {
+            margin: 60px 0;
+            padding: 0 2rem;
+        }
+
+        .industries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .industry-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            border-color: #2c3e50;
+            border: 2px solid #000000;
+            text-align: center;
+        }
+
+        .industry-icon {
+            width: 80px;
+            height: 80px;
+            background:rgb(255, 255, 255);
+            display: flex;
+            border-radius: 50%;
+            border-color: #2c3e50;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            
+        }
+
+        .industry-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 10px;
+        }
+
+        .industry-subtitle {
+            font-size: 0.95rem;
+            color: #000000;
+            font-weight: 400;
+        }
+        .industry-icon img {
+    width: 300px;   /* Adjust width */
+    height: auto;  /* Keep the aspect ratio */
+    display: block; /* Ensure the image doesn't have extra space */
+    margin: 0 auto; /* Center the image inside the div */
+}
+
+
+        /* CTA Section */
+        .cta-section {
+            background: rgb(49, 101, 131);
+            padding: 60px 40px;
+            text-align: center;
+            color: white;
+            margin-top: 60px;
+        }
+
+        .cta-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .cta-text {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .cta-button {
+            background: rgb(49, 101, 131);
+            color: white;
+            padding: 16px 32px;
+            border: 2px solid rgb(49, 101, 131);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background: rgb(35, 72, 94);
+            border: 2px solid rgb(35, 72, 94);
+        }
+
+        
+        /* Header Section */
+        .header-section {
+            margin-bottom: 0;
+            padding: 0 ;
+        }
+
+        .main-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color:rgb(35, 72, 94);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #000000;
+            margin-bottom: 20px;
+        }
+
+        .description strong {
+            color: #1a237e;
+        }
+
+        .highlight-text {
+            color: #1a237e;
+            font-weight: 600;
+        }
+         .top-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 10px;  /* Adds space below the image */
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn-large {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .auth-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .industries-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+            }
+
+            .cta-section {
+                padding: 40px 20px;
+            }
+
+            .step-item {
+                padding: 20px;
+            }
+
+            .step-item .step-number {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+                margin-right: 15px;
+            }
+            
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">FoundiT</a>
+                
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+
+                <div class="auth-buttons">
+                    <a href="/login" class="btn btn-outline">Login</a>
+                    <a href="/signup" class="btn btn-primary">Sign Up</a>
+                </div>
+            </nav>
+
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Header Section -->
+            <div class="header-section">
+                <img src="static/assets/background.jpg" alt="Lost & Found" class="top-image",width="100%"  >
+                <h1 class="main-title">Online Lost and Found</h1>
+                
+                <p class="description">
+                    <strong>FOUNDIT</strong> is a unique platform that incorporates a dynamic lost and found matching system for individual users, accompanied by a <span class="highlight-text">Lost and Found Inventory Management Software</span> for businesses. Our approach is unique because it integrates regional and national lost and found networks with their respective items and online with their respective items goals.
+                </p>
+                
+                <p class="description">
+                    The multi-tiered lost and found platform for individual users allows them to easily <span class="highlight-text">view</span>, report, describe, and categorize lost or found items. Additionally users can add location information, upload photos, provide more in-depth details, and print fliers for local awareness. The matching system gives users the ability to receive up-to-date email notifications and system alerts of matching or similar lost or found items. The system works with individuals reporting lost or found items, along with businesses registered to use the lost and found inventory management software.
+                </p>
+                
+                <p class="description">
+                    "Our goal is to provide individual users and businesses with the tools necessary for an effective and efficient <span class="highlight-text">online lost and found</span>."
+                </p>
+            </div>
+
+            <!-- Hero Section -->
+            <section class="hero" id="home">
+                <h1>Find What's Lost, Return What's Found</h1>
+                <p>
+                    Our AI-powered platform uses advanced machine learning to intelligently match 
+                    lost items with found reports, making recovery faster and more reliable than ever before.
+                </p>
+                <div class="hero-buttons">
+                    <a href="/report-lost" class="btn btn-primary btn-large">Report Lost Item</a>
+                    <a href="/report-found" class="btn btn-primary btn-large">Report Found Item</a>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section class="features" id="features">
+                <h2>Powered by Artificial Intelligence</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <img src="static/assets/15.png" alt="Icon" style="width: 350px; height: 250px;" />
+                        <h3>Smart AI Matching</h3>
+                        <p>
+                            Advanced NLP and computer vision models analyze descriptions and images 
+                            to find the best possible matches with high accuracy.
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                         <span class="feature-icon">
+       <img src="static/assets/10.png" alt="Icon" style="width: 350px; height: 250px;" />
+    </span>
+                        <h3>Secure Communication</h3>
+                        <p>
+                            End-to-end encrypted chat becomes available only after match confirmation, 
+                            protecting your privacy throughout the process.
+                        </p>
+                    </div>
+                    
+                   <div class="feature-card">
+    <span class="feature-icon">
+       <img src="static/assets/7.png" alt="Icon" style="width: 350px; height: 250px;" />
+
+    </span>
+    <h3>Real-time Notifications</h3>
+    <p>
+        Get instant alerts when potential matches are found, ensuring you never 
+        miss an opportunity to recover your items.
+    </p>
+</div>
+
+                    
+                    <div class="feature-card">
+                        <img src="static/assets/5.png" alt="Icon" style="width: 350px; height: 250px;" />
+                        <h3>Cross-platform Access</h3>
+                        <p>
+                            Access the platform from any device - desktop, tablet, or smartphone 
+                            with a responsive, user-friendly interface.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Process Section -->
+            <div class="process-section">
+                <h2 class="section-title">Step-By-Step Process</h2>
+                
+                <div class="process-steps">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-text">Enter lost or found item details (e.g., item lost or found, category, photos, date, time, etc.)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-text">Review details entered and submit the lost or found item report</div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-text">Receive an email with your user dashboard login and account information</div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-text">Within the dashboard you can print fliers of the submitted lost or found item</div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <div class="step-text">Receive notifications when newly submitted items match the details on your entry</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How It Works Section -->
+            <section class="how-it-works" id="how-it-works">
+                <h2>How It Works</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Submit Report</h3>
+                        <p>Upload a photo and description of your lost or found item. Our AI immediately begins analyzing the data.</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>AI Analysis</h3>
+                        <p>Sentence-BERT processes text descriptions while CLIP analyzes images to create semantic embeddings.</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Smart Matching</h3>
+                        <p>The system compares your report against all existing entries and presents ranked potential matches.</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h3>Secure Contact</h3>
+                        <p>Once both parties confirm a match, encrypted chat enables safe communication to arrange item return.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Industries Section -->
+            <div class="industries-section">
+                <h2 class="section-title">Industries Served</h2>
+                
+                <div class="industries-grid">
+                    <div class="industry-card">
+                        <div class="industry-icon">
+    <img src="static/assets/9.png" alt="Icon" class="industry-image" />
+</div>
+
+                        <div class="industry-title">Airport</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                        <div class="industry-icon">
+    <img src="static/assets/1.png" alt="Icon" class="industry-image" />
+</div>
+
+                        <div class="industry-title">Hotel</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                         <div class="industry-icon">
+    <img src="static/assets/8.png" alt="Icon" class="industry-image" />
+</div>
+
+                        <div class="industry-title">Animal/Pet</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                        <div class="industry-icon">
+    <img src="static/assets/4.png" alt="Icon" class="industry-image" />
+</div>
+
+                        <div class="industry-title">College/University</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                        <div class="industry-icon">
+    <img src="static/assets/6.png" alt="Icon" class="industry-image" />
+</div>
+
+                        <div class="industry-title">Taxi</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                         <div class="industry-icon">
+    <img src="static/assets/3.png" alt="Icon" class="industry-image" />
+</div>
+
+                        <div class="industry-title">Venue</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                         <div class="industry-icon">
+    <img src="static/assets/2.png" alt="Icon" class="industry-image" />
+</div>
+
+                        <div class="industry-title">Public Transit</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                         <div class="industry-icon">
+    <img src="static/assets/11.png" alt="Icon" class="industry-image" />
+</div>
+
+                        <div class="industry-title">Bar</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                         <div class="industry-icon">
+    <img src="static/assets/13.png" alt="Icon" class="industry-image" />
+</div>
+
+                        <div class="industry-title">Restaurant</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                         <div class="industry-icon">
+    <img src="static/assets/16.png" alt="Icon" class="industry-image" />
+</div>
+
+                        <div class="industry-title">Temple</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                         <div class="industry-icon">
+    <img src="static/assets/14.png" alt="Icon" class="industry-image" />
+</div>
+
+                        <div class="industry-title">Museum</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                         <div class="industry-icon">
+    <img src="static/assets/12.png" alt="Icon" class="industry-image" />
+</div>
+
+                        <div class="industry-title">Park</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to Action Section -->
+            <div class="cta-section">
+                <h2 class="cta-title">Ready to Get Started?</h2>
+                <p class="cta-text">Join thousands of users who have successfully recovered their lost items through our platform</p>
+                <a href="/signup" class="cta-button">Create Your Account</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+  {%include "footer.html"%}
+</body>
+</html>
