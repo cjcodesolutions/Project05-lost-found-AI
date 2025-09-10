@@ -1,0 +1,326 @@
+import torch
+import clip
+from sentence_transformers import SentenceTransformer
+import numpy as np
+from PIL import Image
+import requests
+from io import BytesIO
+import logging
+from typing import List, Dict, Tuple, Optional
+import os
+import re
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+class SimilarityService:
+    def __init__(self):
+        """Initialize CLIP and SentenceBERT models"""
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        logger.info(f"Using device: {self.device}")
+        
+        # Load CLIP model for image-text similarity
+        try:
+            self.clip_model, self.clip_preprocess = clip.load("ViT-B/32", device=self.device)
+            logger.info("CLIP model loaded successfully")
+        except Exception as e:
+            logger.error(f"Failed to load CLIP model: {e}")
+            self.clip_model = None
+            self.clip_preprocess = None
+        
+        # Load SentenceBERT for text similarity
+        try:
+            self.sentence_model = SentenceTransformer('all-MiniLM-L6-v2')
+            logger.info("SentenceBERT model loaded successfully")
+        except Exception as e:
+            logger.error(f"Failed to load SentenceBERT model: {e}")
+            self.sentence_model = None
+    
+    def get_image_embedding(self, image_input) -> Optional[np.ndarray]:
+        """
+        Get CLIP embedding for an image
+        Args:
+            image_input: Can be PIL Image, image URL, or file path
+        Returns:
+            numpy array of image embedding or None if failed
+        """
+        if self.clip_model is None:
+            logger.error("CLIP model not available")
+            return None
+        
+        try:
+            # Handle different input types
+            if isinstance(image_input, str):
+                if image_input.startswith('http'):
+                    # URL - add timeout and error handling
+                    try:
+                        response = requests.get(image_input, timeout=30)
+                        response.raise_for_status()
+                        image = Image.open(BytesIO(response.content)).convert('RGB')
+                    except Exception as e:
+                        logger.error(f"Failed to download image from {image_input}: {e}")
+                        return None
+                else:
+                    # File path
+                    image = Image.open(image_input).convert('RGB')
+            else:
+                # PIL Image
+                image = image_input.convert('RGB')
+            
+            # Preprocess and encode
+            image_tensor = self.clip_preprocess(image).unsqueeze(0).to(self.device)
+            
+            with torch.no_grad():
+                image_features = self.clip_model.encode_image(image_tensor)
+                image_features = image_features / image_features.norm(dim=-1, keepdim=True)
+            
+            return image_features.cpu().numpy().flatten()
+        
+        except Exception as e:
+            logger.error(f"Error processing image: {e}")
+            return None
+    
+    def get_text_embedding(self, text: str) -> Optional[np.ndarray]:
+        """
+        Get embedding for text using SentenceBERT (more reliable for text similarity)
+        """
+        if self.sentence_model is None:
+            logger.error("SentenceBERT model not available")
+            return None
+            
+        try:
+            # Clean and normalize text
+            cleaned_text = self.clean_text(text)
+            if not cleaned_text:
+                return None
+                
+            sentence_embedding = self.sentence_model.encode([cleaned_text])
+            return sentence_embedding.flatten()
+        except Exception as e:
+            logger.error(f"Error with SentenceBERT encoding: {e}")
+            return None
+    
+    def clean_text(self, text: str) -> str:
+        """Clean and normalize text for better comparison"""
+        if not text:
+            return ""
+        
+        # Convert to lowercase
+        text = text.lower()
+        
+        # Remove extra whitespace
+        text = ' '.join(text.split())
+        
+        # Remove special characters but keep letters, numbers, and spaces
+        text = re.sub(r'[^\w\s]', ' ', text)
+        
+        return text.strip()
+    
+    def extract_item_features(self, item: Dict) -> Dict[str, str]:
+        """Extract key features from an item for comparison"""
+        features = {}
+        
+        # Main item description
+        features['description'] = self.clean_text(
+            f"{item.get('whatLost', '')} {item.get('whatFound', '')}"
+        )
+        
+        # Category
+        features['category'] = self.clean_text(item.get('category', ''))
+        
+        # Brand
+        features['brand'] = self.clean_text(item.get('brand', ''))
+        
+        # Colors
+        features['color'] = self.clean_text(
+            f"{item.get('primaryColor', '')} {item.get('secondaryColor', '')}"
+        )
+        
+        # Location
+        features['location'] = self.clean_text(
+            f"{item.get('whereLost', '')} {item.get('whereFound', '')} {item.get('locationName', '')}"
+        )
+        
+        # Additional info
+        features['additional'] = self.clean_text(item.get('additionalInfo', ''))
+        
+        # Combine all text features
+        all_text = ' '.join([v for v in features.values() if v])
+        features['combined'] = all_text
+        
+        return features
+    
+    def calculate_text_similarity_detailed(self, query_item: Dict, db_item: Dict) -> float:
+        """Calculate detailed text similarity focusing on key factors"""
+        query_features = self.extract_item_features(query_item)
+        db_features = self.extract_item_features(db_item)
+        
+        similarities = []
+        weights = {
+            'description': 0.3,  # What the item is
+            'category': 0.25,    # Item category
+            'color': 0.2,        # Color information
+            'brand': 0.15,       # Brand if available
+            'location': 0.1      # Location similarity
+        }
+        
+        for feature, weight in weights.items():
+            query_text = query_features.get(feature, '')
+            db_text = db_features.get(feature, '')
+            
+            if query_text and db_text:
+                # Calculate embedding similarity for this feature
+                query_emb = self.get_text_embedding(query_text)
+                db_emb = self.get_text_embedding(db_text)
+                
+                if query_emb is not None and db_emb is not None:
+                    similarity = self.calculate_similarity(query_emb, db_emb)
+                    similarities.append(similarity * weight)
+                    logger.debug(f"{feature} similarity: {similarity:.3f} (weight: {weight})")
+        
+        # Also check for exact matches in key fields
+        exact_match_bonus = 0
+        if query_features['category'] and db_features['category']:
+            if query_features['category'] == db_features['category']:
+                exact_match_bonus += 0.1
+        
+        if query_features['brand'] and db_features['brand']:
+            if query_features['brand'] == db_features['brand']:
+                exact_match_bonus += 0.1
+        
+        final_similarity = sum(similarities) + exact_match_bonus
+        return min(final_similarity, 1.0)  # Cap at 1.0
+    
+    def calculate_similarity(self, embedding1: np.ndarray, embedding2: np.ndarray) -> float:
+        """Calculate cosine similarity between two embeddings"""
+        try:
+            # Ensure embeddings have the same dimension
+            min_dim = min(len(embedding1), len(embedding2))
+            embedding1 = embedding1[:min_dim]
+            embedding2 = embedding2[:min_dim]
+            
+            # Calculate cosine similarity
+            dot_product = np.dot(embedding1, embedding2)
+            norm_product = np.linalg.norm(embedding1) * np.linalg.norm(embedding2)
+            
+            if norm_product == 0:
+                return 0.0
+            
+            similarity = dot_product / norm_product
+            return float(max(0.0, similarity))  # Ensure non-negative
+        
+        except Exception as e:
+            logger.error(f"Error calculating similarity: {e}")
+            return 0.0
+    
+    def find_similar_items_structured(self, 
+                                     query_image_url: Optional[str], 
+                                     query_data: Dict,
+                                     database_items: List[Dict],
+                                     top_k: int = 10) -> List[Tuple[Dict, float]]:
+        """
+        Find similar items using structured query data (preferred method)
+        """
+        logger.info(f"Finding similar items for structured query: {query_data}")
+        
+        # Get image embedding for query
+        query_image_embedding = None
+        if query_image_url:
+            query_image_embedding = self.get_image_embedding(query_image_url)
+            logger.info(f"Query image embedding: {'Success' if query_image_embedding is not None else 'Failed'}")
+        
+        similar_items = []
+        
+        for item in database_items:
+            try:
+                similarity_scores = []
+                
+                # Image similarity (60% weight)
+                if query_image_embedding is not None and item.get('imageUrl'):
+                    item_image_embedding = self.get_image_embedding(item['imageUrl'])
+                    if item_image_embedding is not None:
+                        img_similarity = self.calculate_similarity(query_image_embedding, item_image_embedding)
+                        similarity_scores.append(img_similarity * 0.6)
+                        logger.debug(f"Image similarity for item {item.get('_id', 'unknown')}: {img_similarity:.3f}")
+                
+                # Text similarity (40% weight) using structured comparison
+                text_similarity = self.calculate_text_similarity_detailed(query_data, item)
+                if text_similarity > 0:
+                    similarity_scores.append(text_similarity * 0.4)
+                    logger.debug(f"Text similarity for item {item.get('_id', 'unknown')}: {text_similarity:.3f}")
+                
+                # Calculate final similarity score
+                if similarity_scores:
+                    final_similarity = sum(similarity_scores)
+                    if final_similarity > 0.05:  # Lower threshold for debugging
+                        similar_items.append((item, final_similarity))
+                        logger.info(f"Item {item.get('_id', 'unknown')} - Final similarity: {final_similarity:.3f}")
+                
+            except Exception as e:
+                logger.error(f"Error processing item {item.get('_id', 'unknown')}: {e}")
+                continue
+        
+        # Sort by similarity score (descending)
+        similar_items.sort(key=lambda x: x[1], reverse=True)
+        
+        logger.info(f"Found {len(similar_items)} similar items (before filtering)")
+        
+        # Apply threshold filtering
+        filtered_items = [(item, score) for item, score in similar_items if score > 0.1]
+        logger.info(f"After threshold filtering (>0.1): {len(filtered_items)} items")
+        
+        return filtered_items[:top_k]
+
+    def find_similar_items(self, 
+                          query_image_url: Optional[str], 
+                          query_text: str, 
+                          database_items: List[Dict],
+                          top_k: int = 10) -> List[Tuple[Dict, float]]:
+        """
+        Find similar items from database with improved matching
+        """
+        logger.info(f"Finding similar items for query: '{query_text}' with image: {bool(query_image_url)}")
+        
+        # Create query item structure for text comparison
+        query_item = {
+            'whatLost': query_text,
+            'category': '',
+            'brand': '',
+            'primaryColor': '',
+            'additionalInfo': ''
+        }
+        
+        # Try to extract structured info from query text if possible
+        query_parts = query_text.lower().split()
+        for part in query_parts:
+            if part in ['electronics', 'clothing', 'bags', 'jewelry', 'keys', 'pets']:
+                query_item['category'] = part
+            elif part in ['black', 'white', 'red', 'blue', 'green', 'yellow', 'brown', 'gray', 'silver', 'gold']:
+                query_item['primaryColor'] = part
+        
+        return self.find_similar_items_structured(query_image_url, query_item, database_items, top_k)
+    
+    def create_item_embedding(self, item: Dict) -> Optional[Dict]:
+        """
+        Create and return embeddings for a database item
+        This can be used to pre-compute embeddings for faster similarity search
+        """
+        embeddings = {}
+        
+        # Image embedding
+        if item.get('imageUrl'):
+            image_embedding = self.get_image_embedding(item['imageUrl'])
+            if image_embedding is not None:
+                embeddings['image_embedding'] = image_embedding.tolist()
+        
+        # Text embedding
+        features = self.extract_item_features(item)
+        text_embedding = self.get_text_embedding(features['combined'])
+        if text_embedding is not None:
+            embeddings['text_embedding'] = text_embedding.tolist()
+        
+        return embeddings if embeddings else None
+
+# Global instance
+similarity_service = SimilarityService()

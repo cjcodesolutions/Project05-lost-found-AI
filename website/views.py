@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
+from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app, jsonify
 from datetime import datetime
 import boto3
 from botocore.exceptions import NoCredentialsError, ClientError
@@ -6,6 +6,10 @@ import os
 from werkzeug.utils import secure_filename
 import uuid
 from dotenv import load_dotenv
+from bson import ObjectId
+
+# Import the similarity service
+from .similarity_service import similarity_service
 
 load_dotenv()
 
@@ -94,7 +98,7 @@ def upload_file_to_s3(file, bucket_name):
         )
         print("S3 upload successful")
         
-        # Generate presigned URL (valid for 1 year)
+        # Generate presigned URL (valid for 1 week)
         print("Generating presigned URL...")
         file_url = s3_client.generate_presigned_url(
             'get_object',
@@ -128,47 +132,6 @@ def upload_file_to_s3(file, bucket_name):
         import traceback
         traceback.print_exc()
         raise ValueError(f"Failed to upload image to S3: {str(e)}")
-
-
-# Also add this route to test S3 upload specifically
-@views.route('/test-s3-upload', methods=['GET', 'POST'])
-def test_s3_upload():
-    """Test S3 upload functionality"""
-    if request.method == 'POST':
-        if 'test_file' not in request.files:
-            return "No file uploaded"
-        
-        file = request.files['test_file']
-        if file.filename == '':
-            return "No file selected"
-        
-        try:
-            file_url = upload_file_to_s3(file, S3_BUCKET)
-            return f"""
-            <h2>S3 Upload Test - SUCCESS</h2>
-            <p>File uploaded successfully!</p>
-            <p><strong>URL:</strong> <a href="{file_url}" target="_blank">{file_url}</a></p>
-            <p><a href="/test-s3-upload">Test Again</a></p>
-            """
-        except Exception as e:
-            return f"""
-            <h2>S3 Upload Test - FAILED</h2>
-            <p><strong>Error:</strong> {str(e)}</p>
-            <p>Check the console output for detailed error information.</p>
-            <p><a href="/test-s3-upload">Try Again</a></p>
-            """
-    
-    return '''
-    <h2>Test S3 Upload</h2>
-    <form method="POST" enctype="multipart/form-data">
-        <p>
-            <label>Select an image file:</label><br>
-            <input type="file" name="test_file" accept="image/*" required>
-        </p>
-        <button type="submit">Test Upload</button>
-    </form>
-    <p><a href="/">Back to Home</a></p>
-    '''
 
 @views.route('/')
 def home():
@@ -240,7 +203,7 @@ def lost_item_form(item_id=None):
 
 @views.route('/submit-detailed-lost', methods=['GET', 'POST'])
 def submit_detailed_lost():
-    """Handle the detailed form submission with image upload"""
+    """Handle the detailed form submission with image upload and similarity check"""
     print(f"=== INCOMING REQUEST ===")
     print(f"Method: {request.method}")
     print(f"URL: {request.url}")
@@ -323,13 +286,67 @@ def submit_detailed_lost():
                 {'$set': detailed_data}
             )
             print(f"Updated existing record. Modified count: {result.modified_count}")
+            saved_item_id = item_id
         else:
             # Insert new record
             result = db.lostItems.insert_one(detailed_data)
-            print(f"Inserted new record with ID: {result.inserted_id}")
+            saved_item_id = str(result.inserted_id)
+            print(f"Inserted new record with ID: {saved_item_id}")
         
-        flash('Lost item submitted successfully!', 'success')
-        return redirect(url_for('views.welcome'))
+        # NEW: Check for similar items in found items database
+        print("=== STARTING SIMILARITY CHECK ===")
+        try:
+            # Get all found items for comparison
+            found_items = list(db.foundItems.find({'status': 'active'}))
+            print(f"Found {len(found_items)} active found items for comparison")
+            
+            # Create structured query data instead of just text
+            query_data = {
+                'whatLost': detailed_data['whatLost'],
+                'category': detailed_data['category'],
+                'brand': detailed_data['brand'] or '',
+                'primaryColor': detailed_data['primaryColor'] or '',
+                'secondaryColor': detailed_data['secondaryColor'] or '',
+                'whereLost': detailed_data['whereLost'],
+                'additionalInfo': detailed_data['additionalInfo'] or ''
+            }
+            
+            # Create query text for logging
+            query_text = f"{detailed_data['whatLost']} {detailed_data['category']} {detailed_data['brand']} {detailed_data['primaryColor']} {detailed_data['additionalInfo']}"
+            query_text = query_text.strip()
+            
+            print(f"Query data: {query_data}")
+            print(f"Query image URL: {image_url}")
+            
+            # Find similar items with structured data
+            similar_items = similarity_service.find_similar_items_structured(
+                query_image_url=image_url,
+                query_data=query_data,
+                database_items=found_items,
+                top_k=10
+            )
+            
+            if similar_items:
+                print(f"Found {len(similar_items)} similar items")
+                for item, score in similar_items[:3]:  # Log top 3 matches
+                    print(f"Match: {item.get('whatFound', 'N/A')} - Score: {score:.3f}")
+                
+                # Redirect to suggestions page with the item ID and similarity results
+                return redirect(url_for('views.suggestions', 
+                                      lost_item_id=saved_item_id, 
+                                      show_suggestions=True))
+            else:
+                print("No similar items found")
+                flash('Lost item submitted successfully! No similar found items at this time.', 'success')
+                return redirect(url_for('views.welcome'))
+        
+        except Exception as e:
+            print(f"Error during similarity check: {e}")
+            import traceback
+            traceback.print_exc()
+            # Even if similarity check fails, the item is still saved
+            flash('Lost item submitted successfully! (Similarity check unavailable)', 'success')
+            return redirect(url_for('views.welcome'))
         
     except Exception as e:
         print(f"Error submitting detailed lost item: {e}")
@@ -337,6 +354,136 @@ def submit_detailed_lost():
         traceback.print_exc()
         flash('An error occurred. Please try again.', 'error')
         return redirect(request.url)
+
+@views.route('/suggestions/<lost_item_id>')
+def suggestions(lost_item_id):
+    """Display suggestions page with similar found items"""
+    try:
+        db = current_app.db
+        
+        # Get the lost item
+        lost_item = db.lostItems.find_one({'_id': ObjectId(lost_item_id)})
+        if not lost_item:
+            flash('Lost item not found', 'error')
+            return redirect(url_for('views.welcome'))
+        
+        # Get all found items
+        found_items = list(db.foundItems.find({'status': 'active'}))
+        
+        # Create query text
+        query_text = f"{lost_item.get('whatLost', '')} {lost_item.get('category', '')} {lost_item.get('brand', '')} {lost_item.get('primaryColor', '')} {lost_item.get('additionalInfo', '')}"
+        query_text = query_text.strip()
+        
+        # Find similar items
+        similar_items = similarity_service.find_similar_items(
+            query_image_url=lost_item.get('imageUrl'),
+            query_text=query_text,
+            database_items=found_items,
+            top_k=10
+        )
+        
+        # Filter items with similarity > 0.1 (threshold)
+        filtered_suggestions = [(item, score) for item, score in similar_items if score > 0.1]
+        
+        print(f"Showing {len(filtered_suggestions)} suggestions for lost item {lost_item_id}")
+        
+        return render_template('suggestions.html', 
+                             lost_item=lost_item,
+                             suggestions=filtered_suggestions)
+    
+    except Exception as e:
+        print(f"Error loading suggestions: {e}")
+        flash('Error loading suggestions', 'error')
+        return redirect(url_for('views.welcome'))
+
+@views.route('/api/similar-items/<item_id>')
+def api_similar_items(item_id):
+    """API endpoint to get similar items"""
+    try:
+        db = current_app.db
+        
+        # Get the item
+        item = db.lostItems.find_one({'_id': ObjectId(item_id)})
+        if not item:
+            return jsonify({'error': 'Item not found'}), 404
+        
+        # Get found items
+        found_items = list(db.foundItems.find({'status': 'active'}))
+        
+        # Create query text
+        query_text = f"{item.get('whatLost', '')} {item.get('category', '')} {item.get('brand', '')} {item.get('primaryColor', '')} {item.get('additionalInfo', '')}"
+        
+        # Find similar items
+        similar_items = similarity_service.find_similar_items(
+            query_image_url=item.get('imageUrl'),
+            query_text=query_text,
+            database_items=found_items,
+            top_k=5
+        )
+        
+        # Format response
+        response_data = []
+        for found_item, score in similar_items:
+            if score > 0.1:  # Threshold
+                response_data.append({
+                    'item': {
+                        'id': str(found_item['_id']),
+                        'whatFound': found_item.get('whatFound', ''),
+                        'category': found_item.get('category', ''),
+                        'location': found_item.get('whereFound', ''),
+                        'imageUrl': found_item.get('imageUrl'),
+                        'contactEmail': found_item.get('email', ''),
+                        'dateFound': found_item.get('dateFound', '')
+                    },
+                    'similarity_score': round(score, 3)
+                })
+        
+        return jsonify({'similar_items': response_data})
+    
+    except Exception as e:
+        print(f"API error: {e}")
+        return jsonify({'error': 'Internal server error'}), 500
+
+# Route to render map.html
+@views.route('/map')
+def map_page():
+    """Render the map page"""
+    return render_template('map.html')  
+
+from flask import make_response
+
+@views.route('/lost-items')
+def lost_items():
+    """List all lost items from the database"""
+    try:
+        db = current_app.db
+        lost_items_list = list(db.lostItems.find().sort('submissionTime', -1))
+        
+        # Create response with explicit content type
+        response = make_response(render_template('viewLostItems.html', lost_items=lost_items_list))
+        response.headers['Content-Type'] = 'text/html'
+        return response
+        
+    except Exception as e:
+        print(f"Error fetching lost items: {e}")
+        return f"<h2>Error fetching lost items: {str(e)}</h2>"
+
+@views.route('/found-items')
+def found_items():
+    """List all found items from the database"""
+    try:
+        db = current_app.db
+        found_items_list = list(db.foundItems.find().sort('submissionTime', -1))
+        
+        # Create response with explicit content type
+        response = make_response(render_template('viewFoundItems.html', found_items=found_items_list))
+        response.headers['Content-Type'] = 'text/html'
+        return response
+        
+    except Exception as e:
+        print(f"Error fetching found items: {e}")
+        return f"<h2>Error fetching found items: {str(e)}</h2>"
+
 # Test routes for debugging
 @views.route('/test-db')
 def test_db():
@@ -403,49 +550,45 @@ def test_s3():
         <p>Check your .env file and AWS credentials</p>
         <p><a href="/">Back to Home</a></p>
         """
+
+@views.route('/test-s3-upload', methods=['GET', 'POST'])
+def test_s3_upload():
+    """Test S3 upload functionality"""
+    if request.method == 'POST':
+        if 'test_file' not in request.files:
+            return "No file uploaded"
+        
+        file = request.files['test_file']
+        if file.filename == '':
+            return "No file selected"
+        
+        try:
+            file_url = upload_file_to_s3(file, S3_BUCKET)
+            return f"""
+            <h2>S3 Upload Test - SUCCESS</h2>
+            <p>File uploaded successfully!</p>
+            <p><strong>URL:</strong> <a href="{file_url}" target="_blank">{file_url}</a></p>
+            <p><a href="/test-s3-upload">Test Again</a></p>
+            """
+        except Exception as e:
+            return f"""
+            <h2>S3 Upload Test - FAILED</h2>
+            <p><strong>Error:</strong> {str(e)}</p>
+            <p>Check the console output for detailed error information.</p>
+            <p><a href="/test-s3-upload">Try Again</a></p>
+            """
     
-
-    # Route to render map.html
-@views.route('/map')
-def map_page():
-    """Render the map page"""
-    return render_template('map.html')  
-
-from flask import make_response
-
-@views.route('/lost-items')
-def lost_items():
-    """List all lost items from the database"""
-    try:
-        db = current_app.db
-        lost_items_list = list(db.lostItems.find().sort('submissionTime', -1))
-        
-        # Create response with explicit content type
-        response = make_response(render_template('viewLostItems.html', lost_items=lost_items_list))
-        response.headers['Content-Type'] = 'text/html'
-        return response
-        
-    except Exception as e:
-        print(f"Error fetching lost items: {e}")
-        return f"<h2>Error fetching lost items: {str(e)}</h2>"
-    
-
-@views.route('/found-items')
-def found_items():
-    """List all lost items from the database"""
-    try:
-        db = current_app.db
-        found_items_list = list(db.foundItems.find().sort('submissionTime', -1))
-        
-        # Create response with explicit content type
-        response = make_response(render_template('viewFoundItems.html', found_items=found_items_list))
-        response.headers['Content-Type'] = 'text/html'
-        return response
-        
-    except Exception as e:
-        print(f"Error fetching lost items: {e}")
-        return f"<h2>Error fetching lost items: {str(e)}</h2>"
-    
+    return '''
+    <h2>Test S3 Upload</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <p>
+            <label>Select an image file:</label><br>
+            <input type="file" name="test_file" accept="image/*" required>
+        </p>
+        <button type="submit">Test Upload</button>
+    </form>
+    <p><a href="/">Back to Home</a></p>
+    '''
 
 @views.route('/test-template')
 def test_template():
@@ -468,3 +611,225 @@ def debug_routes():
     <hr>
     {routes_html}
     """
+
+@views.route('/test-similarity')
+def test_similarity():
+    """Test the similarity service"""
+    try:
+        # Test if the similarity service is working
+        test_text = "black smartphone with cracked screen"
+        embedding = similarity_service.get_text_embedding(test_text)
+        
+        if embedding is not None:
+            return f"""
+            <h2>Similarity Service Test - SUCCESS</h2>
+            <p>Text: "{test_text}"</p>
+            <p>Embedding shape: {embedding.shape}</p>
+            <p>Service is working correctly!</p>
+            <p><a href="/">Back to Home</a></p>
+            """
+        else:
+            return f"""
+            <h2>Similarity Service Test - FAILED</h2>
+            <p>Failed to generate embedding</p>
+            <p>Check if CLIP and SentenceBERT models are installed</p>
+            <p><a href="/">Back to Home</a></p>
+            """
+    except Exception as e:
+        return f"""
+        <h2>Similarity Service Test - ERROR</h2>
+        <p>Error: {str(e)}</p>
+        <p>Make sure to install required packages:</p>
+        <ul>
+            <li>pip install torch torchvision</li>
+            <li>pip install clip-by-openai</li>
+            <li>pip install sentence-transformers</li>
+        </ul>
+        <p><a href="/">Back to Home</a></p>
+        """
+
+@views.route('/submit-found')
+def submit_found():
+    """Redirect old submit-found URL to new found-item-form"""
+    return redirect(url_for('views.found_item_form'))
+
+@views.route('/found-item-form')
+@views.route('/found-item-form/<item_id>')
+def found_item_form(item_id=None):
+    """Display the detailed found item form"""
+    initial_data = None
+    
+    if item_id:
+        try:
+            from bson import ObjectId
+            db = current_app.db
+            initial_data = db.foundItems.find_one({'_id': ObjectId(item_id)})
+            print(f"Retrieved initial found item data: {initial_data}")
+        except Exception as e:
+            print(f"Error fetching initial found item data: {e}")
+    
+    return render_template("foundItem.html", initial_data=initial_data)
+
+@views.route('/submit-detailed-found', methods=['GET', 'POST'])
+def submit_detailed_found():
+    """Handle the detailed found item form submission with image upload"""
+    print(f"=== INCOMING FOUND ITEM REQUEST ===")
+    print(f"Method: {request.method}")
+    print(f"Form keys: {list(request.form.keys()) if request.form else 'No form data'}")
+    print(f"Files: {list(request.files.keys()) if request.files else 'No files'}")
+    
+    if request.method == 'GET':
+        print("GET request received - redirecting to form")
+        flash('Please submit the form properly', 'warning')
+        return redirect(url_for('views.found_item_form'))
+    
+    print("=== POST REQUEST PROCESSING ===")
+    print(f"Form data: {dict(request.form)}")
+    
+    try:
+        db = current_app.db
+        
+        # Handle image upload to S3
+        image_url = None
+        if 'imageUpload' in request.files:
+            file = request.files['imageUpload']
+            print(f"File received: {file.filename if file else 'No file'}")
+            
+            if file and file.filename != '':
+                try:
+                    image_url = upload_file_to_s3(file, S3_BUCKET)
+                    print(f"Found item image uploaded successfully: {image_url}")
+                except ValueError as ve:
+                    flash(f'Image upload error: {str(ve)}', 'error')
+                    return redirect(request.url)
+                except Exception as e:
+                    print(f"Image upload failed: {e}")
+                    flash('Failed to upload image. Please try again.', 'error')
+                    return redirect(request.url)
+        
+        # Get all form data for found item
+        detailed_data = {
+            'whatFound': request.form.get('whatFound'),
+            'dateFound': request.form.get('dateFound'),
+            'category': request.form.get('category'),
+            'timeFound': request.form.get('timeFound'),
+            'brand': request.form.get('brand'),
+            'primaryColor': request.form.get('primaryColor'),
+            'secondaryColor': request.form.get('secondaryColor'),
+            'additionalInfo': request.form.get('additionalInfo'),
+            'whereFound': request.form.get('whereFound'),
+            'zipCode': request.form.get('zipCode'),
+            'locationName': request.form.get('locationName'),
+            'firstName': request.form.get('firstName'),
+            'lastName': request.form.get('lastName'),
+            'phoneNumber': request.form.get('phoneNumber'),
+            'email': request.form.get('email'),
+            'imageUrl': image_url,  # Store the S3 image URL
+            'submissionTime': datetime.now(),
+            'status': 'active',
+            'type': 'found'
+        }
+        
+        print(f"Found item data to save: {detailed_data}")
+        
+        # Validate required fields
+        required_fields = ['whatFound', 'dateFound', 'category', 'timeFound', 'whereFound', 'firstName', 'lastName', 'phoneNumber', 'email']
+        for field in required_fields:
+            if not detailed_data[field]:
+                flash(f'Please fill in the {field} field', 'error')
+                print(f"Validation failed for field: {field}")
+                return redirect(request.url)
+        
+        # Check if this is an update to an existing record
+        item_id = request.form.get('item_id')
+        if item_id:
+            from bson import ObjectId
+            result = db.foundItems.update_one(
+                {'_id': ObjectId(item_id)}, 
+                {'$set': detailed_data}
+            )
+            print(f"Updated existing found item record. Modified count: {result.modified_count}")
+        else:
+            # Insert new record
+            result = db.foundItems.insert_one(detailed_data)
+            print(f"Inserted new found item record with ID: {result.inserted_id}")
+        
+        flash('Found item submitted successfully! Thank you for helping reunite lost items with their owners.', 'success')
+        return redirect(url_for('views.welcome'))
+        
+    except Exception as e:
+        print(f"Error submitting detailed found item: {e}")
+        import traceback
+        traceback.print_exc()
+        flash('An error occurred. Please try again.', 'error')
+        return redirect(request.url)
+    """Debug similarity calculations for a specific lost item"""
+    try:
+        db = current_app.db
+        
+        # Get the lost item
+        lost_item = db.lostItems.find_one({'_id': ObjectId(lost_item_id)})
+        if not lost_item:
+            return "<h2>Lost item not found</h2>"
+        
+        # Get all found items
+        found_items = list(db.foundItems.find({'status': 'active'}))
+        
+        # Create structured query data
+        query_data = {
+            'whatLost': lost_item.get('whatLost', ''),
+            'category': lost_item.get('category', ''),
+            'brand': lost_item.get('brand', ''),
+            'primaryColor': lost_item.get('primaryColor', ''),
+            'additionalInfo': lost_item.get('additionalInfo', '')
+        }
+        
+        # Test similarity calculation
+        similar_items = similarity_service.find_similar_items_structured(
+            query_image_url=lost_item.get('imageUrl'),
+            query_data=query_data,
+            database_items=found_items,
+            top_k=20
+        )
+        
+        # Create debug output
+        debug_html = f"""
+        <h2>Similarity Debug for Lost Item: {lost_item.get('whatLost', 'Unknown')}</h2>
+        <h3>Query Data:</h3>
+        <ul>
+            <li>Description: {query_data['whatLost']}</li>
+            <li>Category: {query_data['category']}</li>
+            <li>Brand: {query_data['brand']}</li>
+            <li>Color: {query_data['primaryColor']}</li>
+            <li>Image: {'Yes' if lost_item.get('imageUrl') else 'No'}</li>
+        </ul>
+        <h3>Found Items Comparison ({len(found_items)} total):</h3>
+        """
+        
+        if similar_items:
+            debug_html += "<table border='1' style='border-collapse: collapse; width: 100%;'>"
+            debug_html += "<tr><th>Rank</th><th>Score</th><th>Description</th><th>Category</th><th>Brand</th><th>Color</th><th>Image</th></tr>"
+            
+            for i, (item, score) in enumerate(similar_items):
+                debug_html += f"""
+                <tr>
+                    <td>{i+1}</td>
+                    <td>{score:.3f}</td>
+                    <td>{item.get('whatFound', item.get('whatLost', 'N/A'))}</td>
+                    <td>{item.get('category', 'N/A')}</td>
+                    <td>{item.get('brand', 'N/A')}</td>
+                    <td>{item.get('primaryColor', 'N/A')}</td>
+                    <td>{'Yes' if item.get('imageUrl') else 'No'}</td>
+                </tr>
+                """
+            debug_html += "</table>"
+        else:
+            debug_html += "<p>No similar items found</p>"
+        
+        debug_html += f"<p><a href='/suggestions/{lost_item_id}'>View Suggestions Page</a></p>"
+        debug_html += "<p><a href='/'>Back to Home</a></p>"
+        
+        return debug_html
+        
+    except Exception as e:
+        return f"<h2>Debug Error:</h2><p>{str(e)}</p>"

@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Found Property</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        /* Flash messages */
+        .alert {
+            padding: 12px 20px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error, .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .form-header {
+            padding: 2rem;
+            border-bottom: 1px solid #e0e0e0;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .form-header h1 {
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+
+        .form-header ul {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .form-header li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1rem;
+            color: rgba(255,255,255,0.9);
+            font-size: 0.9rem;
+        }
+
+        .form-header li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: white;
+        }
+
+        .submit-btn-top {
+            background-color: transparent;
+            border: 2px solid rgba(255,255,255,0.8);
+            color: rgba(255,255,255,0.9);
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn-top:hover {
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .form-note {
+            background-color: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .form-content {
+            padding: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        .help-text {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+            font-style: italic;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+            background-color: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #28a745;
+            box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
+        }
+
+        .form-control::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .date-input, .time-input {
+            position: relative;
+        }
+
+        .date-input input, .time-input input {
+            padding-right: 40px;
+        }
+
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 4px;
+            padding: 3rem 2rem;
+            text-align: center;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .upload-area:hover {
+            border-color: #28a745;
+            background-color: #f0fff4;
+        }
+
+        .upload-area.dragover {
+            border-color: #28a745;
+            background-color: #e8f5e8;
+        }
+
+        .upload-icon {
+            width: 48px;
+            height: 48px;
+            background-color: #28a745;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .upload-text {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .hidden-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        /* Location Information Section */
+        .location-section {
+            background: #f8f9fa;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .location-section h2 {
+            font-size: 1.4rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+
+        .map-container {
+            width: 100%;
+            height: 150px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin: 1rem 0;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Contact Information Section */
+        .contact-section {
+            background: white;
+            padding: 2rem;
+        }
+
+        .contact-section h2 {
+            font-size: 1.4rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+
+        .phone-input {
+            display: flex;
+            align-items: center;
+        }
+
+        .country-code {
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+            border-right: none;
+            padding: 10px 12px;
+            border-radius: 4px 0 0 4px;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .phone-input input {
+            border-radius: 0 4px 4px 0;
+            flex: 1;
+        }
+
+        .final-submit {
+            text-align: center;
+            padding: 2rem;
+            background-color: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .btn-submit-final {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 48px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-submit-final:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+
+            .form-content, .location-section, .contact-section {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    {%include "header.html"%}
+    
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'danger' if category == 'error' else category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="container">
+        <div class="form-container">
+            <!-- Form Header -->
+            <div class="form-header">
+                <h1>Submit Found Property</h1>
+                <ul>
+                    <li>Help reunite people with their lost items</li>
+                    <li>Our system matches your found item with lost reports</li>
+                    <li>Make a positive impact in your community</li>
+                </ul>
+                <button type="button" class="submit-btn-top">Submit Found Item</button>
+                
+                <div class="form-note">
+                    <strong>*</strong> Please provide detailed information about the found item to help us match it with someone looking for it.
+                </div>
+            </div>
+
+            <!-- Single Form Containing All Sections -->
+            <form id="foundPropertyForm" action="{{ url_for('views.submit_detailed_found') }}" method="POST" enctype="multipart/form-data">
+                
+                <!-- Hidden field to track if this is an update -->
+                {% if initial_data %}
+                <input type="hidden" name="item_id" value="{{ initial_data._id }}">
+                {% endif %}
+
+                <!-- Main Form Content -->
+                <div class="form-content">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="whatFound">What was Found <span class="required">*</span></label>
+                            <div class="help-text">Describe the item you found (Phone, Wallet, Keys, etc.)</div>
+                            <input type="text" id="whatFound" name="whatFound" class="form-control" 
+                                   value="{{ initial_data.itemType if initial_data else '' }}"
+                                   placeholder="iPhone with blue case" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="dateFound">Date Found <span class="required">*</span></label>
+                            <div class="help-text">When did you find this item?</div>
+                            <div class="date-input">
+                                <input type="date" id="dateFound" name="dateFound" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="category">Category <span class="required">*</span></label>
+                            <div class="help-text">What type of item is this?</div>
+                            <select id="category" name="category" class="form-control" required>
+                                <option value="">Select Category</option>
+                                <option value="Clothing">Clothing</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Personal Accessories">Personal Accessories</option>
+                                <option value="Bags">Bags</option>
+                                <option value="Jewelry">Jewelry</option>
+                                <option value="Keys">Keys</option>
+                                <option value="Documents">Documents</option>
+                                <option value="Pets">Pets</option>
+                                <option value="Sports Equipment">Sports Equipment</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="timeFound">Time Found <span class="required">*</span></label>
+                            <div class="help-text">Approximate time when you found the item</div>
+                            <div class="time-input">
+                                <input type="time" id="timeFound" name="timeFound" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="brand">Brand</label>
+                            <div class="help-text">Brand or manufacturer if visible</div>
+                            <input type="text" id="brand" name="brand" class="form-control" placeholder="Apple, Samsung, Nike, etc.">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="imageUpload">Upload Image</label>
+                            <div class="help-text">Photo of the found item (helps with identification)</div>
+                            <div class="upload-area" onclick="document.getElementById('imageUpload').click()">
+                                <div class="upload-icon">📤</div>
+                                <div class="upload-text">Click to upload or drag and drop</div>
+                                <input type="file" id="imageUpload" name="imageUpload" class="hidden-input" accept="image/*">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="primaryColor">Primary Color</label>
+                            <div class="help-text">Main color of the found item</div>
+                            <input type="text" id="primaryColor" name="primaryColor" class="form-control" placeholder="Black, Red, Blue, etc.">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="additionalInfo">Additional Information</label>
+                            <div class="help-text">Any other details that might help identify the owner</div>
+                            <textarea id="additionalInfo" name="additionalInfo" class="form-control" placeholder="Size, condition, distinctive features..." rows="4"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="secondaryColor">Secondary Color</label>
+                            <div class="help-text">Secondary color if applicable</div>
+                            <input type="text" id="secondaryColor" name="secondaryColor" class="form-control" placeholder="Secondary color">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location Information Section -->
+                <div class="location-section">
+                    <h2>Location Information</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="whereFound">Where Found <span class="required">*</span></label>
+                            <div class="help-text">Where did you find this item?</div>
+                            <select id="whereFound" name="whereFound" class="form-control" required>
+                                <option value="">Select Location</option>
+                                <option value="Airport">Airport</option>
+                                <option value="Bar">Bar</option>
+                                <option value="Hotel">Hotel</option>
+                                <option value="Restaurant">Restaurant</option>
+                                <option value="Park">Park</option>
+                                <option value="Public Transit">Public Transit</option>
+                                <option value="Taxi">Taxi</option>
+                                <option value="University">University</option>
+                                <option value="College/University">College/University</option>
+                                <option value="Mall">Mall</option>
+                                <option value="Beach">Beach</option>
+                                <option value="Animal/Pet">Animal/Pet Care Center</option>
+                                <option value="Venue">Venue</option>
+                                <option value="Rental Car">Rental Car</option>
+                                <option value="Museum">Museum</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="zipCode">Zip Code</label>
+                            <div class="help-text">Zip code of the location where found</div>
+                            <input type="text" id="zipCode" name="zipCode" class="form-control" placeholder="Enter Zip Code">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="locationName">Specific Location</label>
+                        <div class="help-text">Name of business, street, or specific area</div>
+                        <input type="text" id="locationName" name="locationName" class="form-control" placeholder="e.g., Central Park near fountain">
+                    </div>
+
+                    <!-- Map Container -->
+                    <div class="map-container">
+                        <div class="map-placeholder">
+                            <img src="static/assets/6.png" alt="Icon" style="width: 100px; height: 100px;" />
+                            <h3>Mark Location on Map</h3>
+                            <p>Click below to pinpoint where you found the item</p>
+                            <a href="{{ url_for('views.map_page') }}">Open Map</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Information Section -->
+                <div class="contact-section">
+                    <h2>Contact Information</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name <span class="required">*</span></label>
+                            <div class="help-text">Your first name (for the owner to contact you)</div>
+                            <input type="text" id="firstName" name="firstName" class="form-control" placeholder="First Name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastName">Last Name <span class="required">*</span></label>
+                            <div class="help-text">Your last name (for the owner to contact you)</div>
+                            <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Last Name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phoneNumber">Phone Number <span class="required">*</span></label>
+                            <div class="help-text">Best number for the owner to reach you</div>
+                            <div class="phone-input">
+                                <span class="country-code">+1</span>
+                                <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control" placeholder="Phone Number" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email <span class="required">*</span></label>
+                            <div class="help-text">Your email address for contact</div>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Email Address" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Final Submit Button -->
+                <div class="final-submit">
+                    <button type="submit" class="btn-submit-final">Submit Found Property Report</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Form submission handler with client-side validation
+        document.getElementById('foundPropertyForm').addEventListener('submit', function(e) {
+            // Client-side validation
+            const requiredFields = ['whatFound', 'dateFound', 'category', 'timeFound', 'whereFound', 'firstName', 'lastName', 'phoneNumber', 'email'];
+            
+            for (let field of requiredFields) {
+                const element = document.getElementById(field);
+                if (!element.value.trim()) {
+                    alert(`Please fill in the ${field.replace(/([A-Z])/g, ' $1').toLowerCase()} field`);
+                    element.focus();
+                    e.preventDefault();
+                    return false;
+                }
+            }
+            
+            // Email validation
+            const email = document.getElementById('email').value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Please enter a valid email address');
+                document.getElementById('email').focus();
+                e.preventDefault();
+                return false;
+            }
+            
+            // Form will submit normally to Flask if validation passes
+        });
+
+        // File upload handling
+        const uploadArea = document.querySelector('.upload-area');
+        const fileInput = document.getElementById('imageUpload');
+
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', function() {
+            this.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        });
+
+        fileInput.addEventListener('change', function() {
+            handleFiles(this.files);
+        });
+
+        function handleFiles(files) {
+            if (files.length > 0) {
+                const uploadText = document.querySelector('.upload-text');
+                const file = files[0];
+                
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    alert('Please upload an image file');
+                    return;
+                }
+                
+                // Validate file size (5MB limit)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size must be less than 5MB');
+                    return;
+                }
+                
+                uploadText.textContent = `Selected: ${file.name}`;
+                
+                // Preview image
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const uploadIcon = document.querySelector('.upload-icon');
+                    uploadIcon.innerHTML = '<img src="' + e.target.result + '" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;">';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Auto-populate category based on what was found
+        document.getElementById('whatFound').addEventListener('input', function() {
+            const value = this.value.toLowerCase();
+            const categorySelect = document.getElementById('category');
+            
+            if (value.includes('bag') || value.includes('backpack') || value.includes('purse')) {
+                categorySelect.value = 'Bags';
+            } else if (value.includes('phone') || value.includes('laptop') || value.includes('tablet')) {
+                categorySelect.value = 'Electronics';
+            } else if (value.includes('shirt') || value.includes('jacket') || value.includes('scarf') || value.includes('gloves')) {
+                categorySelect.value = 'Clothing';
+            } else if (value.includes('watch') || value.includes('ring') || value.includes('necklace')) {
+                categorySelect.value = 'Personal Accessories';
+            } else if (value.includes('key')) {
+                categorySelect.value = 'Keys';
+            } else if (value.includes('dog') || value.includes('cat') || value.includes('pet')) {
+                categorySelect.value = 'Pets';
+            }
+        });
+
+        // Initialize with current date and time
+        window.addEventListener('load', function() {
+            // Set current date as default if not pre-populated
+            const dateInput = document.getElementById('dateFound');
+            if (!dateInput.value) {
+                const today = new Date();
+                const dateString = today.toISOString().split('T')[0];
+                dateInput.value = dateString;
+            }
+            
+            // Set current time as default
+            const timeInput = document.getElementById('timeFound');
+            if (!timeInput.value) {
+                const now = new Date();
+                const timeString = now.toTimeString().slice(0, 5);
+                timeInput.value = timeString;
+            }
+        });
+    </script>
+   {%include "footer.html"%}
+</body>
+</html>
