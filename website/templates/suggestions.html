@@ -19,61 +19,81 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 40px 20px;
         }
 
         .header {
-            background: linear-gradient(135deg, #007bff, #0056b3);
+            background: linear-gradient(135deg, rgb(49, 101, 131), rgb(35, 72, 94));
             color: white;
-            padding: 2rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+            padding: 3rem 2.5rem;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 32px rgba(49, 101, 131, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)" /></svg>');
+            opacity: 0.3;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
         }
 
         .header h1 {
-            font-size: 2rem;
+            font-size: 2.5rem;
             margin-bottom: 0.5rem;
-            font-weight: 300;
+            font-weight: 700;
         }
 
         .header p {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             opacity: 0.9;
+            max-width: 800px;
         }
 
         .your-item {
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+            margin-bottom: 3rem;
             overflow: hidden;
+            border: 1px solid #e9ecef;
         }
 
         .your-item-header {
-            background-color: #28a745;
+            background: linear-gradient(135deg, rgb(49, 101, 131), rgb(35, 72, 94));
             color: white;
-            padding: 1rem 2rem;
-            font-size: 1.2rem;
-            font-weight: 500;
+            padding: 1.5rem 2.5rem;
+            font-size: 1.3rem;
+            font-weight: 600;
         }
 
         .your-item-content {
-            padding: 2rem;
+            padding: 2.5rem;
             display: grid;
-            grid-template-columns: 200px 1fr;
-            gap: 2rem;
+            grid-template-columns: 300px 1fr;
+            gap: 3rem;
             align-items: start;
         }
 
         .your-item-image {
-            width: 200px;
-            height: 200px;
+            width: 300px;
+            height: 300px;
             background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -88,45 +108,50 @@
 
         .your-item-image .no-image {
             color: #6c757d;
-            font-size: 0.9rem;
+            font-size: 1rem;
             text-align: center;
+            font-weight: 500;
         }
 
         .your-item-details {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
         }
 
         .detail-item {
-            margin-bottom: 1rem;
+            padding: 1rem 0;
         }
 
         .detail-label {
-            font-weight: 600;
-            color: #495057;
+            font-weight: 700;
+            color: rgb(35, 72, 94);
             font-size: 0.9rem;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .detail-value {
             color: #333;
-            font-size: 1rem;
+            font-size: 1.1rem;
+            font-weight: 500;
         }
 
         .suggestions-section {
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.08);
             overflow: hidden;
+            border: 1px solid #e9ecef;
         }
 
         .suggestions-header {
-            background-color: #17a2b8;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
             color: white;
-            padding: 1rem 2rem;
-            font-size: 1.2rem;
-            font-weight: 500;
+            padding: 1.5rem 2.5rem;
+            font-size: 1.3rem;
+            font-weight: 600;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -134,60 +159,65 @@
 
         .suggestions-count {
             background-color: rgba(255,255,255,0.2);
-            padding: 0.25rem 0.75rem;
-            border-radius: 15px;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
             font-size: 0.9rem;
+            font-weight: 600;
         }
 
         .suggestions-content {
-            padding: 2rem;
+            padding: 2.5rem;
+        }
+
+        /* Grid Layout for Suggestions */
+        .suggestions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2rem;
         }
 
         .suggestion-item {
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
             overflow: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             position: relative;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         .suggestion-item:hover {
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(49, 101, 131, 0.1);
+            transform: translateY(-4px);
+            border-color: rgb(49, 101, 131);
         }
 
         .similarity-badge {
             position: absolute;
             top: 15px;
             right: 15px;
-            background: linear-gradient(135deg, #28a745, #20c997);
+            background: linear-gradient(135deg, rgb(49, 101, 131), rgb(35, 72, 94));
             color: white;
             padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 700;
             z-index: 2;
-        }
-
-        .suggestion-content {
-            display: grid;
-            grid-template-columns: 200px 1fr auto;
-            gap: 1.5rem;
-            padding: 1.5rem;
-            align-items: start;
+            box-shadow: 0 4px 12px rgba(49, 101, 131, 0.3);
         }
 
         .suggestion-image {
-            width: 200px;
+            width: 100%;
             height: 200px;
             background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
+            border-bottom: 2px solid #dee2e6;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            position: relative;
         }
 
         .suggestion-image img {
@@ -196,134 +226,228 @@
             object-fit: cover;
         }
 
-        .suggestion-details {
+        .suggestion-image .no-image {
+            color: #6c757d;
+            font-size: 1rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .suggestion-content {
+            padding: 1.5rem;
             flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .suggestion-details {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex: 1;
+        }
+
+        .suggestion-details .detail-item {
+            padding: 0.5rem 0;
+            margin-bottom: 0;
+        }
+
+        .suggestion-details .detail-label {
+            font-size: 0.8rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .suggestion-details .detail-value {
+            font-size: 0.95rem;
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: 2px solid rgb(49, 101, 131);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            grid-column: span 2;
+        }
+
+        .contact-info strong {
+            color: rgb(35, 72, 94);
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .contact-info div {
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+            color: #555;
+            font-size: 0.85rem;
         }
 
         .suggestion-actions {
             display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            align-items: flex-end;
+            gap: 0.75rem;
+            margin-top: auto;
         }
 
         .btn {
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1.25rem;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 0.9rem;
-            transition: all 0.3s;
+            font-weight: 600;
+            transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
             text-align: center;
-            min-width: 120px;
+            flex: 1;
+            letter-spacing: 0.3px;
         }
 
         .btn-primary {
-            background-color: #007bff;
+            background: linear-gradient(135deg, rgb(49, 101, 131), rgb(35, 72, 94));
             color: white;
+            border: 2px solid transparent;
         }
 
         .btn-primary:hover {
-            background-color: #0056b3;
+            background: linear-gradient(135deg, rgb(35, 72, 94), rgb(26, 54, 71));
             color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(49, 101, 131, 0.3);
         }
 
         .btn-outline {
             background-color: transparent;
-            color: #6c757d;
-            border: 1px solid #6c757d;
+            color: rgb(49, 101, 131);
+            border: 2px solid rgb(49, 101, 131);
         }
 
         .btn-outline:hover {
-            background-color: #6c757d;
+            background: rgb(49, 101, 131);
             color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(49, 101, 131, 0.2);
         }
 
         .no-suggestions {
             text-align: center;
-            padding: 3rem;
+            padding: 4rem 2rem;
             color: #6c757d;
         }
 
         .no-suggestions h3 {
             margin-bottom: 1rem;
-            font-weight: 400;
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: rgb(35, 72, 94);
         }
 
         .no-suggestions p {
-            margin-bottom: 2rem;
-        }
-
-        .contact-info {
-            background-color: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 4px;
-            padding: 0.75rem;
-            margin-top: 1rem;
-            grid-column: span 2;
-        }
-
-        .contact-info strong {
-            color: #856404;
-            display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.7;
         }
 
         .back-actions {
             text-align: center;
-            margin-top: 2rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid #e9ecef;
         }
 
         .back-actions .btn {
-            margin: 0 0.5rem;
+            margin: 0 0.75rem 1rem 0.75rem;
         }
 
-        @media (max-width: 768px) {
+        .status-indicator {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(135deg, rgb(49, 101, 131), rgb(35, 72, 94));
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        @media (max-width: 1200px) {
+            .suggestions-grid {
+                grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            }
+        }
+
+        @media (max-width: 968px) {
             .container {
-                padding: 10px;
+                padding: 20px 15px;
             }
 
-            .your-item-content,
-            .suggestion-content {
+            .header {
+                padding: 2rem 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .your-item-content {
                 grid-template-columns: 1fr;
-                gap: 1rem;
+                gap: 2rem;
             }
 
-            .your-item-details,
+            .your-item-image {
+                width: 100%;
+                max-width: 300px;
+                height: 300px;
+                margin: 0 auto;
+            }
+
+            .suggestions-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
             .suggestion-details {
                 grid-template-columns: 1fr;
             }
 
-            .suggestion-actions {
-                align-items: stretch;
+            .contact-info {
+                grid-column: span 1;
             }
 
-            .similarity-badge {
-                position: static;
-                align-self: start;
-                margin-bottom: 1rem;
+            .back-actions .btn {
+                display: block;
+                margin: 0.5rem auto;
+                max-width: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .suggestion-actions {
+                flex-direction: column;
+            }
+            
+            .suggestions-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
             }
         }
 
         .loading {
             text-align: center;
-            padding: 2rem;
+            padding: 3rem;
             color: #6c757d;
         }
 
         .spinner {
             border: 4px solid #f3f3f3;
-            border-top: 4px solid #007bff;
+            border-top: 4px solid rgb(49, 101, 131);
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
+            margin: 0 auto 1.5rem;
         }
 
         @keyframes spin {
@@ -338,26 +462,28 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>Similar Items Found!</h1>
-            <p>We found some items that might match what you're looking for. Review them below and contact the finder if you see your item.</p>
+            <div class="header-content">
+                <h1>Similar Items Found</h1>
+                <p>We have identified potential matches for your lost item. Please review the following suggestions and contact the appropriate parties to verify if any of these items belong to you.</p>
+            </div>
         </div>
 
         <!-- Your Lost Item -->
         <div class="your-item">
             <div class="your-item-header">
-                📋 Your Lost Item Details
+                Your Lost Item Details
             </div>
             <div class="your-item-content">
                 <div class="your-item-image">
                     {% if lost_item.imageUrl %}
                         <img src="{{ lost_item.imageUrl }}" alt="Your lost item">
                     {% else %}
-                        <div class="no-image">No Image</div>
+                        <div class="no-image">No Image Available</div>
                     {% endif %}
                 </div>
                 <div class="your-item-details">
                     <div class="detail-item">
-                        <div class="detail-label">Item</div>
+                        <div class="detail-label">Item Description</div>
                         <div class="detail-value">{{ lost_item.whatLost or 'Not specified' }}</div>
                     </div>
                     <div class="detail-item">
@@ -377,7 +503,7 @@
                         <div class="detail-value">{{ lost_item.dateLost or 'Not specified' }}</div>
                     </div>
                     <div class="detail-item">
-                        <div class="detail-label">Location</div>
+                        <div class="detail-label">Location Lost</div>
                         <div class="detail-value">{{ lost_item.whereLost or 'Not specified' }}</div>
                     </div>
                 </div>
@@ -387,113 +513,101 @@
         <!-- Suggestions -->
         <div class="suggestions-section">
             <div class="suggestions-header">
-                🔍 Similar Found Items
-                <span class="suggestions-count">{{ suggestions|length }} matches</span>
+                Potential Matches Found
+                <span class="suggestions-count">{{ suggestions|length }} Results</span>
             </div>
             <div class="suggestions-content">
                 {% if suggestions %}
-                    {% for found_item, similarity_score in suggestions %}
-                    <div class="suggestion-item">
-                        <div class="similarity-badge">
-                            {{ "%.1f" | format(similarity_score * 100) }}% match
-                        </div>
-                        <div class="suggestion-content">
+                    <div class="suggestions-grid">
+                        {% for found_item, similarity_score in suggestions %}
+                        <div class="suggestion-item">
+                            <div class="similarity-badge">
+                                {{ "%.1f" | format(similarity_score * 100) }}% Match
+                            </div>
                             <div class="suggestion-image">
                                 {% if found_item.imageUrl %}
                                     <img src="{{ found_item.imageUrl }}" alt="Found item">
                                 {% else %}
-                                    <div class="no-image">No Image</div>
+                                    <div class="no-image">No Image Available</div>
                                 {% endif %}
                             </div>
-                            <div class="suggestion-details">
-                                <div class="detail-item">
-                                    <div class="detail-label">Item Found</div>
-                                    <div class="detail-value">{{ found_item.whatFound or found_item.whatLost or 'Not specified' }}</div>
+                            <div class="suggestion-content">
+                                <div class="suggestion-details">
+                                    <div class="detail-item">
+                                        <div class="detail-label">Item Found</div>
+                                        <div class="detail-value">{{ found_item.whatFound or found_item.whatLost or 'Not specified' }}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Category</div>
+                                        <div class="detail-value">{{ found_item.category or 'Not specified' }}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Brand</div>
+                                        <div class="detail-value">{{ found_item.brand or 'Not specified' }}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Color</div>
+                                        <div class="detail-value">{{ found_item.primaryColor or 'Not specified' }}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Date Found</div>
+                                        <div class="detail-value">{{ found_item.dateFound or found_item.dateLost or 'Not specified' }}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Location Found</div>
+                                        <div class="detail-value">{{ found_item.whereFound or found_item.whereLost or 'Not specified' }}</div>
+                                    </div>
+                                    <div class="contact-info">
+                                        <strong>Contact Information</strong>
+                                        <div><span class="status-indicator"></span>Email: {{ found_item.email or 'Not provided' }}</div>
+                                        <div><span class="status-indicator"></span>Phone: {{ found_item.phoneNumber or 'Not provided' }}</div>
+                                        <div><span class="status-indicator"></span>Name: {{ found_item.firstName or '' }} {{ found_item.lastName or '' }}</div>
+                                    </div>
                                 </div>
-                                <div class="detail-item">
-                                    <div class="detail-label">Category</div>
-                                    <div class="detail-value">{{ found_item.category or 'Not specified' }}</div>
+                                <div class="suggestion-actions">
+                                    {% if found_item.email %}
+                                    <a href="mailto:{{ found_item.email }}?subject=Lost%20Item%20Inquiry&body=Hello%2C%0A%0AI%20found%20your%20listing%20for%20a%20found%20item%20that%20may%20belong%20to%20me.%20Could%20we%20arrange%20to%20discuss%20this%20further%3F%0A%0AThank%20you%20for%20your%20time." 
+                                       class="btn btn-primary">
+                                        Contact Finder
+                                    </a>
+                                    {% endif %}
+                                    {% if found_item.phoneNumber %}
+                                    <a href="tel:{{ found_item.phoneNumber }}" class="btn btn-outline">
+                                        Call Now
+                                    </a>
+                                    {% endif %}
                                 </div>
-                                <div class="detail-item">
-                                    <div class="detail-label">Brand</div>
-                                    <div class="detail-value">{{ found_item.brand or 'Not specified' }}</div>
-                                </div>
-                                <div class="detail-item">
-                                    <div class="detail-label">Color</div>
-                                    <div class="detail-value">{{ found_item.primaryColor or 'Not specified' }}</div>
-                                </div>
-                                <div class="detail-item">
-                                    <div class="detail-label">Date Found</div>
-                                    <div class="detail-value">{{ found_item.dateFound or found_item.dateLost or 'Not specified' }}</div>
-                                </div>
-                                <div class="detail-item">
-                                    <div class="detail-label">Location Found</div>
-                                    <div class="detail-value">{{ found_item.whereFound or found_item.whereLost or 'Not specified' }}</div>
-                                </div>
-                                <div class="contact-info">
-                                    <strong>Contact Information:</strong>
-                                    <div>📧 {{ found_item.email or 'Email not provided' }}</div>
-                                    <div>📞 {{ found_item.phoneNumber or 'Phone not provided' }}</div>
-                                    <div>👤 {{ found_item.firstName or '' }} {{ found_item.lastName or '' }}</div>
-                                </div>
-                            </div>
-                            <div class="suggestion-actions">
-                                {% if found_item.email %}
-                                <a href="mailto:{{ found_item.email }}?subject=Found%20Item%20Inquiry&body=Hi%2C%0A%0AI%20saw%20your%20found%20item%20listing%20and%20believe%20it%20might%20be%20mine.%20%0A%0ACould%20we%20arrange%20to%20meet%20or%20discuss%20further%3F%0A%0AThank%20you!" 
-                                   class="btn btn-primary">
-                                    📧 Contact Finder
-                                </a>
-                                {% endif %}
-                                {% if found_item.phoneNumber %}
-                                <a href="tel:{{ found_item.phoneNumber }}" class="btn btn-outline">
-                                    📞 Call
-                                </a>
-                                {% endif %}
                             </div>
                         </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 {% else %}
                     <div class="no-suggestions">
-                        <h3>No Similar Items Found</h3>
-                        <p>We didn't find any matching found items at this time. Don't worry - new items are added regularly!</p>
-                        <p>Your lost item report has been saved and you'll be notified if similar items are found in the future.</p>
+                        <h3>No Matching Items Found</h3>
+                        <p>We have not found any items that match your description at this time. However, new found items are added to our database regularly.</p>
+                        <p>Your lost item report has been saved in our system, and you will receive automatic notifications when similar items are reported as found.</p>
                     </div>
                 {% endif %}
             </div>
         </div>
 
-        <!-- Back Actions -->
+        <!-- Navigation Actions -->
         <div class="back-actions">
-            <a href="{{ url_for('views.welcome') }}" class="btn btn-primary">Back to Welcome</a>
-            <a href="{{ url_for('views.lost_items') }}" class="btn btn-outline">View All Lost Items</a>
-            <a href="{{ url_for('views.found_items') }}" class="btn btn-outline">View All Found Items</a>
+            <a href="{{ url_for('views.welcome') }}" class="btn btn-primary">Return to Dashboard</a>
+            <a href="{{ url_for('views.lost_items') }}" class="btn btn-outline">Browse Lost Items</a>
+            <a href="{{ url_for('views.found_items') }}" class="btn btn-outline">Browse Found Items</a>
         </div>
     </div>
 
     <script>
-        // Auto-refresh suggestions every 30 seconds
-        let refreshInterval;
-        
-        function refreshSuggestions() {
-            // You can implement AJAX refresh here if needed
-            console.log('Refreshing suggestions...');
-        }
-        
-        // Start auto-refresh if there are suggestions
-        {% if suggestions %}
-        refreshInterval = setInterval(refreshSuggestions, 30000);
-        {% endif %}
-        
-        // Contact button analytics
+        // Contact tracking for analytics
         document.querySelectorAll('.btn-primary').forEach(button => {
             button.addEventListener('click', function(e) {
-                // Track contact attempts
-                console.log('Contact attempt for item:', this.closest('.suggestion-item'));
+                console.log('Contact initiated for item match');
             });
         });
         
-        // Smooth scroll to suggestions
+        // Smooth scroll behavior
         window.addEventListener('load', function() {
             if (window.location.hash === '#suggestions') {
                 document.querySelector('.suggestions-section').scrollIntoView({
@@ -501,6 +615,11 @@
                 });
             }
         });
+
+        // Auto-refresh functionality (if needed)
+        {% if suggestions %}
+        console.log('{{ suggestions|length }} potential matches found');
+        {% endif %}
     </script>
 
     {%include "footer.html"%}

@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lost and Found Forum</title>
     <style>
-        * {
-            margin: 0;
+        /* * {
             padding: 0;
             box-sizing: border-box;
-        }
+        } */
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -20,8 +19,7 @@
 
         .container {
             max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+            padding: 0px;
         }
 
         /* Flash messages */
@@ -250,69 +248,64 @@
             color: white;
         }
 
-        /* Industries Served Section */
+        /* Industries Section - REDUCED SIZE */
         .industries-section {
-            margin-top: 3rem;
-        }
-
-        .industries-section h2 {
-            color: #4a90a4;
-            text-align: center;
-            margin-bottom: 2rem;
-            font-size: 2rem;
+            margin: 30px 0;
+            padding: 0 1.5rem;
         }
 
         .industries-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
         }
 
         .industry-card {
             background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 1.5rem;
+            border-radius: 8px;
+            padding: 10px;
+            border: 2px solid #000000;
             text-align: center;
-            transition: all 0.3s;
-            cursor: pointer;
-            max-width: 250px; 
-            margin: 0 auto;  
+            transition: all 0.3s ease;
         }
 
         .industry-card:hover {
-            border-color: #4a90a4;
-            box-shadow: 0 4px 12px rgba(74, 144, 164, 0.1);
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .industry-icon {
-            width: 60px;
-            height: 60px;
-            background: #4a90a4;
-            border-radius: 10px;
-            margin: 0 auto 1rem;
+            width: 120px;
+            height: 120px;
+            background: rgb(255, 255, 255);
             display: flex;
+            border-radius: 50%;
+            border-color: #2c3e50;
             align-items: center;
             justify-content: center;
+            margin: 0 auto 10px;
             font-size: 1.5rem;
-            color: white;
         }
 
-        .industry-card h3 {
-            color: #333;
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-        }
-
-        .industry-card p {
-            color: #666;
+        .industry-title {
             font-size: 0.9rem;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 5px;
         }
 
-        .industry-image {
-            width: 250px;
+        .industry-subtitle {
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .industry-icon img {
+            width: 200px;
             height: auto;
+            display: block;
+            margin: 0 ;
         }
 
         @media (max-width: 768px) {
@@ -420,85 +413,108 @@
         </div>
 
         
-        <!-- Industries Served Section -->
-        <div class="industries-section">
-            <h2>Industries Served</h2>
-            <div class="industries-grid">
-                <div class="industry-card" onclick="selectIndustry('Airport')">
-                    <img src="static/assets/9.png" alt="Airport Icon" class="industry-image" />
-                    <h3>Airport</h3>
-                    <p>Lost and Found</p>
-                </div>
-
-                <div class="industry-card" onclick="selectIndustry('Hotel')">
-                    <img src="static/assets/1.png" alt="Hotel Icon" class="industry-image" />
-                    <h3>Hotel</h3>
-                    <p>Lost and Found</p>
-                </div>
-
-                <div class="industry-card" onclick="selectIndustry('Animal/Pet')">
-                    <img src="static/assets/8.png" alt="Pet Icon" class="industry-image" />
-                    <h3>Animal/Pet</h3>
-                    <p>Lost and Found</p>
-                </div>
-
-                <div class="industry-card" onclick="selectIndustry('College/University')">
-                    <img src="static/assets/4.png" alt="University Icon" class="industry-image" />
-                    <h3>College/University</h3>
-                    <p>Lost and Found</p>
-                </div>
-
-                <div class="industry-card" onclick="selectIndustry('Taxi')">
-                    <img src="static/assets/6.png" alt="Taxi Icon" class="industry-image" />
-                    <h3>Taxi</h3>
-                    <p>Lost and Found</p>
-                </div>
-
-                <div class="industry-card" onclick="selectIndustry('Venue')">
-                    <img src="static/assets/3.png" alt="Venue Icon" class="industry-image" />
-                    <h3>Venue</h3>
-                    <p>Lost and Found</p>
-                </div>
-
-                <div class="industry-card" onclick="selectIndustry('Public Transit')">
-                    <img src="static/assets/2.png" alt="Transit Icon" class="industry-image" />
-                    <h3>Public Transit</h3>
-                    <p>Lost and Found</p>
-                </div>
-
-                <div class="industry-card" onclick="selectIndustry('Bar')">
-                    <img src="static/assets/11.png" alt="Bar Icon" class="industry-image" />
-                    <h3>Bar</h3>
-                    <p>Lost and Found</p>
-                </div>
-
-                <div class="industry-card" onclick="selectIndustry('Restaurant')">
-                    <img src="static/assets/13.png" alt="Restaurant Icon" class="industry-image" />
-                    <h3>Restaurant</h3>
-                    <p>Lost and Found</p>
-                </div>
-
-                <div class="industry-card" onclick="selectIndustry('Rental Car')">
-                    <img src="static/assets/16.png" alt="Religious Place Icon" class="industry-image" />
-                    <h3>Religious Place</h3>
-                    <p>Lost and Found</p>
-                </div>
-
-                <div class="industry-card" onclick="selectIndustry('Museum')">
-                    <img src="static/assets/14.png" alt="Museum Icon" class="industry-image" />
-                    <h3>Museum</h3>
-                    <p>Lost and Found</p>
-                </div>
-
-                <div class="industry-card" onclick="selectIndustry('Park')">
-                    <img src="static/assets/12.png" alt="Park Icon" class="industry-image" />
-                    <h3>Park</h3>
-                    <p>Lost and Found</p>
+        <!-- Industries Section -->
+            <div class="industries-section">
+                <h2 class="section-title">Industries Served</h2>
+                
+                <div class="industries-grid">
+                    <div class="industry-card">
+                        <div class="industry-icon">
+                            <img src="static/assets/9.png" alt="Airport Icon" />
+                        </div>
+                        <div class="industry-title">Airport</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                        <div class="industry-icon">
+                            <img src="static/assets/1.png" alt="Hotel Icon" />
+                        </div>
+                        <div class="industry-title">Hotel</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                         <div class="industry-icon">
+                            <img src="static/assets/8.png" alt="Pet Icon" />
+                        </div>
+                        <div class="industry-title">Animal/Pet</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                        <div class="industry-icon">
+                            <img src="static/assets/4.png" alt="University Icon" />
+                        </div>
+                        <div class="industry-title">College/University</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                        <div class="industry-icon">
+                            <img src="static/assets/6.png" alt="Taxi Icon" />
+                        </div>
+                        <div class="industry-title">Taxi</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                         <div class="industry-icon">
+                            <img src="static/assets/3.png" alt="Venue Icon" />
+                        </div>
+                        <div class="industry-title">Venue</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                         <div class="industry-icon">
+                            <img src="static/assets/2.png" alt="Transit Icon" />
+                        </div>
+                        <div class="industry-title">Public Transit</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                         <div class="industry-icon">
+                            <img src="static/assets/11.png" alt="Bar Icon" />
+                        </div>
+                        <div class="industry-title">Bar</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                         <div class="industry-icon">
+                            <img src="static/assets/13.png" alt="Restaurant Icon" />
+                        </div>
+                        <div class="industry-title">Restaurant</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                         <div class="industry-icon">
+                            <img src="static/assets/16.png" alt="Temple Icon" />
+                        </div>
+                        <div class="industry-title">Temple</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                         <div class="industry-icon">
+                            <img src="static/assets/14.png" alt="Museum Icon" />
+                        </div>
+                        <div class="industry-title">Museum</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
+                    
+                    <div class="industry-card">
+                         <div class="industry-icon">
+                            <img src="static/assets/12.png" alt="Park Icon" />
+                        </div>
+                        <div class="industry-title">Park</div>
+                        <div class="industry-subtitle">Lost and Found</div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-
     <script>
         // Industry card selection function
         function selectIndustry(industry) {
@@ -608,6 +624,7 @@
         `;
         document.head.appendChild(style);
     </script>
+    
     {%include "footer.html"%}
 </body>
 </html>

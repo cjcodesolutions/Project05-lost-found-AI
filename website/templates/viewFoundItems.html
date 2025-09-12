@@ -3,8 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lost Items List</title>
+    <title>Lost & Found Registry | Professional Portal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #4a90a4;
+            --primary-dark: #2c3e50;
+            --secondary-color: #0f172a;
+            --accent-color: #3b82f6;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+            --light-gray: #f8fafc;
+            --medium-gray: #64748b;
+            --dark-gray: #334155;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,55 +33,292 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--light-gray);
+            color: var(--secondary-color);
+            line-height: 1.6;
         }
 
+        /* Header Section */
         .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 3rem 0;
             text-align: center;
-            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
         }
 
         .header h1 {
-            color: #2c3e50;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            font-weight: 300;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
         }
 
-        .header p {
-            color: #7f8c8d;
-            font-size: 1.1rem;
+        .header .subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            font-weight: 400;
         }
 
-        .items-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
+        .header .stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Container */
+        .container {
             max-width: 1400px;
             margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: white;
+            margin: -2rem auto 3rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 2rem;
+            position: relative;
+            border: 1px solid var(--border-color);
+        }
+
+        .search-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .search-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .search-header p {
+            color: var(--medium-gray);
+            font-size: 1rem;
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input-group {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.875rem 1rem 0.875rem 3rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            background-color: white;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--medium-gray);
+            font-size: 1rem;
+        }
+
+        .search-btn {
+            padding: 0.875rem 2rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .search-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 0.9375rem;
+            background: white;
+            transition: border-color 0.2s ease;
+            cursor: pointer;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .clear-filters {
+            text-align: center;
+        }
+
+        .clear-filters-btn {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9375rem;
+            transition: color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .clear-filters-btn:hover {
+            color: var(--primary-dark);
+        }
+
+        /* Results Info */
+        .results-info {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: white;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            display: none;
+        }
+
+        .results-info.show {
+            display: block;
+        }
+
+        /* Items Grid */
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(275px, 0.5fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .item-card {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
             overflow: hidden;
             transition: all 0.3s ease;
             position: relative;
         }
 
         .item-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .item-status-indicator {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 10;
+        }
+
+        .status-badge {
+            padding: 0.375rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .status-badge.active {
+            background-color: rgb(34 197 94 / 0.1);
+            color: var(--success-color);
+        }
+
+        .status-badge.incomplete {
+            background-color: rgb(251 146 60 / 0.1);
+            color: var(--warning-color);
+        }
+
+        .status-badge.claimed {
+            background-color: rgb(59 130 246 / 0.1);
+            color: var(--primary-color);
+        }
+
+        .status-indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: currentColor;
         }
 
         .item-image {
             width: 100%;
             height: 200px;
-            background-color: #f8f9fa;
+            background: var(--light-gray);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -76,393 +334,811 @@
         }
 
         .item-card:hover .item-image img {
-            transform: scale(1.05);
+            transform: scale(1.02);
         }
 
         .no-image {
-            color: #bdc3c7;
+            color: var(--medium-gray);
             font-size: 3rem;
         }
 
         .item-content {
-            padding: 15px;
+            padding: 0.5rem;
         }
 
         .item-title {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 5px;
-            line-height: 1.2;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
         }
 
         .item-location {
-            color: #e74c3c;
-            font-size: 0.9rem;
-            margin-bottom: 8px;
+            color: var(--medium-gray);
+            font-size: 0.8375rem;
+            margin-bottom: 0.4rem;
             display: flex;
             align-items: center;
+            gap: 0.2rem;
         }
 
-        .item-location::before {
-            content: "📍";
-            margin-right: 8px;
+        .item-meta {
+            margin-bottom: 0.4rem;
         }
 
-        .item-basic-info {
-            margin-bottom: 10px;
-        }
-
-        .info-row {
+        .meta-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 4px;
-            font-size: 0.8rem;
+            align-items: center;
+            margin-bottom: 0.2rem;
+            font-size: 0.875rem;
         }
 
-        .info-label {
-            color: #7f8c8d;
-            font-weight: 500;
+        .meta-label {
+            color: var(--medium-gray);
+            font-weight: 300;
         }
 
-        .info-value {
-            color: #2c3e50;
+        .meta-value {
+            color: var(--dark-gray);
             font-weight: 600;
         }
 
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .item-actions {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 0.75rem;
         }
 
-        .status-badge.active {
-            background-color: #d5f4e6;
-            color: #27ae60;
-        }
-
-        .status-badge.incomplete {
-            background-color: #fef9e7;
-            color: #f39c12;
-        }
-
-        .status-badge.found {
-            background-color: #e8f5e8;
-            color: #28a745;
-        }
-
-        .view-more-btn {
-            width: 100%;
-            padding: 8px;
-            background: linear-gradient(45deg, #3498db, #2980b9);
+        .contact-btn {
+            padding: 0.75rem 1rem;
+            background: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 6px;
-            font-size: 0.85rem;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
             font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .contact-btn:hover {
+            background: var(--primary-dark);
+            color: white;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+        .details-btn {
+            padding: 0.75rem;
+            background: transparent;
+            color: var(--medium-gray);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .view-more-btn:hover {
-            background: linear-gradient(45deg, #2980b9, #3498db);
-            transform: translateY(-2px);
+        .details-btn:hover {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
         }
 
+        /* Detailed Info Panel */
         .detailed-info {
             display: none;
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-top: 1px solid #e9ecef;
-            animation: slideDown 0.3s ease;
+            padding: 0.4rem;
+            background: var(--light-gray);
+            border-top: 1px solid var(--border-color);
         }
 
         .detailed-info.show {
             display: block;
+            animation: slideDown 0.3s ease;
         }
 
         @keyframes slideDown {
             from {
                 opacity: 0;
-                max-height: 0;
+                transform: translateY(-10px);
             }
             to {
                 opacity: 1;
-                max-height: 500px;
+                transform: translateY(0);
             }
         }
 
-        .detail-row {
-            display: flex;
-            margin-bottom: 12px;
-            padding: 8px 0;
-            border-bottom: 1px solid #e9ecef;
+        .detail-section {
+            margin-bottom: 1.5rem;
         }
 
-        .detail-row:last-child {
-            border-bottom: none;
+        .detail-section:last-child {
             margin-bottom: 0;
         }
 
-        .detail-label {
+        .detail-section h4 {
+            font-size: 0.875rem;
             font-weight: 600;
-            color: #34495e;
-            min-width: 120px;
+            color: var(--dark-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+
+        .detail-grid {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 0.3rem;
+            background: white;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .detail-label {
+            font-weight: 500;
+            color: var(--medium-gray);
+            font-size: 0.875rem;
         }
 
         .detail-value {
-            color: #2c3e50;
-            flex: 1;
+            color: var(--dark-gray);
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-align: right;
         }
 
-        .no-items {
+        .contact-info {
+            background: rgb(59 130 246 / 0.05);
+            border: 1px solid rgb(59 130 246 / 0.2);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+        }
+
+        /* Empty State */
+        .empty-state {
             text-align: center;
-            color: #7f8c8d;
-            font-size: 1.2rem;
-            margin-top: 60px;
-            padding: 60px 20px;
+            padding: 4rem 2rem;
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
             max-width: 500px;
-            margin: 60px auto;
+            margin: 3rem auto;
         }
 
-        .no-items-icon {
+        .empty-icon {
             font-size: 4rem;
-            margin-bottom: 20px;
+            color: var(--medium-gray);
+            margin-bottom: 1.5rem;
         }
 
-        .back-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: linear-gradient(45deg, #e74c3c, #c0392b);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 50px;
+        .empty-state h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--medium-gray);
+            margin-bottom: 2rem;
+        }
+
+        .primary-link {
+            color: var(--primary-color);
             text-decoration: none;
             font-weight: 600;
-            box-shadow: 0 4px 20px rgba(231, 76, 60, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.2s ease;
+        }
+
+        .primary-link:hover {
+            color: var(--primary-dark);
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: var(--shadow-lg);
             transition: all 0.3s ease;
             z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .back-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 25px rgba(231, 76, 60, 0.4);
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            color: white;
+            text-decoration: none;
         }
 
-        @media (max-width: 1200px) {
-            .items-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
         }
 
-        @media (max-width: 900px) {
+        /* Responsive Design */
+        @media (max-width: 1024px) {
             .items-grid {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             }
         }
 
         @media (max-width: 768px) {
-            .items-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
+            .header {
+                padding: 2rem 0;
             }
 
             .header h1 {
                 font-size: 2rem;
             }
 
+            .header .stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .search-section {
+                margin: -1rem auto 2rem;
+                padding: 1.5rem;
+            }
+
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .items-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
             .back-btn {
-                bottom: 20px;
-                right: 20px;
-                padding: 12px 20px;
+                bottom: 1rem;
+                right: 1rem;
+                padding: 0.75rem 1rem;
             }
         }
 
         @media (max-width: 480px) {
-            .items-grid {
+            .item-actions {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
+    {% include 'header.html' %}
+    <!-- Header -->
     <div class="header">
-        <h1>View Items Registry</h1>
-        <p>Help reunite lost items with their owners</p>
-    </div>
-    
-    {% if lost_items %}
-    <div class="items-grid">
-        {% for item in lost_items %}
-        <div class="item-card">
-            <div class="item-image">
-                {% if item.imageUrl %}
-                    <img src="{{ item.imageUrl }}" alt="Lost Item Image" loading="lazy">
-                {% else %}
-                    <div class="no-image">📷</div>
-                {% endif %}
-            </div>
-            
-            <div class="item-content">
-                <h3 class="item-title">
-                    {% if item.whatLost %}
-                        {{ item.whatLost }}
-                    {% elif item.itemType %}
-                        {{ item.itemType }}
-                    {% else %}
-                        Unknown Item
-                    {% endif %}
-                </h3>
-                
-                <div class="item-location">
-                    {% if item.whereLost %}
-                        {{ item.whereLost }}
-                    {% elif item.location %}
-                        {{ item.location }}
-                    {% else %}
-                        Unknown Location
-                    {% endif %}
+        <div class="header-content">
+            <h1><i class="fas fa-search-location"></i> Lost & Found Registry</h1>
+            <p class="subtitle">Professional item recovery system connecting finders with owners</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalItems">0</span>
+                    <span class="stat-label">Items Registered</span>
                 </div>
-                
-                <div class="item-basic-info">
-                    <div class="info-row">
-                        <span class="info-label">Status:</span>
-                        <span class="status-badge {{ item.status }}">{{ item.status }}</span>
-                    </div>
-                    
-                    {% if item.dateLost %}
-                    <div class="info-row">
-                        <span class="info-label">Date Lost:</span>
-                        <span class="info-value">{{ item.dateLost }}</span>
-                    </div>
-                    {% endif %}
-                    
-                    {% if item.category %}
-                    <div class="info-row">
-                        <span class="info-label">Category:</span>
-                        <span class="info-value">{{ item.category }}</span>
-                    </div>
-                    {% endif %}
-                    
-                    {% if item.primaryColor %}
-                    <div class="info-row">
-                        <span class="info-label">Color:</span>
-                        <span class="info-value">
-                            {{ item.primaryColor }}
-                            {% if item.secondaryColor %}
-                                / {{ item.secondaryColor }}
-                            {% endif %}
-                        </span>
-                    </div>
-                    {% endif %}
+                <div class="stat-item">
+                    <span class="stat-number" id="activeItems">0</span>
+                    <span class="stat-label">Currently Active</span>
                 </div>
-                
-                <button class="view-more-btn" onclick="toggleDetails(this)">
-                    View Details
-                </button>
-            </div>
-            
-            <div class="detailed-info">
-                {% if item.timeLost %}
-                <div class="detail-row">
-                    <span class="detail-label">Time Lost:</span>
-                    <span class="detail-value">{{ item.timeLost }}</span>
-                </div>
-                {% endif %}
-                
-                {% if item.brand %}
-                <div class="detail-row">
-                    <span class="detail-label">Brand:</span>
-                    <span class="detail-value">{{ item.brand }}</span>
-                </div>
-                {% endif %}
-                
-                {% if item.additionalInfo %}
-                <div class="detail-row">
-                    <span class="detail-label">Additional Info:</span>
-                    <span class="detail-value">{{ item.additionalInfo }}</span>
-                </div>
-                {% endif %}
-                
-                {% if item.firstName and item.lastName %}
-                <div class="detail-row">
-                    <span class="detail-label">Contact:</span>
-                    <span class="detail-value">{{ item.firstName }} {{ item.lastName }}</span>
-                </div>
-                {% endif %}
-                
-                {% if item.phoneNumber %}
-                <div class="detail-row">
-                    <span class="detail-label">Phone:</span>
-                    <span class="detail-value">{{ item.phoneNumber }}</span>
-                </div>
-                {% endif %}
-                
-                <div class="detail-row">
-                    <span class="detail-label">Submitted:</span>
-                    <span class="detail-value">
-                        {{ item.submissionTime.strftime('%Y-%m-%d at %H:%M') if item.submissionTime else 'Unknown' }}
-                    </span>
+                <div class="stat-item">
+                    <span class="stat-number" id="claimedItems">0</span>
+                    <span class="stat-label">Successfully Claimed</span>
                 </div>
             </div>
         </div>
-        {% endfor %}
     </div>
-    {% else %}
-    <div class="no-items">
-        <div class="no-items-icon">🔍</div>
-        <h2>No Lost Items Found</h2>
-        <p>Be the first to report a lost item</p>
-        <br>
-        <a href="{{ url_for('views.welcome') }}" style="color: #3498db; text-decoration: none; font-weight: 600;">Report a Lost Item →</a>
+
+    <div class="container">
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-header">
+                <h2>Search Found Items</h2>
+                <p>Use advanced filtering to locate specific items in our database</p>
+            </div>
+            
+            <div class="search-form">
+                <div class="search-input-group">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" 
+                           class="search-input" 
+                           id="searchInput" 
+                           placeholder="Search by item name, brand, description, or location...">
+                </div>
+                <button class="search-btn" onclick="performSearch()">
+                    <i class="fas fa-search"></i>
+                    Search
+                </button>
+            </div>
+            
+            <div class="filters-grid">
+                <select class="filter-select" id="locationFilter">
+                    <option value="">All Locations</option>
+                </select>
+                
+                <select class="filter-select" id="categoryFilter">
+                    <option value="">All Categories</option>
+                </select>
+                
+                <select class="filter-select" id="statusFilter">
+                    <option value="">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="incomplete">Incomplete</option>
+                    <option value="claimed">Claimed</option>
+                </select>
+            </div>
+            
+            <div class="clear-filters">
+                <a href="#" class="clear-filters-btn" onclick="clearAllFilters()">
+                    <i class="fas fa-times"></i>
+                    Clear All Filters
+                </a>
+            </div>
+        </div>
+
+        <!-- Results Info -->
+        <div class="results-info" id="resultsInfo">
+            <i class="fas fa-info-circle" style="color: var(--primary-color); margin-right: 0.5rem;"></i>
+            Showing <strong><span id="resultCount">0</span></strong> items matching your criteria
+        </div>
+        
+        <!-- Items Grid -->
+        {% if found_items %}
+        <div class="items-grid" id="itemsGrid">
+            {% for item in found_items %}
+            <div class="item-card" 
+                 data-title="{{ (item.whatFound or item.whatLost or item.itemType or 'Unknown Item')|lower }}"
+                 data-location="{{ (item.whereFound or item.whereLost or item.location or '')|lower }}"
+                 data-category="{{ (item.category or '')|lower }}"
+                 data-status="{{ item.status|lower }}"
+                 data-brand="{{ (item.brand or '')|lower }}"
+                 data-additional-info="{{ (item.additionalInfo or '')|lower }}">
+                
+                <div class="item-status-indicator">
+                    <div class="status-badge {{ item.status }}">
+                        <div class="status-indicator"></div>
+                        {{ item.status|title }}
+                    </div>
+                </div>
+                
+                <div class="item-image">
+                    {% if item.imageUrl %}
+                        <img src="{{ item.imageUrl }}" alt="Found Item Image" loading="lazy">
+                    {% else %}
+                        <i class="fas fa-camera no-image"></i>
+                    {% endif %}
+                </div>
+                
+                <div class="item-content">
+                    <h3 class="item-title">
+                        {% if item.whatFound %}
+                            {{ item.whatFound }}
+                        {% elif item.whatLost %}
+                            {{ item.whatLost }}
+                        {% elif item.itemType %}
+                            {{ item.itemType }}
+                        {% else %}
+                            Unknown Item
+                        {% endif %}
+                    </h3>
+                    
+                    <div class="item-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        {% if item.whereFound %}
+                            {{ item.whereFound }}
+                        {% elif item.whereLost %}
+                            {{ item.whereLost }}
+                        {% elif item.location %}
+                            {{ item.location }}
+                        {% else %}
+                            Location not specified
+                        {% endif %}
+                    </div>
+                    
+                    <div class="item-meta">
+                        {% if item.dateFound or item.dateLost %}
+                        <div class="meta-row">
+                            <span class="meta-label">Date Found:</span>
+                            <span class="meta-value">{{ item.dateFound or item.dateLost }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if item.category %}
+                        <div class="meta-row">
+                            <span class="meta-label">Category:</span>
+                            <span class="meta-value">{{ item.category }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if item.primaryColor %}
+                        <div class="meta-row">
+                            <span class="meta-label">Color:</span>
+                            <span class="meta-value">
+                                {{ item.primaryColor }}
+                                {% if item.secondaryColor %}/ {{ item.secondaryColor }}{% endif %}
+                            </span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="item-actions">
+                        {% if item.email %}
+                        <a href="mailto:{{ item.email }}?subject=Found%20Item%20Inquiry%20-%20{{ item.whatFound or item.whatLost or item.itemType or 'Item' }}&body=Hello%2C%0A%0AI%20believe%20the%20item%20you%20found%20may%20belong%20to%20me.%20Could%20we%20discuss%20this%20further%3F%0A%0AThank%20you%20for%20your%20time." 
+                           class="contact-btn">
+                            <i class="fas fa-envelope"></i>
+                            Contact Finder
+                        </a>
+                        {% endif %}
+                        
+                        <button class="details-btn" onclick="toggleDetails(this)" aria-label="Toggle details">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="detailed-info">
+                    <div class="detail-section">
+                        <h4>Item Details</h4>
+                        <div class="detail-grid">
+                            {% if item.timeFound or item.timeLost %}
+                            <div class="detail-item">
+                                <span class="detail-label">Time Found:</span>
+                                <span class="detail-value">{{ item.timeFound or item.timeLost }}</span>
+                            </div>
+                            {% endif %}
+                            
+                            {% if item.brand %}
+                            <div class="detail-item">
+                                <span class="detail-label">Brand:</span>
+                                <span class="detail-value">{{ item.brand }}</span>
+                            </div>
+                            {% endif %}
+                            
+                            {% if item.additionalInfo %}
+                            <div class="detail-item">
+                                <span class="detail-label">Additional Info:</span>
+                                <span class="detail-value">{{ item.additionalInfo }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h4>Contact Information</h4>
+                        <div class="contact-info">
+                            <div class="detail-grid">
+                                <div class="detail-item">
+                                    <span class="detail-label">Finder:</span>
+                                    <span class="detail-value">
+                                        {% if item.firstName and item.lastName %}
+                                            {{ item.firstName }} {{ item.lastName }}
+                                        {% else %}
+                                            Anonymous
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                
+                                {% if item.phoneNumber %}
+                                <div class="detail-item">
+                                    <span class="detail-label">Phone:</span>
+                                    <span class="detail-value">
+                                        <a href="tel:{{ item.phoneNumber }}" style="color: var(--primary-color); text-decoration: none;">
+                                            {{ item.phoneNumber }}
+                                        </a>
+                                    </span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if item.email %}
+                                <div class="detail-item">
+                                    <span class="detail-label">Email:</span>
+                                    <span class="detail-value">
+                                        <a href="mailto:{{ item.email }}" style="color: var(--primary-color); text-decoration: none;">
+                                            {{ item.email }}
+                                        </a>
+                                    </span>
+                                </div>
+                                {% endif %}
+                                
+                                <div class="detail-item">
+                                    <span class="detail-label">Submitted:</span>
+                                    <span class="detail-value">
+                                        {{ item.submissionTime.strftime('%B %d, %Y at %I:%M %p') if item.submissionTime else 'Unknown' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-inbox"></i>
+            </div>
+            <h2>No Found Items</h2>
+            <p>No items have been registered in the system yet. Be the first to help someone recover their lost belongings.</p>
+            <a href="{{ url_for('views.submit_found') }}" class="primary-link">
+                <i class="fas fa-plus"></i>
+                Report a Found Item
+            </a>
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
     
-    <a href="{{ url_for('views.home') }}" class="back-btn">← Back to Home</a>
+    <!-- Back Button -->
+    <!-- <a href="{{ url_for('views.welcome') }}" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        Back to Home
+    </a> -->
 
     <script>
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+        });
+
+        function initializeApp() {
+            populateFilters();
+            updateStatistics();
+            setupEventListeners();
+        }
+
+        function setupEventListeners() {
+            document.getElementById('searchInput').addEventListener('input', performSearch);
+            document.getElementById('locationFilter').addEventListener('change', performSearch);
+            document.getElementById('categoryFilter').addEventListener('change', performSearch);
+            document.getElementById('statusFilter').addEventListener('change', performSearch);
+        }
+
         function toggleDetails(button) {
-            const detailedInfo = button.parentNode.nextElementSibling;
+            const card = button.closest('.item-card');
+            const detailedInfo = card.querySelector('.detailed-info');
+            const icon = button.querySelector('i');
             const isVisible = detailedInfo.classList.contains('show');
             
             if (isVisible) {
                 detailedInfo.classList.remove('show');
-                button.textContent = 'View Details';
-                button.style.background = 'linear-gradient(45deg, #3498db, #2980b9)';
+                icon.className = 'fas fa-chevron-down';
+                button.setAttribute('aria-expanded', 'false');
             } else {
                 detailedInfo.classList.add('show');
-                button.textContent = 'Hide Details';
-                button.style.background = 'linear-gradient(45deg, #95a5a6, #7f8c8d)';
+                icon.className = 'fas fa-chevron-up';
+                button.setAttribute('aria-expanded', 'true');
             }
         }
 
-        // Add smooth scroll behavior
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
+        function populateFilters() {
+            const items = document.querySelectorAll('.item-card');
+            const locations = new Set();
+            const categories = new Set();
 
-        // Add loading animation for images
-        document.querySelectorAll('img').forEach(img => {
+            items.forEach(item => {
+                const location = item.dataset.location;
+                const category = item.dataset.category;
+                
+                if (location && location.trim() !== '') {
+                    locations.add(location);
+                }
+                if (category && category.trim() !== '') {
+                    categories.add(category);
+                }
+            });
+
+            // Populate location filter
+            const locationFilter = document.getElementById('locationFilter');
+            Array.from(locations).sort().forEach(location => {
+                const option = document.createElement('option');
+                option.value = location;
+                option.textContent = location.charAt(0).toUpperCase() + location.slice(1);
+                locationFilter.appendChild(option);
+            });
+
+            // Populate category filter
+            const categoryFilter = document.getElementById('categoryFilter');
+            Array.from(categories).sort().forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+                categoryFilter.appendChild(option);
+            });
+        }
+
+        function updateStatistics() {
+            const items = document.querySelectorAll('.item-card');
+            const totalItems = items.length;
+            let activeItems = 0;
+            let claimedItems = 0;
+
+            items.forEach(item => {
+                const status = item.dataset.status;
+                if (status === 'active') activeItems++;
+                else if (status === 'claimed') claimedItems++;
+            });
+
+            // Animate numbers
+            animateNumber('totalItems', totalItems);
+            animateNumber('activeItems', activeItems);
+            animateNumber('claimedItems', claimedItems);
+        }
+
+        function animateNumber(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            const duration = 1000;
+            const increment = targetValue / (duration / 16);
+            let current = 0;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= targetValue) {
+                    current = targetValue;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current);
+            }, 16);
+        }
+
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const locationFilter = document.getElementById('locationFilter').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+            
+            const items = document.querySelectorAll('.item-card');
+            let visibleCount = 0;
+
+            items.forEach(item => {
+                const title = item.dataset.title;
+                const location = item.dataset.location;
+                const category = item.dataset.category;
+                const status = item.dataset.status;
+                const brand = item.dataset.brand;
+                const additionalInfo = item.dataset.additionalInfo;
+
+                // Check if item matches search term
+                const matchesSearch = !searchTerm || 
+                    title.includes(searchTerm) || 
+                    location.includes(searchTerm) ||
+                    brand.includes(searchTerm) ||
+                    additionalInfo.includes(searchTerm);
+
+                // Check if item matches filters
+                const matchesLocation = !locationFilter || location === locationFilter;
+                const matchesCategory = !categoryFilter || category === categoryFilter;
+                const matchesStatus = !statusFilter || status === statusFilter;
+
+                if (matchesSearch && matchesLocation && matchesCategory && matchesStatus) {
+                    item.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+
+            updateResultsInfo(visibleCount);
+        }
+
+        function updateResultsInfo(count) {
+            const resultsInfo = document.getElementById('resultsInfo');
+            const resultCount = document.getElementById('resultCount');
+            
+            if (hasActiveFilters()) {
+                resultsInfo.classList.add('show');
+                resultCount.textContent = count;
+            } else {
+                resultsInfo.classList.remove('show');
+            }
+        }
+
+        function hasActiveFilters() {
+            const searchTerm = document.getElementById('searchInput').value;
+            const locationFilter = document.getElementById('locationFilter').value;
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            
+            return searchTerm || locationFilter || categoryFilter || statusFilter;
+        }
+
+        function clearAllFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('locationFilter').value = '';
+            document.getElementById('categoryFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+            
+            // Show all items
+            document.querySelectorAll('.item-card').forEach(item => {
+                item.classList.remove('hidden');
+            });
+            
+            // Hide results info
+            document.getElementById('resultsInfo').classList.remove('show');
+            
+            // Prevent default link behavior
+            event.preventDefault();
+        }
+
+        // Enhanced image loading with proper error handling
+        document.querySelectorAll('.item-image img').forEach(img => {
+            // Set initial opacity to 1 to show images immediately
+            img.style.opacity = '1';
+            
             img.addEventListener('load', function() {
                 this.style.opacity = '1';
             });
-            img.style.opacity = '0';
-            img.style.transition = 'opacity 0.3s ease';
+            
+            img.addEventListener('error', function() {
+                console.log('Image failed to load:', this.src);
+                // Show fallback icon if image fails to load
+                const fallback = document.createElement('i');
+                fallback.className = 'fas fa-camera no-image';
+                this.parentNode.appendChild(fallback);
+                this.style.display = 'none';
+            });
+        });
+
+        // Keyboard accessibility for search
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        // Add smooth scrolling for better UX
+        function scrollToResults() {
+            const resultsSection = document.getElementById('itemsGrid');
+            if (resultsSection) {
+                resultsSection.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+
+        // Enhanced search with debouncing for better performance
+        let searchTimeout;
+        document.getElementById('searchInput').addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(performSearch, 300);
         });
     </script>
+    {% include 'footer.html' %}
 </body>
 </html>

@@ -4,7 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lost Items List</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #4a90a4;
+            --primary-dark: #2c3e50;
+            --secondary-color: #0f172a;
+            --accent-color: #3b82f6;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+            --light-gray: #f8fafc;
+            --medium-gray: #64748b;
+            --dark-gray: #334155;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,56 +33,103 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--light-gray);
+            color: var(--secondary-color);
+            line-height: 1.6;
         }
 
+        /* Header Section */
         .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 3rem 0;
             text-align: center;
-            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
         }
 
         .header h1 {
-            color: #2c3e50;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            font-weight: 300;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
         }
 
-        .header p {
-            color: #7f8c8d;
-            font-size: 1.1rem;
-            margin-bottom: 30px;
+        .header .subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .header .stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         /* Search Section */
         .search-section {
             background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            margin-bottom: 30px;
-           
-            margin-left: 35px;
-            margin-right: 35px;
-            margin-bottom: 20px;
+            margin: -2rem auto 3rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 2rem;
+            position: relative;
+            border: 1px solid var(--border-color);
+            max-width: 1400px;
         }
 
         .search-header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 2rem;
         }
 
         .search-header h2 {
-            color: #2c3e50;
             font-size: 1.5rem;
-            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
         }
 
         .search-header p {
-            color: #7f8c8d;
+            color: var(--medium-gray);
             font-size: 1rem;
         }
 
@@ -200,7 +268,7 @@
         }
 
         .item-content {
-            padding: 15px;
+            padding: 5px;
         }
 
         .item-title {
@@ -221,18 +289,18 @@
 
         .item-location::before {
             content: "📍";
-            margin-right: 8px;
+            margin-right: 3px;
         }
 
         .item-basic-info {
-            margin-bottom: 10px;
+            margin-bottom: 2px;
         }
 
         .info-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 4px;
-            font-size: 0.8rem;
+            margin-bottom: 1px;
+            font-size: 0.6rem;
         }
 
         .info-label {
@@ -291,7 +359,7 @@
 
         .detailed-info {
             display: none;
-            padding: 20px;
+            padding: 5px;
             background-color: #f8f9fa;
             border-top: 1px solid #e9ecef;
             animation: slideDown 0.3s ease;
@@ -314,8 +382,8 @@
 
         .detail-row {
             display: flex;
-            margin-bottom: 12px;
-            padding: 8px 0;
+            margin-bottom: 2px;
+            padding: 2px 0;
             border-bottom: 1px solid #e9ecef;
         }
 
@@ -325,7 +393,7 @@
         }
 
         .detail-label {
-            font-weight: 600;
+            font-weight: 50;
             color: #34495e;
             min-width: 120px;
         }
@@ -373,6 +441,13 @@
             box-shadow: 0 6px 25px rgba(231, 76, 60, 0.4);
         }
 
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
         @media (max-width: 1200px) {
             .items-grid {
                 grid-template-columns: repeat(4, 1fr);
@@ -395,6 +470,24 @@
                 font-size: 2rem;
             }
 
+            .header {
+                padding: 2rem 0;
+            }
+
+            .header .stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .search-section {
+                margin: -1rem auto 2rem;
+                padding: 1.5rem;
+            }
+
             .back-btn {
                 bottom: 20px;
                 right: 20px;
@@ -410,11 +503,6 @@
                 grid-template-columns: 1fr;
                 gap: 10px;
             }
-
-            .search-section {
-                padding: 20px;
-                margin-bottom: 20px;
-            }
         }
 
         @media (max-width: 480px) {
@@ -425,198 +513,262 @@
     </style>
 </head>
 <body>
+    {% include 'header.html' %}
+    
+    <!-- Header -->
     <div class="header">
-        <h1>Lost Items Registry</h1>
-        <p>Help reunite lost items with their owners</p>
-    </div>
-    
-    <!-- Search Section -->
-    <div class="search-section">
-        <div class="search-header">
-            <h2>Search Lost Items</h2>
-            <p>Find lost items by searching through descriptions, locations, or categories</p>
-        </div>
-        
-        <div class="search-container">
-            <input type="text" id="searchInput" class="search-input" placeholder="Search by item name, brand, or description...">
-            <button class="search-btn" onclick="performSearch()">Search</button>
-        </div>
-        
-        <div class="filter-row">
-            <select id="locationFilter" class="filter-select">
-                <option value="">All Locations</option>
-                <option value="Airport">Airport</option>
-                <option value="Hotel">Hotel</option>
-                <option value="Animal/Pet">Animal/Pet</option>
-                <option value="College/University">College/University</option>
-                <option value="Taxi">Taxi</option>
-                <option value="Venue">Venue</option>
-                <option value="Public Transit">Public Transit</option>
-                <option value="Bar">Bar</option>
-                <option value="Restaurant">Restaurant</option>
-                <option value="Rental Car">Rental Car</option>
-                <option value="Museum">Museum</option>
-                <option value="Park">Park</option>
-            </select>
-            
-            <select id="categoryFilter" class="filter-select">
-                <option value="">All Categories</option>
-                <option value="Electronics">Electronics</option>
-                <option value="Clothing">Clothing</option>
-                <option value="Accessories">Accessories</option>
-                <option value="Documents">Documents</option>
-                <option value="Jewelry">Jewelry</option>
-                <option value="Bags">Bags</option>
-                <option value="Other">Other</option>
-            </select>
-            
-            <select id="statusFilter" class="filter-select">
-                <option value="">All Status</option>
-                <option value="active">Active</option>
-                <option value="incomplete">Incomplete</option>
-                <option value="found">Found</option>
-            </select>
-        </div>
-        
-        <div class="clear-filters">
-            <button class="clear-btn" onclick="clearAllFilters()">Clear All Filters</button>
+        <div class="header-content">
+            <h1><i class="fas fa-search-location"></i> Lost Items Registry</h1>
+            <p class="subtitle">Help reunite lost items with their owners</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalItems">0</span>
+                    <span class="stat-label">Items Reported</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="activeItems">0</span>
+                    <span class="stat-label">Currently Missing</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="foundItems">0</span>
+                    <span class="stat-label">Successfully Found</span>
+                </div>
+            </div>
         </div>
     </div>
-    
-    <div class="search-results-info" id="searchResults">
-        <span id="resultsCount">Showing all items</span>
-    </div>
-    
-    {% if lost_items %}
-    <div class="items-grid">
-        {% for item in lost_items %}
-        <div class="item-card">
-            <div class="item-image">
-                {% if item.imageUrl %}
-                    <img src="{{ item.imageUrl }}" alt="Lost Item Image" loading="lazy">
-                {% else %}
-                    <div class="no-image">📷</div>
-                {% endif %}
+
+    <div class="container">
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-header">
+                <h2>Search Lost Items</h2>
+                <p>Find lost items by searching through descriptions, locations, or categories</p>
             </div>
             
-            <div class="item-content">
-                <h3 class="item-title">
-                    {% if item.whatLost %}
-                        {{ item.whatLost }}
-                    {% elif item.itemType %}
-                        {{ item.itemType }}
-                    {% else %}
-                        Unknown Item
-                    {% endif %}
-                </h3>
+            <div class="search-container">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search by item name, brand, or description...">
+                <button class="search-btn" onclick="performSearch()">Search</button>
+            </div>
+            
+            <div class="filter-row">
+                <select id="locationFilter" class="filter-select">
+                    <option value="">All Locations</option>
+                    <option value="Airport">Airport</option>
+                    <option value="Hotel">Hotel</option>
+                    <option value="Animal/Pet">Animal/Pet</option>
+                    <option value="College/University">College/University</option>
+                    <option value="Taxi">Taxi</option>
+                    <option value="Venue">Venue</option>
+                    <option value="Public Transit">Public Transit</option>
+                    <option value="Bar">Bar</option>
+                    <option value="Restaurant">Restaurant</option>
+                    <option value="Rental Car">Rental Car</option>
+                    <option value="Museum">Museum</option>
+                    <option value="Park">Park</option>
+                </select>
                 
-                <div class="item-location">
-                    {% if item.whereLost %}
-                        {{ item.whereLost }}
-                    {% elif item.location %}
-                        {{ item.location }}
+                <select id="categoryFilter" class="filter-select">
+                    <option value="">All Categories</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Accessories">Accessories</option>
+                    <option value="Documents">Documents</option>
+                    <option value="Jewelry">Jewelry</option>
+                    <option value="Bags">Bags</option>
+                    <option value="Other">Other</option>
+                </select>
+                
+                <select id="statusFilter" class="filter-select">
+                    <option value="">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="incomplete">Incomplete</option>
+                    <option value="found">Found</option>
+                </select>
+            </div>
+            
+            <div class="clear-filters">
+                <button class="clear-btn" onclick="clearAllFilters()">Clear All Filters</button>
+            </div>
+        </div>
+        
+        <div class="search-results-info" id="searchResults">
+            <span id="resultsCount">Showing all items</span>
+        </div>
+        
+        {% if lost_items %}
+        <div class="items-grid">
+            {% for item in lost_items %}
+            <div class="item-card">
+                <div class="item-image">
+                    {% if item.imageUrl %}
+                        <img src="{{ item.imageUrl }}" alt="Lost Item Image" loading="lazy">
                     {% else %}
-                        Unknown Location
+                        <div class="no-image">📷</div>
                     {% endif %}
                 </div>
                 
-                <div class="item-basic-info">
-                    <div class="info-row">
-                        <span class="info-label">Status:</span>
-                        <span class="status-badge {{ item.status }}">{{ item.status }}</span>
+                <div class="item-content">
+                    <h3 class="item-title">
+                        {% if item.whatLost %}
+                            {{ item.whatLost }}
+                        {% elif item.itemType %}
+                            {{ item.itemType }}
+                        {% else %}
+                            Unknown Item
+                        {% endif %}
+                    </h3>
+                    
+                    <div class="item-location">
+                        {% if item.whereLost %}
+                            {{ item.whereLost }}
+                        {% elif item.location %}
+                            {{ item.location }}
+                        {% else %}
+                            Unknown Location
+                        {% endif %}
                     </div>
                     
-                    {% if item.dateLost %}
-                    <div class="info-row">
-                        <span class="info-label">Date Lost:</span>
-                        <span class="info-value">{{ item.dateLost }}</span>
+                    <div class="item-basic-info">
+                        <div class="info-row">
+                            <span class="info-label">Status:</span>
+                            <span class="status-badge {{ item.status }}">{{ item.status }}</span>
+                        </div>
+                        
+                        {% if item.dateLost %}
+                        <div class="info-row">
+                            <span class="info-label">Date Lost:</span>
+                            <span class="info-value">{{ item.dateLost }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if item.category %}
+                        <div class="info-row">
+                            <span class="info-label">Category:</span>
+                            <span class="info-value">{{ item.category }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if item.primaryColor %}
+                        <div class="info-row">
+                            <span class="info-label">Color:</span>
+                            <span class="info-value">
+                                {{ item.primaryColor }}
+                                {% if item.secondaryColor %}
+                                    / {{ item.secondaryColor }}
+                                {% endif %}
+                            </span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <button class="view-more-btn" onclick="toggleDetails(this)">
+                        View Details
+                    </button>
+                </div>
+                
+                <div class="detailed-info">
+                    {% if item.timeLost %}
+                    <div class="detail-row">
+                        <span class="detail-label">Time Lost:</span>
+                        <span class="detail-value">{{ item.timeLost }}</span>
                     </div>
                     {% endif %}
                     
-                    {% if item.category %}
-                    <div class="info-row">
-                        <span class="info-label">Category:</span>
-                        <span class="info-value">{{ item.category }}</span>
+                    {% if item.brand %}
+                    <div class="detail-row">
+                        <span class="detail-label">Brand:</span>
+                        <span class="detail-value">{{ item.brand }}</span>
                     </div>
                     {% endif %}
                     
-                    {% if item.primaryColor %}
-                    <div class="info-row">
-                        <span class="info-label">Color:</span>
-                        <span class="info-value">
-                            {{ item.primaryColor }}
-                            {% if item.secondaryColor %}
-                                / {{ item.secondaryColor }}
-                            {% endif %}
+                    {% if item.additionalInfo %}
+                    <div class="detail-row">
+                        <span class="detail-label">Additional Info:</span>
+                        <span class="detail-value">{{ item.additionalInfo }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if item.firstName and item.lastName %}
+                    <div class="detail-row">
+                        <span class="detail-label">Contact:</span>
+                        <span class="detail-value">{{ item.firstName }} {{ item.lastName }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if item.phoneNumber %}
+                    <div class="detail-row">
+                        <span class="detail-label">Phone:</span>
+                        <span class="detail-value">{{ item.phoneNumber }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="detail-row">
+                        <span class="detail-label">Submitted:</span>
+                        <span class="detail-value">
+                            {{ item.submissionTime.strftime('%Y-%m-%d at %H:%M') if item.submissionTime else 'Unknown' }}
                         </span>
                     </div>
-                    {% endif %}
-                </div>
-                
-                <button class="view-more-btn" onclick="toggleDetails(this)">
-                    View Details
-                </button>
-            </div>
-            
-            <div class="detailed-info">
-                {% if item.timeLost %}
-                <div class="detail-row">
-                    <span class="detail-label">Time Lost:</span>
-                    <span class="detail-value">{{ item.timeLost }}</span>
-                </div>
-                {% endif %}
-                
-                {% if item.brand %}
-                <div class="detail-row">
-                    <span class="detail-label">Brand:</span>
-                    <span class="detail-value">{{ item.brand }}</span>
-                </div>
-                {% endif %}
-                
-                {% if item.additionalInfo %}
-                <div class="detail-row">
-                    <span class="detail-label">Additional Info:</span>
-                    <span class="detail-value">{{ item.additionalInfo }}</span>
-                </div>
-                {% endif %}
-                
-                {% if item.firstName and item.lastName %}
-                <div class="detail-row">
-                    <span class="detail-label">Contact:</span>
-                    <span class="detail-value">{{ item.firstName }} {{ item.lastName }}</span>
-                </div>
-                {% endif %}
-                
-                {% if item.phoneNumber %}
-                <div class="detail-row">
-                    <span class="detail-label">Phone:</span>
-                    <span class="detail-value">{{ item.phoneNumber }}</span>
-                </div>
-                {% endif %}
-                
-                <div class="detail-row">
-                    <span class="detail-label">Submitted:</span>
-                    <span class="detail-value">
-                        {{ item.submissionTime.strftime('%Y-%m-%d at %H:%M') if item.submissionTime else 'Unknown' }}
-                    </span>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+        {% else %}
+        <div class="no-items">
+            <div class="no-items-icon">🔍</div>
+            <h2>No Lost Items Found</h2>
+            <p>Be the first to report a lost item</p>
+            <br>
+            <a href="{{ url_for('views.welcome') }}" style="color: #3498db; text-decoration: none; font-weight: 600;">Report a Lost Item →</a>
+        </div>
+        {% endif %}
     </div>
-    {% else %}
-    <div class="no-items">
-        <div class="no-items-icon">🔍</div>
-        <h2>No Lost Items Found</h2>
-        <p>Be the first to report a lost item</p>
-        <br>
-        <a href="{{ url_for('views.welcome') }}" style="color: #3498db; text-decoration: none; font-weight: 600;">Report a Lost Item →</a>
-    </div>
-    {% endif %}
     
-    <a href="{{ url_for('views.welcome') }}" class="back-btn">← Back to Home</a>
+    <!-- <a href="{{ url_for('views.welcome') }}" class="back-btn">← Back to Home</a> -->
 
     <script>
+        // Initialize statistics
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStatistics();
+        });
+
+        function updateStatistics() {
+            const items = document.querySelectorAll('.item-card');
+            const totalItems = items.length;
+            let activeItems = 0;
+            let foundItems = 0;
+
+            items.forEach(item => {
+                const statusElement = item.querySelector('.status-badge');
+                if (statusElement) {
+                    if (statusElement.classList.contains('active')) activeItems++;
+                    else if (statusElement.classList.contains('found')) foundItems++;
+                }
+            });
+
+            // Animate numbers
+            animateNumber('totalItems', totalItems);
+            animateNumber('activeItems', activeItems);
+            animateNumber('foundItems', foundItems);
+        }
+
+        function animateNumber(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            const duration = 1000;
+            const increment = targetValue / (duration / 16);
+            let current = 0;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= targetValue) {
+                    current = targetValue;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current);
+            }, 16);
+        }
+
         function toggleDetails(button) {
             const detailedInfo = button.parentNode.nextElementSibling;
             const isVisible = detailedInfo.classList.contains('show');
@@ -725,5 +877,6 @@
             img.style.transition = 'opacity 0.3s ease';
         });
     </script>
+    {% include "footer.html" %}
 </body>
 </html>
