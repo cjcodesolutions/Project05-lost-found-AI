@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submit Found Property</title>
     <style>
+        :root {
+            --primary-color: #007bff;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --text-color: #333;
+            --text-secondary-color: #6c757d;
+            --bg-color: #f8f9fa;
+            --bg-light: #fff;
+            --border-color: #e0e0e0;
+            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,24 +26,26 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-color);
             line-height: 1.6;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 10px;
+            padding: 1rem;
         }
 
         /* Flash messages */
         .alert {
             padding: 12px 20px;
-            margin: 10px 0;
+            margin: 1rem 0;
             border-radius: 4px;
             font-size: 0.95rem;
+            display: flex;
+            align-items: center;
         }
 
         .alert-success {
@@ -45,22 +61,20 @@
         }
 
         .form-container {
-            background: white;
+            background: var(--bg-light);
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: var(--box-shadow);
             overflow: hidden;
         }
 
         .form-header {
             padding: 2rem;
-            border-bottom: 1px solid #e0e0e0;
-            /* background: linear-gradient(135deg, #e4efe7, #e7eceb); */
-            color: white;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .form-header h1 {
             font-size: 1.8rem;
-            color: rgb(0, 0, 0);
+            color: var(--text-color);
             margin-bottom: 1rem;
             font-weight: 400;
         }
@@ -73,22 +87,22 @@
         .form-header li {
             margin-bottom: 0.5rem;
             position: relative;
-            padding-left: 1rem;
-            color: rgba(0, 0, 0, 0.9);
+            padding-left: 1.5rem;
+            color: var(--text-secondary-color);
             font-size: 0.9rem;
         }
 
-        .form-header li:before {
-            content: "•";
+        .form-header li::before {
+            content: "✅";
             position: absolute;
             left: 0;
-            color: rgb(71, 70, 70);
+            color: var(--primary-color);
         }
 
         .submit-btn-top {
             background-color: transparent;
-            border: 2px solid rgba(79, 76, 76, 0.8);
-            color: rgba(48, 47, 47, 0.9);
+            border: 2px solid var(--text-secondary-color);
+            color: var(--text-secondary-color);
             padding: 8px 16px;
             border-radius: 4px;
             font-size: 0.9rem;
@@ -97,8 +111,8 @@
         }
 
         .submit-btn-top:hover {
-            background-color: rgba(255,255,255,0.2);
-            color: white;
+            background-color: var(--text-secondary-color);
+            color: var(--bg-light);
         }
 
         .form-note {
@@ -111,7 +125,9 @@
             font-size: 0.9rem;
         }
 
-        .form-content {
+        .form-content,
+        .location-section,
+        .contact-section {
             padding: 2rem;
         }
 
@@ -127,24 +143,24 @@
         }
 
         .form-group.full-width {
-            grid-column: span 2;
+            grid-column: 1 / -1;
         }
 
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 500;
-            color: #333;
+            color: var(--text-color);
             font-size: 0.95rem;
         }
 
         .required {
-            color: #dc3545;
+            color: var(--danger-color);
         }
 
         .help-text {
             font-size: 0.8rem;
-            color: #666;
+            color: var(--text-secondary-color);
             margin-bottom: 0.5rem;
             font-style: italic;
         }
@@ -155,14 +171,14 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 0.95rem;
-            transition: border-color 0.3s;
-            background-color: white;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background-color: var(--bg-light);
         }
 
         .form-control:focus {
             outline: none;
-            border-color: #28a745;
-            box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
         }
 
         .form-control::placeholder {
@@ -184,15 +200,15 @@
         }
 
         .date-input input, .time-input input {
-            padding-right: 40px;
+            padding-right: 12px;
         }
 
         .upload-area {
             border: 2px dashed #ccc;
             border-radius: 4px;
-            padding: 3rem 2rem;
+            padding: 1rem;
             text-align: center;
-            background-color: #f8f9fa;
+            background-color: var(--bg-color);
             cursor: pointer;
             transition: all 0.3s;
             position: relative;
@@ -204,30 +220,30 @@
         }
 
         .upload-area:hover {
-            border-color: #28a745;
-            background-color: #f0fff4;
+            border-color: var(--primary-color);
+            background-color: #f0f8ff;
         }
 
         .upload-area.dragover {
-            border-color: #28a745;
-            background-color: #e8f5e8;
+            border-color: var(--primary-color);
+            background-color: #e3f2fd;
         }
 
         .upload-icon {
             width: 48px;
             height: 48px;
-            background-color: #28a745;
+            background-color: var(--primary-color);
             border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 1rem;
-            color: white;
+            color: var(--bg-light);
             font-size: 1.5rem;
         }
 
         .upload-text {
-            color: #666;
+            color: var(--text-secondary-color);
             font-size: 0.9rem;
         }
 
@@ -241,48 +257,64 @@
 
         /* Location Information Section */
         .location-section {
-            background: #f8f9fa;
+            background: var(--bg-color);
             padding: 2rem;
-            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .location-section h2 {
+        .location-section h2,
+        .contact-section h2 {
             font-size: 1.4rem;
-            color: #333;
+            color: var(--text-color);
             margin-bottom: 1.5rem;
             font-weight: 400;
         }
 
         .map-container {
             width: 100%;
-            height: 150px;
-            border: 1px solid #ccc;
+            height: 250px;
+            border: 1px solid var(--border-color);
             border-radius: 4px;
             margin: 1rem 0;
             background-color: #e9ecef;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #666;
-            font-size: 0.9rem;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .map-placeholder img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 1rem;
+        }
+
+        .map-placeholder a {
+            margin-top: 1rem;
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: var(--bg-light);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .map-placeholder a:hover {
+            background-color: #0056b3;
         }
 
         /* Contact Information Section */
         .contact-section {
-            background: white;
+            background: var(--bg-light);
             padding: 2rem;
-        }
-
-        .contact-section h2 {
-            font-size: 1.4rem;
-            color: #333;
-            margin-bottom: 1.5rem;
-            font-weight: 400;
         }
 
         .phone-input {
             display: flex;
-            align-items: center;
+            align-items: stretch;
         }
 
         .country-code {
@@ -291,8 +323,10 @@
             border-right: none;
             padding: 10px 12px;
             border-radius: 4px 0 0 4px;
-            color: #666;
+            color: var(--text-secondary-color);
             font-size: 0.95rem;
+            display: flex;
+            align-items: center;
         }
 
         .phone-input input {
@@ -303,13 +337,13 @@
         .final-submit {
             text-align: center;
             padding: 2rem;
-            background-color: #f8f9fa;
-            border-top: 1px solid #e0e0e0;
+            background-color: var(--bg-color);
+            border-top: 1px solid var(--border-color);
         }
 
         .btn-submit-final {
-            background-color: #28a745;
-            color: white;
+            background-color: var(--success-color);
+            color: var(--bg-light);
             padding: 12px 48px;
             border: none;
             border-radius: 4px;
@@ -343,14 +377,13 @@
     </style>
 </head>
 <body>
-    {%include "header.html"%}
-    
-    <!-- Flash Messages -->
+    {% include "header.html" %}
+
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <div class="container">
                 {% for category, message in messages %}
-                    <div class="alert alert-{{ 'danger' if category == 'error' else category }}">
+                    <div class="alert alert-{{ 'danger' if category == 'error' else category }}" role="alert">
                         {{ message }}
                     </div>
                 {% endfor %}
@@ -360,208 +393,207 @@
 
     <div class="container">
         <div class="form-container">
-            <!-- Form Header -->
             <div class="form-header">
                 <h1>Submit Found Property</h1>
+                <p>Our matching system helps reunite people with their lost items.</p>
                 <ul>
-                    <li>Help reunite people with their lost items</li>
-                    <li>Our system matches your found item with lost reports</li>
-                    <li>Make a positive impact in your community</li>
+                    <li>Our Matching System Connects Lost and Found Items</li>
+                    <li>Help Someone Get Their Precious Item Back</li>
+                    <li>Make a Positive Impact in Your Community</li>
                 </ul>
-                <button type="button" class="submit-btn-top">Submit Found Item</button>
+                <button type="button" class="submit-btn-top" onclick="document.getElementById('foundPropertyForm').scrollIntoView({behavior: 'smooth'})">Submit Found Item</button>
                 
-                <div class="form-note">
-                    <strong>*</strong> Please provide detailed information about the found item to help us match it with someone looking for it.
+                <div class="form-note" role="alert">
+                    <strong>Note:</strong> Please be descriptive when submitting your found property report; the more information you provide, the better chances of reuniting items with their owners.
                 </div>
             </div>
 
-            <!-- Single Form Containing All Sections -->
             <form id="foundPropertyForm" action="{{ url_for('views.submit_detailed_found') }}" method="POST" enctype="multipart/form-data">
                 
-                <!-- Hidden field to track if this is an update -->
                 {% if initial_data %}
                 <input type="hidden" name="item_id" value="{{ initial_data._id }}">
                 {% endif %}
 
-                <!-- Main Form Content -->
                 <div class="form-content">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="whatFound">What was Found <span class="required">*</span></label>
-                            <div class="help-text">Describe the item you found (Phone, Wallet, Keys, etc.)</div>
+                            <div class="help-text">e.g., Dog, Jacket, Smartphone, Wallet. This field may auto-populate.</div>
                             <input type="text" id="whatFound" name="whatFound" class="form-control" 
-                                   value="{{ initial_data.itemType if initial_data else '' }}"
-                                   placeholder="iPhone with blue case" required>
+                                value="{{ initial_data.itemType if initial_data else '' }}"
+                                placeholder="e.g., Bag With Formal Shirt, Scarf And Gloves" required aria-describedby="whatFoundHelp">
+                            <small id="whatFoundHelp" class="visually-hidden">This field is required and helps auto-populate the category.</small>
                         </div>
                         
                         <div class="form-group">
                             <label for="dateFound">Date Found <span class="required">*</span></label>
-                            <div class="help-text">When did you find this item?</div>
-                            <div class="date-input">
-                                <input type="date" id="dateFound" name="dateFound" class="form-control" required>
-                            </div>
+                            <div class="help-text">Approximate date the item was found.</div>
+                            <input type="date" id="dateFound" name="dateFound" class="form-control" required aria-describedby="dateFoundHelp">
+                            <small id="dateFoundHelp" class="visually-hidden">This field is required. It auto-fills with the current date.</small>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label for="category">Category <span class="required">*</span></label>
-                            <div class="help-text">What type of item is this?</div>
-                            <select id="category" name="category" class="form-control" required>
+                            <div class="help-text">e.g., Clothing, Electronics, Personal Accessories. This field is required.</div>
+                            <select id="category" name="category" class="form-control" required aria-describedby="categoryHelp">
                                 <option value="">Select Category</option>
-                                <option value="Clothing">Clothing</option>
-                                <option value="Electronics">Electronics</option>
-                                <option value="Personal Accessories">Personal Accessories</option>
-                                <option value="Bags">Bags</option>
-                                <option value="Jewelry">Jewelry</option>
-                                <option value="Keys">Keys</option>
-                                <option value="Documents">Documents</option>
-                                <option value="Pets">Pets</option>
-                                <option value="Sports Equipment">Sports Equipment</option>
-                                <option value="Other">Other</option>
+                                <option value="Clothing" {{ 'selected' if initial_data and initial_data.category == 'Clothing' else '' }}>Clothing</option>
+                                <option value="Electronics" {{ 'selected' if initial_data and initial_data.category == 'Electronics' else '' }}>Electronics</option>
+                                <option value="Personal Accessories" {{ 'selected' if initial_data and initial_data.category == 'Personal Accessories' else '' }}>Personal Accessories</option>
+                                <option value="Bags" {{ 'selected' if initial_data and initial_data.category == 'Bags' else '' }}>Bags</option>
+                                <option value="Jewelry" {{ 'selected' if initial_data and initial_data.category == 'Jewelry' else '' }}>Jewelry</option>
+                                <option value="Keys" {{ 'selected' if initial_data and initial_data.category == 'Keys' else '' }}>Keys</option>
+                                <option value="Documents" {{ 'selected' if initial_data and initial_data.category == 'Documents' else '' }}>Documents</option>
+                                <option value="Pets" {{ 'selected' if initial_data and initial_data.category == 'Pets' else '' }}>Pets</option>
+                                <option value="Sports Equipment" {{ 'selected' if initial_data and initial_data.category == 'Sports Equipment' else '' }}>Sports Equipment</option>
+                                <option value="Other" {{ 'selected' if initial_data and initial_data.category == 'Other' else '' }}>Other</option>
                             </select>
+                            <small id="categoryHelp" class="visually-hidden">This field is required.</small>
                         </div>
 
                         <div class="form-group">
                             <label for="timeFound">Time Found <span class="required">*</span></label>
-                            <div class="help-text">Approximate time when you found the item</div>
-                            <div class="time-input">
-                                <input type="time" id="timeFound" name="timeFound" class="form-control" required>
-                            </div>
+                            <div class="help-text">Approximate time of day the item was found.</div>
+                            <input type="time" id="timeFound" name="timeFound" class="form-control" required aria-describedby="timeFoundHelp">
+                            <small id="timeFoundHelp" class="visually-hidden">This field is required. It auto-fills with the current time.</small>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label for="brand">Brand</label>
-                            <div class="help-text">Brand or manufacturer if visible</div>
-                            <input type="text" id="brand" name="brand" class="form-control" placeholder="Apple, Samsung, Nike, etc.">
+                            <div class="help-text">e.g., Ralph Lauren, Samsung, Kitchenaid.</div>
+                            <input type="text" id="brand" name="brand" class="form-control" placeholder="Search For Brands...">
                         </div>
 
                         <div class="form-group">
                             <label for="imageUpload">Upload Image</label>
-                            <div class="help-text">Photo of the found item (helps with identification)</div>
-                            <div class="upload-area" onclick="document.getElementById('imageUpload').click()">
+                            <div class="help-text">This image will display on the "Item Website."</div>
+                            <div class="upload-area" tabindex="0" role="button" aria-controls="image-preview" aria-label="Click to upload or drag and drop an image">
                                 <div class="upload-icon">📤</div>
                                 <div class="upload-text">Click to upload or drag and drop</div>
-                                <input type="file" id="imageUpload" name="imageUpload" class="hidden-input" accept="image/*">
+                                <input type="file" id="imageUpload" name="imageUpload" class="hidden-input" accept="image/*" aria-labelledby="imageUpload">
                             </div>
+                            <div id="image-preview" class="image-preview-area"></div>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label for="primaryColor">Primary Color</label>
-                            <div class="help-text">Main color of the found item</div>
-                            <input type="text" id="primaryColor" name="primaryColor" class="form-control" placeholder="Black, Red, Blue, etc.">
+                            <div class="help-text">The color that best represents the found property. e.g., Black, Red, Blue.</div>
+                            <input type="text" id="primaryColor" name="primaryColor" class="form-control" placeholder="Search Primary Color">
                         </div>
 
                         <div class="form-group">
                             <label for="additionalInfo">Additional Information</label>
-                            <div class="help-text">Any other details that might help identify the owner</div>
-                            <textarea id="additionalInfo" name="additionalInfo" class="form-control" placeholder="Size, condition, distinctive features..." rows="4"></textarea>
+                            <div class="help-text">Provide any additional detailed description of your found property.</div>
+                            <textarea id="additionalInfo" name="additionalInfo" class="form-control" placeholder="Additional Information..." rows="4"></textarea>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="secondaryColor">Secondary Color</label>
-                            <div class="help-text">Secondary color if applicable</div>
-                            <input type="text" id="secondaryColor" name="secondaryColor" class="form-control" placeholder="Secondary color">
+                            <label for="secondaryColor">Secondary Item Color</label>
+                            <div class="help-text">A less dominant color on the item. Leave blank if not applicable.</div>
+                            <input type="text" id="secondaryColor" name="secondaryColor" class="form-control" placeholder="Search Secondary Color">
                         </div>
                     </div>
                 </div>
 
-                <!-- Location Information Section -->
                 <div class="location-section">
                     <h2>Location Information</h2>
                     
                     <div class="form-row">
                         <div class="form-group">
                             <label for="whereFound">Where Found <span class="required">*</span></label>
-                            <div class="help-text">Where did you find this item?</div>
-                            <select id="whereFound" name="whereFound" class="form-control" required>
+                            <div class="help-text">Approximate location of the found property. e.g., Bar, Restaurant, Park.</div>
+                            <select id="whereFound" name="whereFound" class="form-control" required aria-describedby="whereFoundHelp">
                                 <option value="">Select Location</option>
-                                <option value="Airport">Airport</option>
-                                <option value="Bar">Bar</option>
-                                <option value="Hotel">Hotel</option>
-                                <option value="Restaurant">Restaurant</option>
-                                <option value="Park">Park</option>
-                                <option value="Public Transit">Public Transit</option>
-                                <option value="Taxi">Taxi</option>
-                                <option value="University">University</option>
-                                <option value="College/University">College/University</option>
-                                <option value="Mall">Mall</option>
-                                <option value="Beach">Beach</option>
-                                <option value="Animal/Pet">Animal/Pet Care Center</option>
-                                <option value="Venue">Venue</option>
-                                <option value="Rental Car">Rental Car</option>
-                                <option value="Museum">Museum</option>
-                                <option value="Other">Other</option>
+                                <option value="Airport" {{ 'selected' if initial_data and initial_data.location == 'Airport' else '' }}>Airport</option>
+                                <option value="Bar" {{ 'selected' if initial_data and initial_data.location == 'Bar' else '' }}>Bar</option>
+                                <option value="Hotel" {{ 'selected' if initial_data and initial_data.location == 'Hotel' else '' }}>Hotel</option>
+                                <option value="Restaurant" {{ 'selected' if initial_data and initial_data.location == 'Restaurant' else '' }}>Restaurant</option>
+                                <option value="Park" {{ 'selected' if initial_data and initial_data.location == 'Park' else '' }}>Park</option>
+                                <option value="Public Transit" {{ 'selected' if initial_data and initial_data.location == 'Public Transit' else '' }}>Public Transit</option>
+                                <option value="Taxi" {{ 'selected' if initial_data and initial_data.location == 'Taxi' else '' }}>Taxi</option>
+                                <option value="University" {{ 'selected' if initial_data and initial_data.location == 'University' else '' }}>University</option>
+                                <option value="College/University" {{ 'selected' if initial_data and initial_data.location == 'College/University' else '' }}>College/University</option>
+                                <option value="Mall" {{ 'selected' if initial_data and initial_data.location == 'Mall' else '' }}>Mall</option>
+                                <option value="Beach" {{ 'selected' if initial_data and initial_data.location == 'Beach' else '' }}>Beach</option>
+                                <option value="Animal/Pet Care Center" {{ 'selected' if initial_data and initial_data.location == 'Animal/Pet' else '' }}>Animal/Pet Care Center</option>
+                                <option value="Venue" {{ 'selected' if initial_data and initial_data.location == 'Venue' else '' }}>Venue</option>
+                                <option value="Rental Car" {{ 'selected' if initial_data and initial_data.location == 'Rental Car' else '' }}>Rental Car</option>
+                                <option value="Museum" {{ 'selected' if initial_data and initial_data.location == 'Museum' else '' }}>Museum</option>
+                                <option value="Other" {{ 'selected' if initial_data and initial_data.location == 'Other' else '' }}>Other</option>
                             </select>
+                            <small id="whereFoundHelp" class="visually-hidden">This field is required.</small>
                         </div>
 
                         <div class="form-group">
                             <label for="zipCode">Zip Code</label>
-                            <div class="help-text">Zip code of the location where found</div>
+                            <div class="help-text">Your zip code. e.g., 10024, 10028, 10022. This field may auto-populate.</div>
                             <input type="text" id="zipCode" name="zipCode" class="form-control" placeholder="Enter Zip Code">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="locationName">Specific Location</label>
-                        <div class="help-text">Name of business, street, or specific area</div>
-                        <input type="text" id="locationName" name="locationName" class="form-control" placeholder="e.g., Central Park near fountain">
+                        <label for="locationName">Name/Location</label>
+                        <input type="text" id="locationName" name="locationName" class="form-control" placeholder="e.g., The Corner Bar, Central Park">
                     </div>
-
-                    <!-- Map Container -->
+                    
                     <div class="map-container">
                         <div class="map-placeholder">
-                            <img src="static/assets/6.png" alt="Icon" style="width: 100px; height: 100px;" />
-                            <h3>Mark Location on Map</h3>
-                            <p>Click below to pinpoint where you found the item</p>
+                            <img src="/static/assets/6.png" alt="Map icon" />
+                            <h3>Select Location on Map</h3>
+                            <p>Click below to open the interactive map and pinpoint where you found the item.</p>
+                            
                             <a href="{{ url_for('views.map_page') }}">Open Map</a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Contact Information Section -->
                 <div class="contact-section">
                     <h2>Contact Information</h2>
                     
                     <div class="form-row">
                         <div class="form-group">
                             <label for="firstName">First Name <span class="required">*</span></label>
-                            <div class="help-text">Your first name (for the owner to contact you)</div>
-                            <input type="text" id="firstName" name="firstName" class="form-control" placeholder="First Name" required>
+                            <div class="help-text">Your first name. This will appear on your submission.</div>
+                            <input type="text" id="firstName" name="firstName" class="form-control" placeholder="First Name" required aria-describedby="firstNameHelp">
+                            <small id="firstNameHelp" class="visually-hidden">This field is required.</small>
                         </div>
 
                         <div class="form-group">
                             <label for="lastName">Last Name <span class="required">*</span></label>
-                            <div class="help-text">Your last name (for the owner to contact you)</div>
-                            <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Last Name" required>
+                            <div class="help-text">Your last name. This will appear on your submission.</div>
+                            <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Last Name" required aria-describedby="lastNameHelp">
+                            <small id="lastNameHelp" class="visually-hidden">This field is required.</small>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label for="phoneNumber">Phone Number <span class="required">*</span></label>
-                            <div class="help-text">Best number for the owner to reach you</div>
+                            <div class="help-text">The phone number to contact for your submission.</div>
                             <div class="phone-input">
-                                <span class="country-code">+1</span>
-                                <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control" placeholder="Phone Number" required>
+                                
+                                <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control" placeholder="Phone Number" required pattern="[0-9]{10}" title="Ten digits phone number" aria-describedby="phoneNumberHelp">
                             </div>
+                            <small id="phoneNumberHelp" class="visually-hidden">This field is required and should be a ten-digit phone number.</small>
                         </div>
 
                         <div class="form-group">
                             <label for="email">Email <span class="required">*</span></label>
-                            <div class="help-text">Your email address for contact</div>
-                            <input type="email" id="email" name="email" class="form-control" placeholder="Email Address" required>
+                            <div class="help-text">Your email address. This will appear on your submission.</div>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Email Address" required aria-describedby="emailHelp">
+                            <small id="emailHelp" class="visually-hidden">This field is required and must be a valid email address format.</small>
                         </div>
                     </div>
                 </div>
 
-                <!-- Final Submit Button -->
                 <div class="final-submit">
                     <button type="submit" class="btn-submit-final">Submit Found Property Report</button>
                 </div>
@@ -570,127 +602,109 @@
     </div>
 
     <script>
-        // Form submission handler with client-side validation
-        document.getElementById('foundPropertyForm').addEventListener('submit', function(e) {
-            // Client-side validation
-            const requiredFields = ['whatFound', 'dateFound', 'category', 'timeFound', 'whereFound', 'firstName', 'lastName', 'phoneNumber', 'email'];
-            
-            for (let field of requiredFields) {
-                const element = document.getElementById(field);
-                if (!element.value.trim()) {
-                    alert(`Please fill in the ${field.replace(/([A-Z])/g, ' $1').toLowerCase()} field`);
-                    element.focus();
+        document.addEventListener('DOMContentLoaded', () => {
+            const foundPropertyForm = document.getElementById('foundPropertyForm');
+            const whatFoundInput = document.getElementById('whatFound');
+            const categorySelect = document.getElementById('category');
+            const dateInput = document.getElementById('dateFound');
+            const timeInput = document.getElementById('timeFound');
+            const uploadArea = document.querySelector('.upload-area');
+            const fileInput = document.getElementById('imageUpload');
+            const uploadText = document.querySelector('.upload-text');
+            const uploadIcon = document.querySelector('.upload-icon');
+
+            // Set current date and time as default if not already set by Jinja
+            const today = new Date();
+            if (!dateInput.value) {
+                dateInput.value = today.toISOString().split('T')[0];
+            }
+            if (!timeInput.value) {
+                timeInput.value = today.toTimeString().slice(0, 5);
+            }
+
+            // Auto-populate category based on user input
+            whatFoundInput.addEventListener('input', () => {
+                const value = whatFoundInput.value.toLowerCase();
+                if (value.includes('bag') || value.includes('backpack') || value.includes('purse')) {
+                    categorySelect.value = 'Bags';
+                } else if (value.includes('phone') || value.includes('laptop') || value.includes('tablet')) {
+                    categorySelect.value = 'Electronics';
+                } else if (value.includes('shirt') || value.includes('jacket') || value.includes('scarf') || value.includes('gloves')) {
+                    categorySelect.value = 'Clothing';
+                } else if (value.includes('watch') || value.includes('ring') || value.includes('necklace')) {
+                    categorySelect.value = 'Personal Accessories';
+                } else if (value.includes('key')) {
+                    categorySelect.value = 'Keys';
+                } else if (value.includes('dog') || value.includes('cat') || value.includes('pet')) {
+                    categorySelect.value = 'Pets';
+                }
+            });
+
+            // Handle file upload drag-and-drop and selection
+            ['dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, e => {
                     e.preventDefault();
-                    return false;
+                    e.stopPropagation();
+                    uploadArea.classList.remove('dragover');
+                    if (eventName === 'dragover') {
+                        uploadArea.classList.add('dragover');
+                    }
+                });
+            });
+
+            uploadArea.addEventListener('drop', e => {
+                handleFiles(e.dataTransfer.files);
+            });
+
+            fileInput.addEventListener('change', e => {
+                handleFiles(e.target.files);
+            });
+            
+            // Allow clicking the entire upload area and keyboard navigation
+            uploadArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            uploadArea.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    fileInput.click();
                 }
-            }
-            
-            // Email validation
-            const email = document.getElementById('email').value;
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                alert('Please enter a valid email address');
-                document.getElementById('email').focus();
-                e.preventDefault();
-                return false;
-            }
-            
-            // Form will submit normally to Flask if validation passes
-        });
+            });
 
-        // File upload handling
-        const uploadArea = document.querySelector('.upload-area');
-        const fileInput = document.getElementById('imageUpload');
-
-        uploadArea.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            this.classList.add('dragover');
-        });
-
-        uploadArea.addEventListener('dragleave', function() {
-            this.classList.remove('dragover');
-        });
-
-        uploadArea.addEventListener('drop', function(e) {
-            e.preventDefault();
-            this.classList.remove('dragover');
-            
-            const files = e.dataTransfer.files;
-            handleFiles(files);
-        });
-
-        fileInput.addEventListener('change', function() {
-            handleFiles(this.files);
-        });
-
-        function handleFiles(files) {
-            if (files.length > 0) {
-                const uploadText = document.querySelector('.upload-text');
+            function handleFiles(files) {
+                if (files.length === 0) return;
+                
                 const file = files[0];
-                
-                // Validate file type
                 if (!file.type.startsWith('image/')) {
-                    alert('Please upload an image file');
+                    alert('Please upload an image file.');
+                    return;
+                }
+                if (file.size > 5 * 1024 * 1024) { // 5MB in bytes
+                    alert('File size must be less than 5MB.');
                     return;
                 }
                 
-                // Validate file size (5MB limit)
-                if (file.size > 5 * 1024 * 1024) {
-                    alert('File size must be less than 5MB');
-                    return;
-                }
-                
-                uploadText.textContent = `Selected: ${file.name}`;
-                
-                // Preview image
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    const uploadIcon = document.querySelector('.upload-icon');
-                    uploadIcon.innerHTML = '<img src="' + e.target.result + '" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;">';
+                reader.onload = e => {
+                    uploadIcon.innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;" alt="Preview of uploaded image">`;
+                    uploadText.textContent = `Selected: ${file.name}`;
                 };
                 reader.readAsDataURL(file);
             }
-        }
 
-        // Auto-populate category based on what was found
-        document.getElementById('whatFound').addEventListener('input', function() {
-            const value = this.value.toLowerCase();
-            const categorySelect = document.getElementById('category');
-            
-            if (value.includes('bag') || value.includes('backpack') || value.includes('purse')) {
-                categorySelect.value = 'Bags';
-            } else if (value.includes('phone') || value.includes('laptop') || value.includes('tablet')) {
-                categorySelect.value = 'Electronics';
-            } else if (value.includes('shirt') || value.includes('jacket') || value.includes('scarf') || value.includes('gloves')) {
-                categorySelect.value = 'Clothing';
-            } else if (value.includes('watch') || value.includes('ring') || value.includes('necklace')) {
-                categorySelect.value = 'Personal Accessories';
-            } else if (value.includes('key')) {
-                categorySelect.value = 'Keys';
-            } else if (value.includes('dog') || value.includes('cat') || value.includes('pet')) {
-                categorySelect.value = 'Pets';
-            }
-        });
-
-        // Initialize with current date and time
-        window.addEventListener('load', function() {
-            // Set current date as default if not pre-populated
-            const dateInput = document.getElementById('dateFound');
-            if (!dateInput.value) {
-                const today = new Date();
-                const dateString = today.toISOString().split('T')[0];
-                dateInput.value = dateString;
-            }
-            
-            // Set current time as default
-            const timeInput = document.getElementById('timeFound');
-            if (!timeInput.value) {
-                const now = new Date();
-                const timeString = now.toTimeString().slice(0, 5);
-                timeInput.value = timeString;
-            }
+            // Client-side validation is now handled by the browser's native features (required, pattern)
+            // The JavaScript validation is simplified and more robust.
+            foundPropertyForm.addEventListener('submit', function(e) {
+                // The browser's native validation handles most cases.
+                // We add a final check for any custom logic, but let the browser do the heavy lifting.
+                if (!this.checkValidity()) {
+                    e.preventDefault();
+                    alert('Please fill out all required fields and correct any invalid entries.');
+                }
+            });
         });
     </script>
-   {%include "footer.html"%}
+    {% include "footer.html" %}
 </body>
 </html>

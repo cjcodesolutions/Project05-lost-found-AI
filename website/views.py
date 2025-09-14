@@ -673,6 +673,7 @@ def found_item_form(item_id=None):
     
     return render_template("foundItem.html", initial_data=initial_data)
 
+
 @views.route('/submit-detailed-found', methods=['GET', 'POST'])
 def submit_detailed_found():
     """Handle the detailed found item form submission with image upload"""

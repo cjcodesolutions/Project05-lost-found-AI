@@ -347,7 +347,7 @@
         }
 
         .item-title {
-            font-size: 1rem;
+            font-size: 0.8rem;
             font-weight: 600;
             color: var(--secondary-color);
             margin-bottom: 0.5rem;
@@ -372,7 +372,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 0.2rem;
-            font-size: 0.875rem;
+            font-size: 0.7rem;
         }
 
         .meta-label {
@@ -386,18 +386,18 @@
         }
 
         .item-actions {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 0.75rem;
-        }
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 0.5rem;
+}
 
         .contact-btn {
-            padding: 0.75rem 1rem;
+            padding: 0.3rem 0.5rem;
             background: var(--primary-color);
             color: white;
             border: none;
             border-radius: var(--radius-md);
-            font-size: 0.875rem;
+            font-size: 0.7rem;
             font-weight: 600;
             text-decoration: none;
             display: inline-flex;
@@ -415,7 +415,7 @@
         }
 
         .details-btn {
-            padding: 0.75rem;
+            padding: 0.3rem;
             background: transparent;
             color: var(--medium-gray);
             border: 2px solid var(--border-color);
@@ -436,7 +436,7 @@
         /* Detailed Info Panel */
         .detailed-info {
             display: none;
-            padding: 0.4rem;
+            padding: 0.2rem;
             background: var(--light-gray);
             border-top: 1px solid var(--border-color);
         }
@@ -458,7 +458,7 @@
         }
 
         .detail-section {
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.5rem;
         }
 
         .detail-section:last-child {
@@ -466,7 +466,7 @@
         }
 
         .detail-section h4 {
-            font-size: 0.875rem;
+            font-size: 0.7rem;
             font-weight: 600;
             color: var(--dark-gray);
             text-transform: uppercase;
@@ -492,13 +492,13 @@
         .detail-label {
             font-weight: 500;
             color: var(--medium-gray);
-            font-size: 0.875rem;
+            font-size: 0.7rem;
         }
 
         .detail-value {
             color: var(--dark-gray);
             font-weight: 600;
-            font-size: 0.875rem;
+            font-size: 0.7rem;
             text-align: right;
         }
 
@@ -639,6 +639,207 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Alert Button Styles */
+.alert-btn {
+    padding: 0.3rem 0.5rem;
+    background: var(--warning-color, #d97706);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md, 8px);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.alert-btn:hover {
+    background: #b45309;
+    transform: translateY(-1px);
+}
+
+.alert-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Alert Modal Styles */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-overlay.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #64748b;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.modal-close:hover {
+    color: #dc2626;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+    resize: vertical;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #4a90a4;
+    box-shadow: 0 0 0 3px rgb(74 144 164 / 0.1);
+}
+
+.modal-footer {
+    padding: 1.5rem;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-secondary {
+    background: #f8fafc;
+    color: #64748b;
+}
+
+.btn-secondary:hover {
+    background: #e2e8f0;
+}
+
+.btn-primary {
+    background: #d97706;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #b45309;
+    transform: translateY(-1px);
+}
+
+/* Success/Error Messages */
+.alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.alert-success {
+    background: rgb(34 197 94 / 0.1);
+    color: #059669;
+    border: 1px solid rgb(34 197 94 / 0.3);
+}
+
+.alert-error {
+    background: rgb(220 38 38 / 0.1);
+    color: #dc2626;
+    border: 1px solid rgb(220 38 38 / 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .modal-overlay {
+        padding: 1rem;
+    }
+}
     </style>
 </head>
 <body>
@@ -805,10 +1006,18 @@
                             Contact Finder
                         </a>
                         {% endif %}
+                        <button class="alert-btn" onclick="openAlertModal(this)" 
+        data-item-title="{{ item.whatFound or item.whatLost or item.itemType or 'Item' }}" 
+        data-finder-email="{{ item.email }}"
+        data-item-id="{{ item.id }}">
+    <i class="fas fa-bell"></i>
+    Alert
+</button>
                         
                         <button class="details-btn" onclick="toggleDetails(this)" aria-label="Toggle details">
                             <i class="fas fa-chevron-down"></i>
                         </button>
+                        
                     </div>
                 </div>
                 
@@ -903,6 +1112,67 @@
         </div>
         {% endif %}
     </div>
+    <div class="modal-overlay" id="alertModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <i class="fas fa-bell"></i>
+                Send Alert to Potential Owner
+            </h3>
+            <button class="modal-close" onclick="closeAlertModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="modal-body">
+            <div id="alertStatus"></div>
+            
+            <p style="color: #64748b; margin-bottom: 1.5rem; font-size: 0.9rem;">
+                Send a message to potential owners who may be looking for this item. Your message will be forwarded to users who have reported similar lost items.
+            </p>
+            
+            <div class="form-group">
+                <label class="form-label" for="senderName">Your Name *</label>
+                <input type="text" id="senderName" class="form-input" placeholder="Enter your full name" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="senderEmail">Your Email *</label>
+                <input type="email" id="senderEmail" class="form-input" placeholder="Enter your email address" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="alertMessage">Message to Potential Owner *</label>
+                <textarea id="alertMessage" class="form-input" rows="4" placeholder="Describe the item details and how the owner can verify it belongs to them..." required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="contactPreference">Preferred Contact Method</label>
+                <select id="contactPreference" class="form-input">
+                    <option value="email">Email</option>
+                    <option value="phone">Phone</option>
+                    <option value="both">Both Email and Phone</option>
+                </select>
+            </div>
+            
+            <div class="form-group" id="phoneGroup" style="display: none;">
+                <label class="form-label" for="senderPhone">Your Phone Number</label>
+                <input type="tel" id="senderPhone" class="form-input" placeholder="Enter your phone number">
+            </div>
+        </div>
+        
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeAlertModal()">
+                <i class="fas fa-times"></i>
+                Cancel
+            </button>
+            <button class="btn btn-primary" onclick="sendAlert()">
+                <i class="fas fa-paper-plane"></i>
+                Send Alert
+            </button>
+        </div>
+    </div>
+</div>
     
     <!-- Back Button -->
     <!-- <a href="{{ url_for('views.welcome') }}" class="back-btn">
@@ -1138,6 +1408,152 @@
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(performSearch, 300);
         });
+
+
+        let currentItemData = {};
+
+// Initialize event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    // Contact preference change handler
+    document.getElementById('contactPreference').addEventListener('change', function() {
+        const phoneGroup = document.getElementById('phoneGroup');
+        const value = this.value;
+        
+        if (value === 'phone' || value === 'both') {
+            phoneGroup.style.display = 'block';
+            document.getElementById('senderPhone').required = true;
+        } else {
+            phoneGroup.style.display = 'none';
+            document.getElementById('senderPhone').required = false;
+        }
+    });
+    
+    // Modal close on background click
+    document.getElementById('alertModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeAlertModal();
+        }
+    });
+});
+
+function openAlertModal(button) {
+    const itemTitle = button.getAttribute('data-item-title');
+    const finderEmail = button.getAttribute('data-finder-email');
+    const itemId = button.getAttribute('data-item-id');
+    
+    currentItemData = {
+        title: itemTitle,
+        finderEmail: finderEmail,
+        itemId: itemId
+    };
+    
+    // Pre-fill the message with a template
+    const messageTemplate = `Hi! I found a ${itemTitle} and I'm reaching out to see if it might be yours. 
+
+To verify ownership, please provide:
+- Specific details about the item
+- Where you might have lost it
+- Any unique identifying features
+
+If this is your item, please contact me with these details and we can arrange for its return.
+
+Best regards`;
+    
+    document.getElementById('alertMessage').value = messageTemplate;
+    document.getElementById('alertModal').classList.add('show');
+    
+    // Clear any previous status messages
+    document.getElementById('alertStatus').innerHTML = '';
+}
+
+function closeAlertModal() {
+    document.getElementById('alertModal').classList.remove('show');
+    
+    // Clear form
+    document.getElementById('senderName').value = '';
+    document.getElementById('senderEmail').value = '';
+    document.getElementById('senderPhone').value = '';
+    document.getElementById('alertMessage').value = '';
+    document.getElementById('contactPreference').value = 'email';
+    document.getElementById('phoneGroup').style.display = 'none';
+    document.getElementById('alertStatus').innerHTML = '';
+}
+
+function sendAlert() {
+    const senderName = document.getElementById('senderName').value.trim();
+    const senderEmail = document.getElementById('senderEmail').value.trim();
+    const senderPhone = document.getElementById('senderPhone').value.trim();
+    const message = document.getElementById('alertMessage').value.trim();
+    const contactPreference = document.getElementById('contactPreference').value;
+    const statusDiv = document.getElementById('alertStatus');
+    
+    // Validate required fields
+    if (!senderName || !senderEmail || !message) {
+        statusDiv.innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> Please fill in all required fields.</div>';
+        return;
+    }
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(senderEmail)) {
+        statusDiv.innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> Please enter a valid email address.</div>';
+        return;
+    }
+    
+    // Validate phone if required
+    if ((contactPreference === 'phone' || contactPreference === 'both') && !senderPhone) {
+        statusDiv.innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> Please enter your phone number.</div>';
+        return;
+    }
+    
+    // Prepare alert data for your backend
+    const alertData = {
+        itemId: currentItemData.itemId,
+        itemTitle: currentItemData.title,
+        finderEmail: currentItemData.finderEmail,
+        senderName: senderName,
+        senderEmail: senderEmail,
+        senderPhone: senderPhone,
+        message: message,
+        contactPreference: contactPreference,
+        timestamp: new Date().toISOString()
+    };
+    
+    // Show loading state
+    statusDiv.innerHTML = '<div class="alert alert-success"><i class="fas fa-spinner fa-spin"></i> Sending alert...</div>';
+    
+    // Make API call to your backend
+    fetch('/api/send-alert', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            // Add CSRF token if needed: 'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify(alertData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            statusDiv.innerHTML = '<div class="alert alert-success"><i class="fas fa-check-circle"></i> Alert sent successfully! Potential owners will be notified.</div>';
+            
+            // Close modal after 2 seconds
+            setTimeout(() => {
+                closeAlertModal();
+            }, 2000);
+        } else {
+            statusDiv.innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> ' + (data.message || 'Failed to send alert. Please try again.') + '</div>';
+        }
+    })
+    .catch(error => {
+        console.error('Error sending alert:', error);
+        statusDiv.innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> Network error. Please check your connection and try again.</div>';
+    });
+}
+
+// Helper function to get CSRF token if you're using CSRF protection
+function getCsrfToken() {
+    return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+}
     </script>
     {% include 'footer.html' %}
 </body>

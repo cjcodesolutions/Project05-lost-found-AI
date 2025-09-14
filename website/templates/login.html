@@ -70,7 +70,7 @@
         .logo {
             font-size: 2.8rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #667eea;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -336,7 +336,7 @@
 
         .login-btn {
             width: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             color: white;
             border: none;
             padding: 18px;
@@ -436,12 +436,16 @@
             color: white;
             font-size: 10px;
         }
+        
 
         @media (max-width: 1024px) {
             .login-container {
                 max-width: 900px;
             }
-            
+            .img{
+                height: 10px;
+                width: 10px;
+            }
             .stats-grid {
                 grid-template-columns: 1fr;
             }
@@ -510,6 +514,7 @@
             .login-container {
                 border-radius: 16px;
             }
+            
         }
     </style>
 </head>
@@ -517,8 +522,10 @@
     <div class="login-container">
         <div class="left-panel">
             <div class="brand-header">
-                <div class="logo">FOUNDIT</div>
-                <div class="tagline">AI-Powered Lost & Found Platform</div>
+                <div class="img">
+                    <img src="static/assets/foundit.png" alt="Logo">
+                </div>
+      
             </div>
 
             <div class="platform-intro">
@@ -527,21 +534,11 @@
                     Sign in to access your dashboard, manage your reports, and continue helping others recover their lost belongings with our intelligent matching system.
                 </p>
 
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <span class="stat-number">24/7</span>
-                        <span class="stat-label">Available</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">50K+</span>
-                        <span class="stat-label">Active Users</span>
-                    </div>
-                </div>
+                
             </div>
 
             <div class="features-list">
                 <div class="feature-item">
-                    <div class="feature-icon">📊</div>
                     <div class="feature-content">
                         <div class="feature-title">Personal Dashboard</div>
                         <div class="feature-desc">View and manage all your lost/found item reports in one place</div>
@@ -549,7 +546,6 @@
                 </div>
 
                 <div class="feature-item">
-                    <div class="feature-icon">🔔</div>
                     <div class="feature-content">
                         <div class="feature-title">Real-time Notifications</div>
                         <div class="feature-desc">Get instant alerts when potential matches are found</div>
@@ -557,7 +553,6 @@
                 </div>
 
                 <div class="feature-item">
-                    <div class="feature-icon">💬</div>
                     <div class="feature-content">
                         <div class="feature-title">Secure Communication</div>
                         <div class="feature-desc">Chat safely with other users to coordinate item recovery</div>
@@ -565,7 +560,6 @@
                 </div>
 
                 <div class="feature-item">
-                    <div class="feature-icon">📈</div>
                     <div class="feature-content">
                         <div class="feature-title">Success Tracking</div>
                         <div class="feature-desc">Monitor your recovery success rate and impact</div>
@@ -620,7 +614,7 @@
                     </div>
                 </button>
 
-                <div class="trust-indicators">
+                <!-- <div class="trust-indicators">
                     <div class="trust-item">
                         <div class="trust-icon">✓</div>
                         <span>SSL Encrypted</span>
@@ -633,7 +627,7 @@
                         <div class="trust-icon">✓</div>
                         <span>Privacy Protected</span>
                     </div>
-                </div>
+                </div> -->
             </form>
         </div>
     </div>
