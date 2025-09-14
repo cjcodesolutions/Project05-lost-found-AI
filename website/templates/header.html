@@ -58,6 +58,7 @@
         .auth-buttons {
             display: flex;
             gap: 1rem;
+            align-items: center;
         }
 
         .btn {
@@ -95,9 +96,335 @@
             border: 2px solid rgb(35, 72, 94);
         }
 
+        /* Notification Button Styles */
+        .notification-btn {
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.4rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.05);
+        }
+
+        .notification-btn svg {
+            width: 25px;
+            height: 25px;
+        }
+
+        /* Custom image styling for notification icon */
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            /* max-width: 40px;
+            max-height: 40px; */
+            object-fit: contain;
+            /* filter: brightness(0) invert(1);  */
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Chatbox Styles */
+        .chatbox-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: none;
+            backdrop-filter: blur(5px);
+        }
+
+        .chatbox-overlay.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chatbox {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 450px;
+            height: 600px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chatbox-header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbox-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .online-indicator {
+            width: 8px;
+            height: 8px;
+            background: #2ecc71;
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.2rem;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            background: #f8f9fa;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message.user {
+            align-items: flex-end;
+        }
+
+        .message.bot {
+            align-items: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 80%;
+            padding: 0.8rem 1rem;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .message.user .message-bubble {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.bot .message-bubble {
+            background: white;
+            color: #2c3e50;
+            border: 1px solid #e1e8ed;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: #95a5a6;
+            margin: 0.3rem 0.5rem;
+        }
+
+        .chat-input-container {
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid #e1e8ed;
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 25px;
+            outline: none;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-input:focus {
+            border-color: #3498db;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .send-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 0.8rem 1rem;
+            color: #7f8c8d;
+            font-style: italic;
+            font-size: 0.85rem;
+        }
+
+        .typing-dots {
+            display: inline-block;
+        }
+
+        .typing-dots::after {
+            content: '';
+            animation: typing 1.4s infinite;
+        }
+
+        @keyframes typing {
+            0%, 60% { content: ''; }
+            30% { content: '.'; }
+            60% { content: '..'; }
+            90% { content: '...'; }
+        }
+
+        /* Route suggestion styles */
+        .route-suggestion {
+            background: #e8f4fd;
+            border: 1px solid #3498db;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .route-suggestion:hover {
+            background: #3498db;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        .route-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+        }
+
+        .route-desc {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 10px 0;
+        }
+
+        .quick-action {
+            background: #f1f3f5;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            padding: 4px 8px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quick-action:hover {
+            background: #3498db;
+            color: white;
+            transform: scale(1.05);
+        }
+
         /* Make header sticky */
         body {
-            padding-top: 80px; /* Space to avoid content being hidden behind fixed header */
+            padding-top: 80px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
         /* Responsive Design */
@@ -107,10 +434,39 @@
             }
 
             .auth-buttons {
-                flex-direction: column;
-                gap: 0.5rem;
+                gap: 0.8rem;
+            }
+
+            .chatbox {
+                width: 95%;
+                height: 80vh;
+                margin: 10vh auto;
             }
         }
+
+        /* Scrollbar Styling */
+        .chat-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #bdc3c7;
+            border-radius: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: #95a5a6;
+        }
+        .wa-header__logo img {
+    width: 50px;  /* Set the width for your logo */
+    height: auto;  /* Maintain the aspect ratio */
+    object-fit: contain;
+    margin-right: 10px;  /* Space between the logo and title */
+}
     </style>
 </head>
 <body>
@@ -118,23 +474,408 @@
     <header>
         <div class="container">
             <nav>
+                <div class="wa-header__logo">
+        <img src="static/assets/foundit.png" alt="Logo" class="logo">
+    </div>
+             
                 <a href="#" class="logo">FoundiT</a>
-                
+                   
                 <ul class="nav-links">
-                    <li><a href="#home">Home</a></li>
+                    <li><a href="/welcome">Home</a></li>
                     <li><a href="#features">Features</a></li>
                     <li><a href="#how-it-works">How It Works</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="contact">Contact</a></li>
                 </ul>
 
                 <div class="auth-buttons">
                     <a href="/logout" class="btn btn-outline">Logout</a>
-                  
+                    
+                    <!-- Notification Button -->
+                    <button class="notification-btn" onclick="toggleChatbox()">
+                        <img src="static/assets/bot.png" alt="chatbot" class="notification-icon">
+                        <span class="notification-badge">?</span>
+                    </button>
                 </div>
             </nav>
         </div>
     </header>
 
-   
+    <!-- Chatbox Overlay -->
+    <div class="chatbox-overlay" id="chatboxOverlay" onclick="closeChatboxOnOverlay(event)">
+        <div class="chatbox" onclick="event.stopPropagation()">
+            <div class="chatbox-header">
+                <div class="chatbox-title">
+                    <div class="online-indicator"></div>
+                    Navigation Assistant
+                </div>
+                <button class="close-btn" onclick="toggleChatbox()">&times;</button>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    <div class="message-bubble">
+                        Welcome to FoundiT! I can help you navigate our website. Try asking me:
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="sendQuickMessage('I lost something')">I lost something</div>
+                            <div class="quick-action" onclick="sendQuickMessage('I found something')">I found something</div>
+                            <div class="quick-action" onclick="sendQuickMessage('View lost items')">View lost items</div>
+                            <div class="quick-action" onclick="sendQuickMessage('Contact support')">Contact support</div>
+                        </div>
+                    </div>
+                    <div class="message-time">Just now</div>
+                </div>
+            </div>
+
+            <div class="typing-indicator" id="typingIndicator">
+                Assistant is typing<span class="typing-dots"></span>
+            </div>
+
+            <div class="chat-input-container">
+                <input 
+                    type="text" 
+                    class="chat-input" 
+                    id="chatInput" 
+                    placeholder="Ask me how to navigate the website..."
+                    onkeypress="handleKeyPress(event)"
+                >
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isOpen = false;
+
+        // Route mapping based on your Flask routes
+        const routeMap = {
+            home: {
+                route: '/',
+                title: 'Home Page',
+                description: 'Main landing page of FoundiT',
+                keywords: ['home', 'main', 'start', 'beginning', 'index']
+            },
+            welcome: {
+                route: '/welcome',
+                title: 'Welcome Page',
+                description: 'Get started with reporting lost or found items',
+                keywords: ['welcome', 'get started', 'begin', 'start reporting']
+            },
+            contact: {
+                route: '/contact',
+                title: 'Contact Us',
+                description: 'Get in touch with our support team',
+                keywords: ['contact', 'support', 'help', 'get in touch', 'customer service']
+            },
+            lostItemForm: {
+                route: '/lost-item-form',
+                title: 'Report Lost Item',
+                description: 'Submit details about an item you have lost',
+                keywords: ['lost item', 'report lost', 'lost something', 'missing item', 'lost belongings']
+            },
+            foundItemForm: {
+                route: '/found-item-form',
+                title: 'Report Found Item',
+                description: 'Submit details about an item you have found',
+                keywords: ['found item', 'report found', 'found something', 'discovered item']
+            },
+            viewLostItems: {
+                route: '/lost-items',
+                title: 'View Lost Items',
+                description: 'Browse all reported lost items',
+                keywords: ['view lost items', 'browse lost', 'see lost items', 'lost items list']
+            },
+            viewFoundItems: {
+                route: '/found-items',
+                title: 'View Found Items',
+                description: 'Browse all reported found items',
+                keywords: ['view found items', 'browse found', 'see found items', 'found items list']
+            },
+            map: {
+                route: '/map',
+                title: 'Interactive Map',
+                description: 'See lost and found items on a map',
+                keywords: ['map', 'location', 'where', 'geography', 'area']
+            }
+        };
+
+        // Intent detection patterns
+        const intentPatterns = {
+            lost_item: [
+                /i (lost|misplaced|can't find)/i,
+                /lost (my|an?|some)/i,
+                /missing/i,
+                /report.*lost/i,
+                /submit.*lost/i
+            ],
+            found_item: [
+                /i found/i,
+                /discovered/i,
+                /picked up/i,
+                /report.*found/i,
+                /submit.*found/i
+            ],
+            view_lost: [
+                /see.*lost.*items?/i,
+                /view.*lost/i,
+                /browse.*lost/i,
+                /list.*lost/i,
+                /show.*lost/i
+            ],
+            view_found: [
+                /see.*found.*items?/i,
+                /view.*found/i,
+                /browse.*found/i,
+                /list.*found/i,
+                /show.*found/i
+            ],
+            contact: [
+                /contact/i,
+                /support/i,
+                /help/i,
+                /customer service/i,
+                /get in touch/i
+            ],
+            map: [
+                /map/i,
+                /location/i,
+                /where/i,
+                /area/i,
+                /geography/i
+            ]
+        };
+
+        // Contextual responses
+        const contextualResponses = {
+            greeting: [
+                /^(hi|hello|hey|good morning|good afternoon)/i,
+                "Hello! I'm here to help you navigate FoundiT. What are you looking for today?"
+            ],
+            thanks: [
+                /^(thank|thanks)/i,
+                "You're welcome! Is there anything else I can help you find on our website?"
+            ],
+            help: [
+                /^(help|what can you do)/i,
+                "I can help you find the right page on FoundiT! Try asking me things like 'I want to report a lost item' or 'How do I view found items?'"
+            ]
+        };
+
+        function detectIntent(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            for (const [intent, patterns] of Object.entries(intentPatterns)) {
+                for (const pattern of patterns) {
+                    if (pattern.test(message)) {
+                        return intent;
+                    }
+                }
+            }
+            
+            // Fallback: keyword matching
+            for (const [routeKey, routeInfo] of Object.entries(routeMap)) {
+                for (const keyword of routeInfo.keywords) {
+                    if (lowerMessage.includes(keyword.toLowerCase())) {
+                        return routeKey;
+                    }
+                }
+            }
+            
+            return null;
+        }
+
+        function findBestRoutes(message) {
+            const intent = detectIntent(message);
+            const lowerMessage = message.toLowerCase();
+            const matches = [];
+
+            // Direct intent mapping
+            const intentRouteMap = {
+                lost_item: 'lostItemForm',
+                found_item: 'foundItemForm',
+                view_lost: 'viewLostItems',
+                view_found: 'viewFoundItems',
+                contact: 'contact',
+                map: 'map'
+            };
+
+            if (intent && intentRouteMap[intent]) {
+                matches.push(routeMap[intentRouteMap[intent]]);
+            }
+
+            // Score-based matching for additional suggestions
+            const scores = {};
+            for (const [routeKey, routeInfo] of Object.entries(routeMap)) {
+                let score = 0;
+                
+                for (const keyword of routeInfo.keywords) {
+                    if (lowerMessage.includes(keyword.toLowerCase())) {
+                        score += keyword.length; // Longer matches score higher
+                    }
+                }
+                
+                if (score > 0) {
+                    scores[routeKey] = score;
+                }
+            }
+
+            // Add top scoring routes (excluding already matched)
+            const sortedRoutes = Object.entries(scores)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3);
+
+            for (const [routeKey] of sortedRoutes) {
+                if (!matches.find(m => m.route === routeMap[routeKey].route)) {
+                    matches.push(routeMap[routeKey]);
+                }
+            }
+
+            return matches;
+        }
+
+        function generateResponse(message, routes) {
+            if (routes.length === 0) {
+                return `I'm not sure exactly what you're looking for. Here are some popular pages:
+                <div class="route-suggestion" onclick="navigateToRoute('/welcome')">
+                    <div class="route-title">Welcome Page</div>
+                    <div class="route-desc">Get started with reporting items</div>
+                </div>
+                <div class="route-suggestion" onclick="navigateToRoute('/lost-items')">
+                    <div class="route-title">View Lost Items</div>
+                    <div class="route-desc">Browse all lost items</div>
+                </div>`;
+            }
+
+            let response = "Here's what I found for you:\n\n";
+            
+            routes.forEach(route => {
+                response += `<div class="route-suggestion" onclick="navigateToRoute('${route.route}')">
+                    <div class="route-title">${route.title}</div>
+                    <div class="route-desc">${route.description}</div>
+                </div>`;
+            });
+
+            return response;
+        }
+
+        function toggleChatbox() {
+            const overlay = document.getElementById('chatboxOverlay');
+            const badge = document.querySelector('.notification-badge');
+            
+            if (!isOpen) {
+                overlay.classList.add('active');
+                isOpen = true;
+                // Hide notification badge when chat is opened
+                if (badge) {
+                    badge.style.display = 'none';
+                }
+                // Focus on input
+                setTimeout(() => {
+                    document.getElementById('chatInput').focus();
+                }, 300);
+            } else {
+                overlay.classList.remove('active');
+                isOpen = false;
+            }
+        }
+
+        function closeChatboxOnOverlay(event) {
+            if (event.target === event.currentTarget) {
+                toggleChatbox();
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            addMessage(message, 'user');
+            input.value = '';
+
+            // Check for contextual responses first
+            for (const [context, [pattern, response]] of Object.entries(contextualResponses)) {
+                if (pattern.test(message)) {
+                    showTyping();
+                    setTimeout(() => {
+                        hideTyping();
+                        addMessage(response, 'bot');
+                    }, 1000);
+                    return;
+                }
+            }
+
+            // Show typing indicator
+            showTyping();
+
+            // Process the message and find relevant routes
+            setTimeout(() => {
+                hideTyping();
+                const routes = findBestRoutes(message);
+                const response = generateResponse(message, routes);
+                addMessage(response, 'bot');
+            }, 1500);
+        }
+
+        function sendQuickMessage(message) {
+            addMessage(message, 'user');
+            
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+                const routes = findBestRoutes(message);
+                const response = generateResponse(message, routes);
+                addMessage(response, 'bot');
+            }, 800);
+        }
+
+        function addMessage(text, sender) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const currentTime = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            messageDiv.innerHTML = `
+                <div class="message-bubble">${text}</div>
+                <div class="message-time">${currentTime}</div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function navigateToRoute(route) {
+            // Navigate to the actual route
+            window.location.href = route;
+        }
+
+        function showTyping() {
+            document.getElementById('typingIndicator').style.display = 'block';
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function hideTyping() {
+            document.getElementById('typingIndicator').style.display = 'none';
+        }
+
+        // Close chatbox with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && isOpen) {
+                toggleChatbox();
+            }
+        });
+    </script>
 </body>
 </html>

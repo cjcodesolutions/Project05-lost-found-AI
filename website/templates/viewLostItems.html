@@ -272,8 +272,8 @@
         }
 
         .item-title {
-            font-size: 1.1rem;
-            font-weight: 600;
+            font-size: 0.8rem;
+            font-weight: 500;
             color: #2c3e50;
             margin-bottom: 5px;
             line-height: 1.2;
@@ -281,7 +281,7 @@
 
         .item-location {
             color: #e74c3c;
-            font-size: 0.9rem;
+            font-size: 0.7rem;
             margin-bottom: 8px;
             display: flex;
             align-items: center;
@@ -300,7 +300,7 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 1px;
-            font-size: 0.6rem;
+            font-size: 0.7rem;
         }
 
         .info-label {
@@ -314,12 +314,12 @@
         }
 
         .status-badge {
-            padding: 4px 12px;
+            padding: 1px 5px;
             border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            font-size: 0.7rem;
+            font-weight: 400;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
         }
 
         .status-badge.active {
@@ -338,35 +338,43 @@
         }
 
         .view-more-btn {
-            width: 100%;
-            padding: 8px;
-            background: linear-gradient(45deg, #3498db, #2980b9);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+    width: 80%;
+    padding: 6px;
+    background: linear-gradient(45deg, #05263c, #3498db);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
 
         .view-more-btn:hover {
-            background: linear-gradient(45deg, #2980b9, #3498db);
+            background: linear-gradient(45deg, #336180, #6194b5);
             transform: translateY(-2px);
         }
 
         .detailed-info {
             display: none;
-            padding: 5px;
+            padding: 2px;
             background-color: #f8f9fa;
-            border-top: 1px solid #e9ecef;
+            border-top: 0.5px solid #e9ecef;
             animation: slideDown 0.3s ease;
         }
 
         .detailed-info.show {
             display: block;
+            font-size: 0.7rem;
         }
 
         @keyframes slideDown {
@@ -393,7 +401,7 @@
         }
 
         .detail-label {
-            font-weight: 50;
+            font-weight: 0.7rem;
             color: #34495e;
             min-width: 120px;
         }

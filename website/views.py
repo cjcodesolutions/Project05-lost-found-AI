@@ -140,7 +140,10 @@ def home():
 @views.route('/welcome')
 def welcome():
     return render_template("welcome.html")
-
+@views.route('/contact')
+def contact():
+    """Render the contact page"""
+    return render_template('contact.html')
 @views.route('/submit-initial-lost', methods=['POST'])
 def submit_initial_lost():
     """Handle the simple form submission from welcome page"""
@@ -833,3 +836,7 @@ def submit_detailed_found():
         
     except Exception as e:
         return f"<h2>Debug Error:</h2><p>{str(e)}</p>"
+
+
+    
+
