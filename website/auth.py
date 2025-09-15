@@ -10,13 +10,12 @@ auth = Blueprint('auth', __name__)
 def signup():
     if request.method == 'POST':
         db = current_app.db
-        
+
         # Get form data
         first_name = request.form.get("firstName")
         last_name = request.form.get("lastName")
         email = request.form.get("email")
         phone = request.form.get("phone")
-        user_type = request.form.get("userType")
         password = request.form.get("password")
         confirm_password = request.form.get("confirmPassword")
         terms = request.form.get("terms")
@@ -31,10 +30,6 @@ def signup():
             flash("Passwords do not match", "error")
             return render_template("signup.html")
 
-        if not user_type:
-            flash("Please select a user type", "error")
-            return render_template("signup.html")
-
         if not terms:
             flash("You must agree to the terms and conditions", "error")
             return render_template("signup.html")
@@ -46,14 +41,13 @@ def signup():
         # Hash password
         hashed_pw = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
 
-        # Insert user
+        # Insert user (without user_type)
         try:
             result = db.users.insert_one({
                 "firstName": first_name,
                 "lastName": last_name,
                 "email": email,
                 "phone": phone,
-                "userType": user_type,
                 "password": hashed_pw.decode("utf-8"),
                 "termsAccepted": True,
                 "notifications": notifications
@@ -67,6 +61,7 @@ def signup():
             return render_template("signup.html")
 
     return render_template("signup.html")
+
 
 
 # -------------------------
@@ -125,5 +120,4 @@ def test_db():
         """
     except Exception as e:
         return f"Database test FAILED: {e}"
-
 

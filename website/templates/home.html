@@ -512,13 +512,20 @@
 
         .top-image {
             width: 100%;
-            height: auto;
+            height: 85vh;
             display: block;
             margin-bottom: 10px;
             object-fit: cover;
             display: block;
             justify-content: center;
         }
+        
+        .wa-header__logo img {
+    width: 50px;  /* Set the width for your logo */
+    height: auto;  /* Maintain the aspect ratio */
+    object-fit: contain;
+    margin-right: 10px;  /* Space between the logo and title */
+}
 
         /* Responsive Design */
         @media (max-width: 768px) {
@@ -607,6 +614,9 @@
     <header>
         <div class="container">
             <nav>
+            <div class="wa-header__logo">
+        <img src="/static/assets/foundit.png" alt="Logo" class="logo">
+         </div>
                 <a href="#" class="logo">FoundiT</a>
                 
                 <ul class="nav-links">
@@ -627,10 +637,12 @@
 
     <!-- Main Content -->
     <main>
+        <img src="static/assets/background.jpg" alt="Lost & Found" class="top-image">
         <div class="container">
+            
             <!-- Header Section -->
             <div class="header-section">
-                <img src="static/assets/background.jpg" alt="Lost & Found" class="top-image" width="100%">
+                               
                 <h1 class="main-title">Online Lost and Found</h1>
                 
                 <p class="description">
