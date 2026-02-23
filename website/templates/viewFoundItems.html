@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -386,10 +387,10 @@
         }
 
         .item-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr auto;
-    gap: 0.5rem;
-}
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 0.5rem;
+        }
 
         .contact-btn {
             padding: 0.3rem 0.5rem;
@@ -451,6 +452,7 @@
                 opacity: 0;
                 transform: translateY(-10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -641,207 +643,220 @@
         }
 
         /* Alert Button Styles */
-.alert-btn {
-    padding: 0.3rem 0.5rem;
-    background: var(--warning-color, #d97706);
-    color: white;
-    border: none;
-    border-radius: var(--radius-md, 8px);
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    transition: all 0.2s ease;
-    cursor: pointer;
-}
+        .alert-btn {
+            padding: 0.3rem 0.5rem;
+            background: var(--warning-color, #d97706);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md, 8px);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
 
-.alert-btn:hover {
-    background: #b45309;
-    transform: translateY(-1px);
-}
+        .alert-btn:hover {
+            background: #b45309;
+            transform: translateY(-1px);
+        }
 
-.alert-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
+        .alert-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
 
-/* Alert Modal Styles */
-.modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
-    z-index: 1000;
-    animation: fadeIn 0.3s ease;
-}
+        /* Alert Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
 
-.modal-overlay.show {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-}
+        .modal-overlay.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
 
-.modal {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    max-width: 500px;
-    width: 100%;
-    max-height: 90vh;
-    overflow-y: auto;
-    animation: slideUp 0.3s ease;
-}
+            to {
+                opacity: 1;
+            }
+        }
 
-@keyframes slideUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
+        .modal {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
 
-.modal-header {
-    padding: 1.5rem;
-    border-bottom: 1px solid #e2e8f0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
 
-.modal-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #0f172a;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
 
-.modal-close {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: #64748b;
-    cursor: pointer;
-    transition: color 0.2s ease;
-}
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-.modal-close:hover {
-    color: #dc2626;
-}
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
 
-.modal-body {
-    padding: 1.5rem;
-}
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #64748b;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
 
-.form-group {
-    margin-bottom: 1.5rem;
-}
+        .modal-close:hover {
+            color: #dc2626;
+        }
 
-.form-label {
-    display: block;
-    font-weight: 600;
-    color: #0f172a;
-    margin-bottom: 0.5rem;
-    font-size: 0.875rem;
-}
+        .modal-body {
+            padding: 1.5rem;
+        }
 
-.form-input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.2s ease;
-    resize: vertical;
-}
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
 
-.form-input:focus {
-    outline: none;
-    border-color: #4a90a4;
-    box-shadow: 0 0 0 3px rgb(74 144 164 / 0.1);
-}
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
 
-.modal-footer {
-    padding: 1.5rem;
-    border-top: 1px solid #e2e8f0;
-    display: flex;
-    gap: 1rem;
-    justify-content: flex-end;
-}
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+            resize: vertical;
+        }
 
-.btn {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
+        .form-input:focus {
+            outline: none;
+            border-color: #4a90a4;
+            box-shadow: 0 0 0 3px rgb(74 144 164 / 0.1);
+        }
 
-.btn-secondary {
-    background: #f8fafc;
-    color: #64748b;
-}
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
 
-.btn-secondary:hover {
-    background: #e2e8f0;
-}
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
 
-.btn-primary {
-    background: #d97706;
-    color: white;
-}
+        .btn-secondary {
+            background: #f8fafc;
+            color: #64748b;
+        }
 
-.btn-primary:hover {
-    background: #b45309;
-    transform: translateY(-1px);
-}
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
 
-/* Success/Error Messages */
-.alert {
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
+        .btn-primary {
+            background: #d97706;
+            color: white;
+        }
 
-.alert-success {
-    background: rgb(34 197 94 / 0.1);
-    color: #059669;
-    border: 1px solid rgb(34 197 94 / 0.3);
-}
+        .btn-primary:hover {
+            background: #b45309;
+            transform: translateY(-1px);
+        }
 
-.alert-error {
-    background: rgb(220 38 38 / 0.1);
-    color: #dc2626;
-    border: 1px solid rgb(220 38 38 / 0.3);
-}
+        /* Success/Error Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .modal-overlay {
-        padding: 1rem;
-    }
-}
+        .alert-success {
+            background: rgb(34 197 94 / 0.1);
+            color: #059669;
+            border: 1px solid rgb(34 197 94 / 0.3);
+        }
+
+        .alert-error {
+            background: rgb(220 38 38 / 0.1);
+            color: #dc2626;
+            border: 1px solid rgb(220 38 38 / 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .modal-overlay {
+                padding: 1rem;
+            }
+        }
     </style>
 </head>
+
 <body>
     {% include 'header.html' %}
     <!-- Header -->
@@ -873,30 +888,28 @@
                 <h2>Search Found Items</h2>
                 <p>Use advanced filtering to locate specific items in our database</p>
             </div>
-            
+
             <div class="search-form">
                 <div class="search-input-group">
                     <i class="fas fa-search search-icon"></i>
-                    <input type="text" 
-                           class="search-input" 
-                           id="searchInput" 
-                           placeholder="Search by item name, brand, description, or location...">
+                    <input type="text" class="search-input" id="searchInput"
+                        placeholder="Search by item name, brand, description, or location...">
                 </div>
                 <button class="search-btn" onclick="performSearch()">
                     <i class="fas fa-search"></i>
                     Search
                 </button>
             </div>
-            
+
             <div class="filters-grid">
                 <select class="filter-select" id="locationFilter">
                     <option value="">All Locations</option>
                 </select>
-                
+
                 <select class="filter-select" id="categoryFilter">
                     <option value="">All Categories</option>
                 </select>
-                
+
                 <select class="filter-select" id="statusFilter">
                     <option value="">All Status</option>
                     <option value="active">Active</option>
@@ -904,7 +917,7 @@
                     <option value="claimed">Claimed</option>
                 </select>
             </div>
-            
+
             <div class="clear-filters">
                 <a href="#" class="clear-filters-btn" onclick="clearAllFilters()">
                     <i class="fas fa-times"></i>
@@ -918,60 +931,59 @@
             <i class="fas fa-info-circle" style="color: var(--primary-color); margin-right: 0.5rem;"></i>
             Showing <strong><span id="resultCount">0</span></strong> items matching your criteria
         </div>
-        
+
         <!-- Items Grid -->
         {% if found_items %}
         <div class="items-grid" id="itemsGrid">
             {% for item in found_items %}
-            <div class="item-card" 
-                 data-title="{{ (item.whatFound or item.whatLost or item.itemType or 'Unknown Item')|lower }}"
-                 data-location="{{ (item.whereFound or item.whereLost or item.location or '')|lower }}"
-                 data-category="{{ (item.category or '')|lower }}"
-                 data-status="{{ item.status|lower }}"
-                 data-brand="{{ (item.brand or '')|lower }}"
-                 data-additional-info="{{ (item.additionalInfo or '')|lower }}">
-                
+            <div class="item-card"
+                data-title="{{ (item.whatFound or item.whatLost or item.itemType or 'Unknown Item')|lower }}"
+                data-location="{{ (item.whereFound or item.whereLost or item.location or '')|lower }}"
+                data-category="{{ (item.category or '')|lower }}" data-status="{{ item.status|lower }}"
+                data-brand="{{ (item.brand or '')|lower }}"
+                data-additional-info="{{ (item.additionalInfo or '')|lower }}">
+
                 <div class="item-status-indicator">
                     <div class="status-badge {{ item.status }}">
                         <div class="status-indicator"></div>
                         {{ item.status|title }}
                     </div>
                 </div>
-                
+
                 <div class="item-image">
                     {% if item.imageUrl %}
-                        <img src="{{ item.imageUrl }}" alt="Found Item Image" loading="lazy">
+                    <img src="{{ item.imageUrl }}" alt="Found Item Image" loading="lazy">
                     {% else %}
-                        <i class="fas fa-camera no-image"></i>
+                    <i class="fas fa-camera no-image"></i>
                     {% endif %}
                 </div>
-                
+
                 <div class="item-content">
                     <h3 class="item-title">
                         {% if item.whatFound %}
-                            {{ item.whatFound }}
+                        {{ item.whatFound }}
                         {% elif item.whatLost %}
-                            {{ item.whatLost }}
+                        {{ item.whatLost }}
                         {% elif item.itemType %}
-                            {{ item.itemType }}
+                        {{ item.itemType }}
                         {% else %}
-                            Unknown Item
+                        Unknown Item
                         {% endif %}
                     </h3>
-                    
+
                     <div class="item-location">
                         <i class="fas fa-map-marker-alt"></i>
                         {% if item.whereFound %}
-                            {{ item.whereFound }}
+                        {{ item.whereFound }}
                         {% elif item.whereLost %}
-                            {{ item.whereLost }}
+                        {{ item.whereLost }}
                         {% elif item.location %}
-                            {{ item.location }}
+                        {{ item.location }}
                         {% else %}
-                            Location not specified
+                        Location not specified
                         {% endif %}
                     </div>
-                    
+
                     <div class="item-meta">
                         {% if item.dateFound or item.dateLost %}
                         <div class="meta-row">
@@ -979,14 +991,14 @@
                             <span class="meta-value">{{ item.dateFound or item.dateLost }}</span>
                         </div>
                         {% endif %}
-                        
+
                         {% if item.category %}
                         <div class="meta-row">
                             <span class="meta-label">Category:</span>
                             <span class="meta-value">{{ item.category }}</span>
                         </div>
                         {% endif %}
-                        
+
                         {% if item.primaryColor %}
                         <div class="meta-row">
                             <span class="meta-label">Color:</span>
@@ -997,30 +1009,41 @@
                         </div>
                         {% endif %}
                     </div>
-                    
+
                     <div class="item-actions">
                         {% if item.email %}
-                        <a href="mailto:{{ item.email }}?subject=Found%20Item%20Inquiry%20-%20{{ item.whatFound or item.whatLost or item.itemType or 'Item' }}&body=Hello%2C%0A%0AI%20believe%20the%20item%20you%20found%20may%20belong%20to%20me.%20Could%20we%20discuss%20this%20further%3F%0A%0AThank%20you%20for%20your%20time." 
-                           class="contact-btn">
+                        <a href="mailto:{{ item.email }}?subject=Found%20Item%20Inquiry%20-%20{{ item.whatFound or item.whatLost or item.itemType or 'Item' }}&body=Hello%2C%0A%0AI%20believe%20the%20item%20you%20found%20may%20belong%20to%20me.%20Could%20we%20discuss%20this%20further%3F%0A%0AThank%20you%20for%20your%20time."
+                            class="contact-btn">
                             <i class="fas fa-envelope"></i>
                             Contact Finder
                         </a>
                         {% endif %}
-                        <button class="alert-btn" onclick="openAlertModal(this)" 
-        data-item-title="{{ item.whatFound or item.whatLost or item.itemType or 'Item' }}" 
-        data-finder-email="{{ item.email }}"
-        data-item-id="{{ item.id }}">
-    <i class="fas fa-bell"></i>
-    Alert
-</button>
-                        
+                        <button class="alert-btn" onclick="openAlertModal(this)"
+                            data-item-title="{{ item.whatFound or item.whatLost or item.itemType or 'Item' }}"
+                            data-finder-email="{{ item.email }}" data-item-id="{{ item.id }}">
+                            <i class="fas fa-bell"></i>
+                            Alert
+                        </button>
+
+                        {% if current_user_email and item.author_email and current_user_email.lower() ==
+                        item.author_email.lower() %}
+                        <form action="{{ url_for('views.delete_item', item_type='found', item_id=item._id) }}"
+                            method="POST" style="display: inline-block;">
+                            <button type="submit" class="alert-btn"
+                                style="background: var(--success-color, #059669); margin-left: 5px;"
+                                onclick="return confirm('Are you sure you want to mark this item as Returned to Owner? This will permanently remove it from the database.')">
+                                <i class="fas fa-check-circle"></i> Returned to Owner
+                            </button>
+                        </form>
+                        {% endif %}
+
                         <button class="details-btn" onclick="toggleDetails(this)" aria-label="Toggle details">
                             <i class="fas fa-chevron-down"></i>
                         </button>
-                        
+
                     </div>
                 </div>
-                
+
                 <div class="detailed-info">
                     <div class="detail-section">
                         <h4>Item Details</h4>
@@ -1031,14 +1054,14 @@
                                 <span class="detail-value">{{ item.timeFound or item.timeLost }}</span>
                             </div>
                             {% endif %}
-                            
+
                             {% if item.brand %}
                             <div class="detail-item">
                                 <span class="detail-label">Brand:</span>
                                 <span class="detail-value">{{ item.brand }}</span>
                             </div>
                             {% endif %}
-                            
+
                             {% if item.additionalInfo %}
                             <div class="detail-item">
                                 <span class="detail-label">Additional Info:</span>
@@ -1047,7 +1070,7 @@
                             {% endif %}
                         </div>
                     </div>
-                    
+
                     <div class="detail-section">
                         <h4>Contact Information</h4>
                         <div class="contact-info">
@@ -1056,39 +1079,42 @@
                                     <span class="detail-label">Finder:</span>
                                     <span class="detail-value">
                                         {% if item.firstName and item.lastName %}
-                                            {{ item.firstName }} {{ item.lastName }}
+                                        {{ item.firstName }} {{ item.lastName }}
                                         {% else %}
-                                            Anonymous
+                                        Anonymous
                                         {% endif %}
                                     </span>
                                 </div>
-                                
+
                                 {% if item.phoneNumber %}
                                 <div class="detail-item">
                                     <span class="detail-label">Phone:</span>
                                     <span class="detail-value">
-                                        <a href="tel:{{ item.phoneNumber }}" style="color: var(--primary-color); text-decoration: none;">
+                                        <a href="tel:{{ item.phoneNumber }}"
+                                            style="color: var(--primary-color); text-decoration: none;">
                                             {{ item.phoneNumber }}
                                         </a>
                                     </span>
                                 </div>
                                 {% endif %}
-                                
+
                                 {% if item.email %}
                                 <div class="detail-item">
                                     <span class="detail-label">Email:</span>
                                     <span class="detail-value">
-                                        <a href="mailto:{{ item.email }}" style="color: var(--primary-color); text-decoration: none;">
+                                        <a href="mailto:{{ item.email }}"
+                                            style="color: var(--primary-color); text-decoration: none;">
                                             {{ item.email }}
                                         </a>
                                     </span>
                                 </div>
                                 {% endif %}
-                                
+
                                 <div class="detail-item">
                                     <span class="detail-label">Submitted:</span>
                                     <span class="detail-value">
-                                        {{ item.submissionTime.strftime('%B %d, %Y at %I:%M %p') if item.submissionTime else 'Unknown' }}
+                                        {{ item.submissionTime.strftime('%B %d, %Y at %I:%M %p') if item.submissionTime
+                                        else 'Unknown' }}
                                     </span>
                                 </div>
                             </div>
@@ -1104,7 +1130,8 @@
                 <i class="fas fa-inbox"></i>
             </div>
             <h2>No Found Items</h2>
-            <p>No items have been registered in the system yet. Be the first to help someone recover their lost belongings.</p>
+            <p>No items have been registered in the system yet. Be the first to help someone recover their lost
+                belongings.</p>
             <a href="{{ url_for('views.submit_found') }}" class="primary-link">
                 <i class="fas fa-plus"></i>
                 Report a Found Item
@@ -1113,67 +1140,71 @@
         {% endif %}
     </div>
     <div class="modal-overlay" id="alertModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h3 class="modal-title">
-                <i class="fas fa-bell"></i>
-                Send Alert to Potential Owner
-            </h3>
-            <button class="modal-close" onclick="closeAlertModal()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        
-        <div class="modal-body">
-            <div id="alertStatus"></div>
-            
-            <p style="color: #64748b; margin-bottom: 1.5rem; font-size: 0.9rem;">
-                Send a message to potential owners who may be looking for this item. Your message will be forwarded to users who have reported similar lost items.
-            </p>
-            
-            <div class="form-group">
-                <label class="form-label" for="senderName">Your Name *</label>
-                <input type="text" id="senderName" class="form-input" placeholder="Enter your full name" required>
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-bell"></i>
+                    Send Alert to Potential Owner
+                </h3>
+                <button class="modal-close" onclick="closeAlertModal()">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            
-            <div class="form-group">
-                <label class="form-label" for="senderEmail">Your Email *</label>
-                <input type="email" id="senderEmail" class="form-input" placeholder="Enter your email address" required>
+
+            <div class="modal-body">
+                <div id="alertStatus"></div>
+
+                <p style="color: #64748b; margin-bottom: 1.5rem; font-size: 0.9rem;">
+                    Send a message to potential owners who may be looking for this item. Your message will be forwarded
+                    to users who have reported similar lost items.
+                </p>
+
+                <div class="form-group">
+                    <label class="form-label" for="senderName">Your Name *</label>
+                    <input type="text" id="senderName" class="form-input" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="senderEmail">Your Email *</label>
+                    <input type="email" id="senderEmail" class="form-input" placeholder="Enter your email address"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="alertMessage">Message to Potential Owner *</label>
+                    <textarea id="alertMessage" class="form-input" rows="4"
+                        placeholder="Describe the item details and how the owner can verify it belongs to them..."
+                        required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="contactPreference">Preferred Contact Method</label>
+                    <select id="contactPreference" class="form-input">
+                        <option value="email">Email</option>
+                        <option value="phone">Phone</option>
+                        <option value="both">Both Email and Phone</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="phoneGroup" style="display: none;">
+                    <label class="form-label" for="senderPhone">Your Phone Number</label>
+                    <input type="tel" id="senderPhone" class="form-input" placeholder="Enter your phone number">
+                </div>
             </div>
-            
-            <div class="form-group">
-                <label class="form-label" for="alertMessage">Message to Potential Owner *</label>
-                <textarea id="alertMessage" class="form-input" rows="4" placeholder="Describe the item details and how the owner can verify it belongs to them..." required></textarea>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeAlertModal()">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </button>
+                <button class="btn btn-primary" onclick="sendAlert()">
+                    <i class="fas fa-paper-plane"></i>
+                    Send Alert
+                </button>
             </div>
-            
-            <div class="form-group">
-                <label class="form-label" for="contactPreference">Preferred Contact Method</label>
-                <select id="contactPreference" class="form-input">
-                    <option value="email">Email</option>
-                    <option value="phone">Phone</option>
-                    <option value="both">Both Email and Phone</option>
-                </select>
-            </div>
-            
-            <div class="form-group" id="phoneGroup" style="display: none;">
-                <label class="form-label" for="senderPhone">Your Phone Number</label>
-                <input type="tel" id="senderPhone" class="form-input" placeholder="Enter your phone number">
-            </div>
-        </div>
-        
-        <div class="modal-footer">
-            <button class="btn btn-secondary" onclick="closeAlertModal()">
-                <i class="fas fa-times"></i>
-                Cancel
-            </button>
-            <button class="btn btn-primary" onclick="sendAlert()">
-                <i class="fas fa-paper-plane"></i>
-                Send Alert
-            </button>
         </div>
     </div>
-</div>
-    
+
     <!-- Back Button -->
     <!-- <a href="{{ url_for('views.welcome') }}" class="back-btn">
         <i class="fas fa-arrow-left"></i>
@@ -1182,7 +1213,7 @@
 
     <script>
         // Initialize the application
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             initializeApp();
         });
 
@@ -1204,7 +1235,7 @@
             const detailedInfo = card.querySelector('.detailed-info');
             const icon = button.querySelector('i');
             const isVisible = detailedInfo.classList.contains('show');
-            
+
             if (isVisible) {
                 detailedInfo.classList.remove('show');
                 icon.className = 'fas fa-chevron-down';
@@ -1224,7 +1255,7 @@
             items.forEach(item => {
                 const location = item.dataset.location;
                 const category = item.dataset.category;
-                
+
                 if (location && location.trim() !== '') {
                     locations.add(location);
                 }
@@ -1291,7 +1322,7 @@
             const locationFilter = document.getElementById('locationFilter').value.toLowerCase();
             const categoryFilter = document.getElementById('categoryFilter').value.toLowerCase();
             const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
-            
+
             const items = document.querySelectorAll('.item-card');
             let visibleCount = 0;
 
@@ -1304,8 +1335,8 @@
                 const additionalInfo = item.dataset.additionalInfo;
 
                 // Check if item matches search term
-                const matchesSearch = !searchTerm || 
-                    title.includes(searchTerm) || 
+                const matchesSearch = !searchTerm ||
+                    title.includes(searchTerm) ||
                     location.includes(searchTerm) ||
                     brand.includes(searchTerm) ||
                     additionalInfo.includes(searchTerm);
@@ -1329,7 +1360,7 @@
         function updateResultsInfo(count) {
             const resultsInfo = document.getElementById('resultsInfo');
             const resultCount = document.getElementById('resultCount');
-            
+
             if (hasActiveFilters()) {
                 resultsInfo.classList.add('show');
                 resultCount.textContent = count;
@@ -1343,7 +1374,7 @@
             const locationFilter = document.getElementById('locationFilter').value;
             const categoryFilter = document.getElementById('categoryFilter').value;
             const statusFilter = document.getElementById('statusFilter').value;
-            
+
             return searchTerm || locationFilter || categoryFilter || statusFilter;
         }
 
@@ -1352,15 +1383,15 @@
             document.getElementById('locationFilter').value = '';
             document.getElementById('categoryFilter').value = '';
             document.getElementById('statusFilter').value = '';
-            
+
             // Show all items
             document.querySelectorAll('.item-card').forEach(item => {
                 item.classList.remove('hidden');
             });
-            
+
             // Hide results info
             document.getElementById('resultsInfo').classList.remove('show');
-            
+
             // Prevent default link behavior
             event.preventDefault();
         }
@@ -1369,12 +1400,12 @@
         document.querySelectorAll('.item-image img').forEach(img => {
             // Set initial opacity to 1 to show images immediately
             img.style.opacity = '1';
-            
-            img.addEventListener('load', function() {
+
+            img.addEventListener('load', function () {
                 this.style.opacity = '1';
             });
-            
-            img.addEventListener('error', function() {
+
+            img.addEventListener('error', function () {
                 console.log('Image failed to load:', this.src);
                 // Show fallback icon if image fails to load
                 const fallback = document.createElement('i');
@@ -1385,7 +1416,7 @@
         });
 
         // Keyboard accessibility for search
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        document.getElementById('searchInput').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 performSearch();
             }
@@ -1395,7 +1426,7 @@
         function scrollToResults() {
             const resultsSection = document.getElementById('itemsGrid');
             if (resultsSection) {
-                resultsSection.scrollIntoView({ 
+                resultsSection.scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
                 });
@@ -1404,7 +1435,7 @@
 
         // Enhanced search with debouncing for better performance
         let searchTimeout;
-        document.getElementById('searchInput').addEventListener('input', function() {
+        document.getElementById('searchInput').addEventListener('input', function () {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(performSearch, 300);
         });
@@ -1412,43 +1443,43 @@
 
         let currentItemData = {};
 
-// Initialize event listeners
-document.addEventListener('DOMContentLoaded', function() {
-    // Contact preference change handler
-    document.getElementById('contactPreference').addEventListener('change', function() {
-        const phoneGroup = document.getElementById('phoneGroup');
-        const value = this.value;
-        
-        if (value === 'phone' || value === 'both') {
-            phoneGroup.style.display = 'block';
-            document.getElementById('senderPhone').required = true;
-        } else {
-            phoneGroup.style.display = 'none';
-            document.getElementById('senderPhone').required = false;
-        }
-    });
-    
-    // Modal close on background click
-    document.getElementById('alertModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeAlertModal();
-        }
-    });
-});
+        // Initialize event listeners
+        document.addEventListener('DOMContentLoaded', function () {
+            // Contact preference change handler
+            document.getElementById('contactPreference').addEventListener('change', function () {
+                const phoneGroup = document.getElementById('phoneGroup');
+                const value = this.value;
 
-function openAlertModal(button) {
-    const itemTitle = button.getAttribute('data-item-title');
-    const finderEmail = button.getAttribute('data-finder-email');
-    const itemId = button.getAttribute('data-item-id');
-    
-    currentItemData = {
-        title: itemTitle,
-        finderEmail: finderEmail,
-        itemId: itemId
-    };
-    
-    // Pre-fill the message with a template
-    const messageTemplate = `Hi! I found a ${itemTitle} and I'm reaching out to see if it might be yours. 
+                if (value === 'phone' || value === 'both') {
+                    phoneGroup.style.display = 'block';
+                    document.getElementById('senderPhone').required = true;
+                } else {
+                    phoneGroup.style.display = 'none';
+                    document.getElementById('senderPhone').required = false;
+                }
+            });
+
+            // Modal close on background click
+            document.getElementById('alertModal').addEventListener('click', function (e) {
+                if (e.target === this) {
+                    closeAlertModal();
+                }
+            });
+        });
+
+        function openAlertModal(button) {
+            const itemTitle = button.getAttribute('data-item-title');
+            const finderEmail = button.getAttribute('data-finder-email');
+            const itemId = button.getAttribute('data-item-id');
+
+            currentItemData = {
+                title: itemTitle,
+                finderEmail: finderEmail,
+                itemId: itemId
+            };
+
+            // Pre-fill the message with a template
+            const messageTemplate = `Hi! I found a ${itemTitle} and I'm reaching out to see if it might be yours. 
 
 To verify ownership, please provide:
 - Specific details about the item
@@ -1458,103 +1489,104 @@ To verify ownership, please provide:
 If this is your item, please contact me with these details and we can arrange for its return.
 
 Best regards`;
-    
-    document.getElementById('alertMessage').value = messageTemplate;
-    document.getElementById('alertModal').classList.add('show');
-    
-    // Clear any previous status messages
-    document.getElementById('alertStatus').innerHTML = '';
-}
 
-function closeAlertModal() {
-    document.getElementById('alertModal').classList.remove('show');
-    
-    // Clear form
-    document.getElementById('senderName').value = '';
-    document.getElementById('senderEmail').value = '';
-    document.getElementById('senderPhone').value = '';
-    document.getElementById('alertMessage').value = '';
-    document.getElementById('contactPreference').value = 'email';
-    document.getElementById('phoneGroup').style.display = 'none';
-    document.getElementById('alertStatus').innerHTML = '';
-}
+            document.getElementById('alertMessage').value = messageTemplate;
+            document.getElementById('alertModal').classList.add('show');
 
-function sendAlert() {
-    const senderName = document.getElementById('senderName').value.trim();
-    const senderEmail = document.getElementById('senderEmail').value.trim();
-    const senderPhone = document.getElementById('senderPhone').value.trim();
-    const message = document.getElementById('alertMessage').value.trim();
-    const contactPreference = document.getElementById('contactPreference').value;
-    const statusDiv = document.getElementById('alertStatus');
-    
-    // Validate required fields
-    if (!senderName || !senderEmail || !message) {
-        statusDiv.innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> Please fill in all required fields.</div>';
-        return;
-    }
-    
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(senderEmail)) {
-        statusDiv.innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> Please enter a valid email address.</div>';
-        return;
-    }
-    
-    // Validate phone if required
-    if ((contactPreference === 'phone' || contactPreference === 'both') && !senderPhone) {
-        statusDiv.innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> Please enter your phone number.</div>';
-        return;
-    }
-    
-    // Prepare alert data for your backend
-    const alertData = {
-        itemId: currentItemData.itemId,
-        itemTitle: currentItemData.title,
-        finderEmail: currentItemData.finderEmail,
-        senderName: senderName,
-        senderEmail: senderEmail,
-        senderPhone: senderPhone,
-        message: message,
-        contactPreference: contactPreference,
-        timestamp: new Date().toISOString()
-    };
-    
-    // Show loading state
-    statusDiv.innerHTML = '<div class="alert alert-success"><i class="fas fa-spinner fa-spin"></i> Sending alert...</div>';
-    
-    // Make API call to your backend
-    fetch('/api/send-alert', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            // Add CSRF token if needed: 'X-CSRFToken': getCsrfToken()
-        },
-        body: JSON.stringify(alertData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            statusDiv.innerHTML = '<div class="alert alert-success"><i class="fas fa-check-circle"></i> Alert sent successfully! Potential owners will be notified.</div>';
-            
-            // Close modal after 2 seconds
-            setTimeout(() => {
-                closeAlertModal();
-            }, 2000);
-        } else {
-            statusDiv.innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> ' + (data.message || 'Failed to send alert. Please try again.') + '</div>';
+            // Clear any previous status messages
+            document.getElementById('alertStatus').innerHTML = '';
         }
-    })
-    .catch(error => {
-        console.error('Error sending alert:', error);
-        statusDiv.innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> Network error. Please check your connection and try again.</div>';
-    });
-}
 
-// Helper function to get CSRF token if you're using CSRF protection
-function getCsrfToken() {
-    return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-}
+        function closeAlertModal() {
+            document.getElementById('alertModal').classList.remove('show');
+
+            // Clear form
+            document.getElementById('senderName').value = '';
+            document.getElementById('senderEmail').value = '';
+            document.getElementById('senderPhone').value = '';
+            document.getElementById('alertMessage').value = '';
+            document.getElementById('contactPreference').value = 'email';
+            document.getElementById('phoneGroup').style.display = 'none';
+            document.getElementById('alertStatus').innerHTML = '';
+        }
+
+        function sendAlert() {
+            const senderName = document.getElementById('senderName').value.trim();
+            const senderEmail = document.getElementById('senderEmail').value.trim();
+            const senderPhone = document.getElementById('senderPhone').value.trim();
+            const message = document.getElementById('alertMessage').value.trim();
+            const contactPreference = document.getElementById('contactPreference').value;
+            const statusDiv = document.getElementById('alertStatus');
+
+            // Validate required fields
+            if (!senderName || !senderEmail || !message) {
+                statusDiv.innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> Please fill in all required fields.</div>';
+                return;
+            }
+
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(senderEmail)) {
+                statusDiv.innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> Please enter a valid email address.</div>';
+                return;
+            }
+
+            // Validate phone if required
+            if ((contactPreference === 'phone' || contactPreference === 'both') && !senderPhone) {
+                statusDiv.innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> Please enter your phone number.</div>';
+                return;
+            }
+
+            // Prepare alert data for your backend
+            const alertData = {
+                itemId: currentItemData.itemId,
+                itemTitle: currentItemData.title,
+                finderEmail: currentItemData.finderEmail,
+                senderName: senderName,
+                senderEmail: senderEmail,
+                senderPhone: senderPhone,
+                message: message,
+                contactPreference: contactPreference,
+                timestamp: new Date().toISOString()
+            };
+
+            // Show loading state
+            statusDiv.innerHTML = '<div class="alert alert-success"><i class="fas fa-spinner fa-spin"></i> Sending alert...</div>';
+
+            // Make API call to your backend
+            fetch('/api/send-alert', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Add CSRF token if needed: 'X-CSRFToken': getCsrfToken()
+                },
+                body: JSON.stringify(alertData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        statusDiv.innerHTML = '<div class="alert alert-success"><i class="fas fa-check-circle"></i> Alert sent successfully! Potential owners will be notified.</div>';
+
+                        // Close modal after 2 seconds
+                        setTimeout(() => {
+                            closeAlertModal();
+                        }, 2000);
+                    } else {
+                        statusDiv.innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> ' + (data.message || 'Failed to send alert. Please try again.') + '</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error sending alert:', error);
+                    statusDiv.innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-triangle"></i> Network error. Please check your connection and try again.</div>';
+                });
+        }
+
+        // Helper function to get CSRF token if you're using CSRF protection
+        function getCsrfToken() {
+            return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        }
     </script>
     {% include 'footer.html' %}
 </body>
+
 </html>

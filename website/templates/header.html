@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +15,8 @@
 
         /* Header Styles */
         header {
-            background: #2c3e50; /* Dark background for header */
+            background: #2c3e50;
+            /* Dark background for header */
             color: white;
             padding: 1rem 0;
             position: fixed;
@@ -150,9 +152,17 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         /* Chatbox Styles */
@@ -192,6 +202,7 @@
                 opacity: 0;
                 transform: translateY(50px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -224,8 +235,16 @@
         }
 
         @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0.3; }
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0.3;
+            }
         }
 
         .close-btn {
@@ -363,10 +382,23 @@
         }
 
         @keyframes typing {
-            0%, 60% { content: ''; }
-            30% { content: '.'; }
-            60% { content: '..'; }
-            90% { content: '...'; }
+
+            0%,
+            60% {
+                content: '';
+            }
+
+            30% {
+                content: '.';
+            }
+
+            60% {
+                content: '..';
+            }
+
+            90% {
+                content: '...';
+            }
         }
 
         /* Route suggestion styles */
@@ -461,35 +493,38 @@
         .chat-messages::-webkit-scrollbar-thumb:hover {
             background: #95a5a6;
         }
+
         .wa-header__logo img {
-    width: 50px;  /* Set the width for your logo */
-    height: auto;  /* Maintain the aspect ratio */
-    object-fit: contain;
-    margin-right: 10px;  /* Space between the logo and title */
-}
+            width: 50px;
+            /* Set the width for your logo */
+            height: auto;
+            /* Maintain the aspect ratio */
+            object-fit: contain;
+            margin-right: 10px;
+            /* Space between the logo and title */
+        }
     </style>
 </head>
+
 <body>
     <!-- Header -->
     <header>
         <div class="container">
             <nav>
                 <div class="wa-header__logo">
-        <img src="/static/assets/foundit.png" alt="Logo" class="logo">
-    </div>
-             
-                <a href="#" class="logo">FoundiT</a>
-                   
+                    <img src="/static/assets/foundit.png" alt="Logo" class="logo">
+                </div>
+                <a href="/welcome" class="logo">FoundiT</a>
                 <ul class="nav-links">
                     <li><a href="/welcome">Home</a></li>
-                    <li><a href="#features">Lost Items</a></li>
-                    <li><a href="#how-it-works">Found Items</a></li>
-                    <li><a href="contact">Contact</a></li>
+                    <li><a href="/lost-items">Lost Items</a></li>
+                    <li><a href="/found-items">Found Items</a></li>
+                    <li><a href="/contact">Contact</a></li>
                 </ul>
 
                 <div class="auth-buttons">
                     <a href="/logout" class="btn btn-outline">Logout</a>
-                    
+
                     <!-- Notification Button -->
                     <button class="notification-btn" onclick="toggleChatbox()">
                         <img src="/static/assets/bot.png" alt="chatbot" class="notification-icon">
@@ -516,10 +551,14 @@
                     <div class="message-bubble">
                         Welcome to FoundiT! I can help you navigate our website. Try asking me:
                         <div class="quick-actions">
-                            <div class="quick-action" onclick="sendQuickMessage('I lost something')">I lost something</div>
-                            <div class="quick-action" onclick="sendQuickMessage('I found something')">I found something</div>
-                            <div class="quick-action" onclick="sendQuickMessage('View lost items')">View lost items</div>
-                            <div class="quick-action" onclick="sendQuickMessage('Contact support')">Contact support</div>
+                            <div class="quick-action" onclick="sendQuickMessage('I lost something')">I lost something
+                            </div>
+                            <div class="quick-action" onclick="sendQuickMessage('I found something')">I found something
+                            </div>
+                            <div class="quick-action" onclick="sendQuickMessage('View lost items')">View lost items
+                            </div>
+                            <div class="quick-action" onclick="sendQuickMessage('Contact support')">Contact support
+                            </div>
                         </div>
                     </div>
                     <div class="message-time">Just now</div>
@@ -531,16 +570,11 @@
             </div>
 
             <div class="chat-input-container">
-                <input 
-                    type="text" 
-                    class="chat-input" 
-                    id="chatInput" 
-                    placeholder="Ask me how to navigate the website..."
-                    onkeypress="handleKeyPress(event)"
-                >
+                <input type="text" class="chat-input" id="chatInput" placeholder="Ask me how to navigate the website..."
+                    onkeypress="handleKeyPress(event)">
                 <button class="send-btn" id="sendBtn" onclick="sendMessage()">
                     <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                     </svg>
                 </button>
             </div>
@@ -666,7 +700,7 @@
 
         function detectIntent(message) {
             const lowerMessage = message.toLowerCase();
-            
+
             for (const [intent, patterns] of Object.entries(intentPatterns)) {
                 for (const pattern of patterns) {
                     if (pattern.test(message)) {
@@ -674,7 +708,7 @@
                     }
                 }
             }
-            
+
             // Fallback: keyword matching
             for (const [routeKey, routeInfo] of Object.entries(routeMap)) {
                 for (const keyword of routeInfo.keywords) {
@@ -683,7 +717,7 @@
                     }
                 }
             }
-            
+
             return null;
         }
 
@@ -710,13 +744,13 @@
             const scores = {};
             for (const [routeKey, routeInfo] of Object.entries(routeMap)) {
                 let score = 0;
-                
+
                 for (const keyword of routeInfo.keywords) {
                     if (lowerMessage.includes(keyword.toLowerCase())) {
                         score += keyword.length; // Longer matches score higher
                     }
                 }
-                
+
                 if (score > 0) {
                     scores[routeKey] = score;
                 }
@@ -750,7 +784,7 @@
             }
 
             let response = "Here's what I found for you:\n\n";
-            
+
             routes.forEach(route => {
                 response += `<div class="route-suggestion" onclick="navigateToRoute('${route.route}')">
                     <div class="route-title">${route.title}</div>
@@ -764,7 +798,7 @@
         function toggleChatbox() {
             const overlay = document.getElementById('chatboxOverlay');
             const badge = document.querySelector('.notification-badge');
-            
+
             if (!isOpen) {
                 overlay.classList.add('active');
                 isOpen = true;
@@ -797,7 +831,7 @@
         function sendMessage() {
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
-            
+
             if (!message) return;
 
             addMessage(message, 'user');
@@ -829,7 +863,7 @@
 
         function sendQuickMessage(message) {
             addMessage(message, 'user');
-            
+
             showTyping();
             setTimeout(() => {
                 hideTyping();
@@ -843,14 +877,14 @@
             const messagesContainer = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${sender}`;
-            
-            const currentTime = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            
+
+            const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
             messageDiv.innerHTML = `
                 <div class="message-bubble">${text}</div>
                 <div class="message-time">${currentTime}</div>
             `;
-            
+
             messagesContainer.appendChild(messageDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
@@ -871,11 +905,12 @@
         }
 
         // Close chatbox with Escape key
-        document.addEventListener('keydown', function(event) {
+        document.addEventListener('keydown', function (event) {
             if (event.key === 'Escape' && isOpen) {
                 toggleChatbox();
             }
         });
     </script>
 </body>
+
 </html>
