@@ -35,12 +35,15 @@ It is highly recommended to use a virtual environment to manage dependencies loc
 # For Windows
 python -m venv venv
 venv\Scripts\activate
-
 # For Mac/Linux
 python3 -m venv venv
 source venv/bin/activate
 ```
-
+If venv not activated,
+```bash
+#windows
+Set-ExecutionPolicy Unrestricted -Scope Process
+```
 ### Step 3: Install Dependencies
 With the virtual environment activated, install the required packages:
 ```bash
@@ -68,6 +71,8 @@ AWS_REGION="AWS_REGION"
 If you plan to use the similarity AI search, you will need to download or recreate the PyTorch/HuggingFace model files and place them in the following directories:
 - `website/models/finetuned_clip.pt`
 - `website/models/finetuned_sentence_bert/model.safetensors`
+
+For this replace the `website/models/` with your own model files which you downloaded from google drive link which I sent for the MVP.
 
 ### Step 6: Run the Application
 Finally, start the Flask development server:
