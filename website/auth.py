@@ -83,6 +83,9 @@ def login():
 
         # Verify password
         if bcrypt.checkpw(password.encode("utf-8"), user["password"].encode("utf-8")):
+            from flask import session
+            session['email'] = user['email']
+            session['first_name'] = user['firstName']
             flash("Login successful!", "success")
             return redirect(url_for("views.welcome"))  # Fixed: redirect to welcome
         else:
@@ -97,6 +100,9 @@ def login():
 # -------------------------
 @auth.route('/logout')
 def logout():
+    from flask import session
+    session.pop('email', None)
+    session.pop('first_name', None)
     flash("You have been logged out", "info")
     return redirect(url_for("views.home"))
 

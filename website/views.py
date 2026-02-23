@@ -22,7 +22,7 @@ views = Blueprint('views', __name__)
 S3_BUCKET = os.getenv('S3_BUCKET_NAME')
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-AWS_REGION = 'eu-north-1'
+AWS_REGION = os.getenv('AWS_REGION', 'us-east-1')
 
 # Initialize S3 client
 s3_client = boto3.client(
@@ -171,12 +171,14 @@ def submit_initial_lost():
             return redirect(url_for('views.welcome'))
         
         # Create initial lost item record
+        from flask import session
         initial_data = {
             'itemType': item_type,
             'location': location,
             'submissionTime': datetime.now(),
             'status': 'incomplete',
-            'type': 'lost'
+            'type': 'lost',
+            'author_email': session.get('user_email') or session.get('email')
         }
         
         # Insert into database
@@ -487,12 +489,14 @@ def submit_initial_found():
             return redirect(url_for('views.welcome'))
         
         # Create initial found item record
+        from flask import session
         initial_data = {
             'itemType': item_type,
             'location': location,
             'submissionTime': datetime.now(),
             'status': 'incomplete',
-            'type': 'found'
+            'type': 'found',
+            'author_email': session.get('user_email') or session.get('email')
         }
         
         # Insert into database
@@ -520,11 +524,17 @@ from flask import make_response
 @views.route('/lost-items')
 def lost_items():
     """List all lost items from the database"""
+    from flask import session
     try:
         db = current_app.db
         lost_items_list = list(db.lostItems.find().sort('submissionTime', -1))
         
-        response = make_response(render_template('viewLostItems.html', lost_items=lost_items_list))
+        current_user_email = session.get('user_email') or session.get('email')
+        print(f"DEBUG: Rendering lost items. Current session email: {current_user_email}")
+        for item in lost_items_list:
+            print(f"DEBUG: Found lost item {item.get('_id')} with email: {item.get('email')}")
+        
+        response = make_response(render_template('viewLostItems.html', lost_items=lost_items_list, current_user_email=current_user_email))
         response.headers['Content-Type'] = 'text/html'
         return response
         
@@ -535,11 +545,17 @@ def lost_items():
 @views.route('/found-items')
 def found_items():
     """List all found items from the database"""
+    from flask import session
     try:
         db = current_app.db
         found_items_list = list(db.foundItems.find().sort('submissionTime', -1))
         
-        response = make_response(render_template('viewFoundItems.html', found_items=found_items_list))
+        current_user_email = session.get('user_email') or session.get('email')
+        print(f"DEBUG: Rendering found items. Current session email: {current_user_email}")
+        for item in found_items_list:
+             print(f"DEBUG: Found found item {item.get('_id')} with email: {item.get('email')}")
+        
+        response = make_response(render_template('viewFoundItems.html', found_items=found_items_list, current_user_email=current_user_email))
         response.headers['Content-Type'] = 'text/html'
         return response
         
@@ -657,3 +673,37 @@ def submit_detailed_found():
         traceback.print_exc()
         flash('An error occurred. Please try again.', 'error')
         return redirect(request.url)
+
+@views.route('/delete-item/<item_type>/<item_id>', methods=['POST'])
+def delete_item(item_type, item_id):
+    """Delete an item when it is marked as found or returned to owner"""
+    from bson.objectid import ObjectId
+    import traceback
+    db = current_app.db
+    
+    try:
+        print(f"Attempting to delete {item_type} item with ID: {item_id}")
+        
+        if item_type == 'lost':
+            result = db.lostItems.delete_one({'_id': ObjectId(item_id)})
+            if result.deleted_count > 0:
+                flash('Lost item marked as found and successfully removed!', 'success')
+            else:
+                flash('Item not found in database.', 'error')
+            
+        elif item_type == 'found':
+            result = db.foundItems.delete_one({'_id': ObjectId(item_id)})
+            if result.deleted_count > 0:
+                flash('Found item marked as returned to owner and successfully removed!', 'success')
+            else:
+                flash('Item not found in database.', 'error')
+            
+        else:
+            flash('Invalid item type specified.', 'error')
+            
+    except Exception as e:
+        print(f"Error deleting {item_type} item {item_id}: {e}")
+        traceback.print_exc()
+        flash('An error occurred while removing the item. Please try again.', 'error')
+        
+    return redirect(request.referrer or url_for('views.welcome'))
