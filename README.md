@@ -72,10 +72,11 @@ If you plan to use the similarity AI search, you will need to download or recrea
 - `website/models/finetuned_clip.pt`
 - `website/models/finetuned_sentence_bert/model.safetensors`
 
-For this replace the `website/models/` with your own model files which you downloaded from google drive link which I sent for the MVP.
+For this replace the `website/models/` and `website/datasets/` with your own files which you downloaded from google drive link which I sent for the MVP.
 
-### Step 6: Run the Application
+### Step 6: Run the Application 
 Finally, start the Flask development server:
+
 ```bash
 python main.py
 ```
