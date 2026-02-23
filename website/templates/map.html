@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Map - Submit Lost Property</title>
+    
+    <!-- Leaflet CSS for the map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    
+    <style>
+        /* Set the size of the map */
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+        
+        /* Styling for the location search form */
+        .location-search {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .location-search input {
+            width: 60%;
+            padding: 8px;
+            font-size: 16px;
+        }
+        
+        .location-search button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .location-search button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Find Lost Property Location</h2>
+
+        <!-- Location input field -->
+        <div class="location-search">
+            <input type="text" id="location" placeholder="Enter location (e.g., Colombo)">
+            <button onclick="geocodeLocation()">Search Location</button>
+        </div>
+
+        <!-- Map container -->
+        <div id="map"></div>
+    </div>
+
+    <!-- Leaflet JS for map functionality -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <script>
+        let map, marker, geocoder;
+
+        // Initialize the map centered on Colombo, Sri Lanka (default location)
+        function initMap() {
+            map = L.map('map').setView([6.9271, 79.8612], 13); // Default coordinates for Colombo
+
+            // Add OpenStreetMap tiles to the map
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Create a draggable marker at the default location
+            marker = L.marker([6.9271, 79.8612], { draggable: true }).addTo(map)
+                .bindPopup('Colombo')
+                .openPopup();
+
+            // Initialize the geocoder
+            geocoder = new L.Control.Geocoder.Nominatim();
+
+            // Update location in input field when the marker is dragged
+            marker.on('dragend', function () {
+                let latLng = marker.getLatLng();
+                geocodeReverse(latLng.lat, latLng.lng); // Reverse geocode on marker drag
+            });
+        }
+
+        // Geocode the entered location and display it on the map
+        function geocodeLocation() {
+            let location = document.getElementById('location').value;
+
+            // Use Nominatim API to search for the entered location
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        let lat = parseFloat(data[0].lat);
+                        let lon = parseFloat(data[0].lon);
+
+                        // Center the map on the new location and move the marker
+                        map.setView([lat, lon], 13);
+                        marker.setLatLng([lat, lon]);
+                        marker.bindPopup(location).openPopup();
+                        
+                        // Update the input field with the new location (if needed)
+                        document.getElementById('location').value = location;
+                    } else {
+                        alert('Location not found!');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Reverse geocoding to get the location name from coordinates
+        function geocodeReverse(lat, lon) {
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&addressdetails=1`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.address) {
+                        let address = data.address.city || data.address.town || data.address.village || 'Unknown location';
+                        document.getElementById('location').value = address; // Update the input field with the location name
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Initialize the map on page load
+        window.onload = initMap;
+    </script>
+</body>
+</html>

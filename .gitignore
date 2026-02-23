@@ -1,0 +1,66 @@
+# Python/Flask
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+.venv/
+env/
+.env
+
+# Models and Large Files
+*.pt
+*.pth
+*.h5
+*.hdf5
+*.onnx
+*.safetensors
+*.ckpt
+*.bin
+models/
+website/models/
+model/
+
+# Datasets and Media
+datasets/
+website/datasets/
+website/static/uploads/
+*.mp4
+*.avi
+*.mkv
+
+# Databases
+*.db
+*.sqlite3
+*.sqlite
+
+# IDEs and OS Files
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Test coverage
+test_results.json
+.coverage
