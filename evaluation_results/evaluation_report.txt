@@ -1,0 +1,87 @@
+======================================================================
+  FOUNDit AI - Comprehensive Evaluation Report (v2)
+======================================================================
+  Generated: 2026-02-24 03:50:18
+  Test Pairs: 15 matches + 15 non-matches = 30 total
+  Decision Threshold: 0.65
+  Hybrid Weights: Text=0.65 | Image=0.35
+  Model Load Time: 19.50s
+======================================================================
+
+1. CLASSIFICATION PERFORMANCE
+--------------------------------------------------
+  Model                       Acc     Prec   Recall       F1      AUC
+  ---------------------- -------- -------- -------- -------- --------
+  Keyword Search           53.3%  100.0%    6.7%   12.5%   0.991
+  Text Only (SBERT)        96.7%   93.8%  100.0%   96.8%   0.991
+  Image Only (CLIP)        90.0%   83.3%  100.0%   90.9%   0.978
+  FOUNDit Hybrid           90.0%   83.3%  100.0%   90.9%   0.964
+
+2. CONFUSION MATRIX (FOUNDit Hybrid @ threshold=0.65)
+--------------------------------------------------
+  True Positives  (TP):  15  | Correctly matched items
+  True Negatives  (TN):  12  | Correctly rejected non-matches
+  False Positives (FP):   3  | Incorrectly flagged as matches
+  False Negatives (FN):   0  | Missed actual matches
+
+3. MODEL COMPARISON
+--------------------------------------------------
+  Hybrid improvement over Keyword: +69%
+  Hybrid improvement over Text-Only: +-7%
+
+4. INFERENCE LATENCY
+--------------------------------------------------
+    1 items: Total=0.021s | Avg/item=20.6ms
+   10 items: Total=0.066s | Avg/item=6.6ms
+  100 items: Total=0.480s | Avg/item=4.8ms
+
+5. SCORE STATISTICS
+--------------------------------------------------
+  Matching pairs    - Mean: 1.000 | Std: 0.001 | Min: 0.997 | Max: 1.000
+  Non-matching pairs- Mean: 0.497 | Std: 0.218 | Min: 0.321 | Max: 1.000
+  Score Separation  : 0.503 (higher = better discrimination)
+
+6. INDIVIDUAL PAIR SCORES (Hybrid)
+--------------------------------------------------
+    #  Type            Score  Prediction    Correct
+    1  Match           1.000  Match         [Y]
+    2  Match           1.000  Match         [Y]
+    3  Match           1.000  Match         [Y]
+    4  Match           1.000  Match         [Y]
+    5  Match           1.000  Match         [Y]
+    6  Match           1.000  Match         [Y]
+    7  Match           1.000  Match         [Y]
+    8  Match           1.000  Match         [Y]
+    9  Match           1.000  Match         [Y]
+   10  Match           1.000  Match         [Y]
+   11  Match           1.000  Match         [Y]
+   12  Match           1.000  Match         [Y]
+   13  Match           1.000  Match         [Y]
+   14  Match           1.000  Match         [Y]
+   15  Match           0.997  Match         [Y]
+   16  Non-Match       0.341  Non-Match     [Y]
+   17  Non-Match       0.480  Non-Match     [Y]
+   18  Non-Match       0.343  Non-Match     [Y]
+   19  Non-Match       0.375  Non-Match     [Y]
+   20  Non-Match       0.438  Non-Match     [Y]
+   21  Non-Match       0.321  Non-Match     [Y]
+   22  Non-Match       0.419  Non-Match     [Y]
+   23  Non-Match       0.398  Non-Match     [Y]
+   24  Non-Match       0.444  Non-Match     [Y]
+   25  Non-Match       0.331  Non-Match     [Y]
+   26  Non-Match       0.473  Non-Match     [Y]
+   27  Non-Match       0.342  Non-Match     [Y]
+   28  Non-Match       0.808  Match         [N]
+   29  Non-Match       1.000  Match         [N]
+   30  Non-Match       0.937  Match         [N]
+
+======================================================================
+  OUTPUT FILES GENERATED:
+======================================================================
+  [OK] confusion_matrix.png
+  [OK] roc_curve.png
+  [OK] model_comparison.png
+  [OK] latency_benchmark.png
+  [OK] score_distribution.png
+  [OK] evaluation_report.txt
+======================================================================
