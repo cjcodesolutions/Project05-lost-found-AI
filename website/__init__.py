@@ -21,6 +21,9 @@ def create_app():
         # Continue without crashing
         app.db = None
 
+    from .indexed_similarity import register_commands
+    register_commands(app)
+
     # Register blueprints
     from .views import views
     from .auth import auth

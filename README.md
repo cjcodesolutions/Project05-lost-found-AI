@@ -100,3 +100,69 @@ You should see output indicating the routes and the server running. Open your br
 - **Missing Module Error:** Ensure you activated the virtual environment (`venv`) before running `pip install` and `python main.py`.
 - **Database Connection Error:** Double check your `MONGO_URL` in the `.env` file string.
 - **Git Timeout Issues:** Large files are excluded via `.gitignore`. If you add new models, ensure they are also ignored.
+
+## Persistent vector search (pgvector + HNSW)
+
+Similarity search now encodes each completed report once on save. PostgreSQL
+stores only its MongoDB item ID, item type, and a vector—no source descriptions,
+image URLs, or contact information. MongoDB still stores the report fields used
+by the forms and results pages. This change does not erase existing report text.
+
+Use PostgreSQL with the pgvector extension installed (0.5 or newer). For local
+ development, for example:
+
+```bash
+docker run --name foundit-vectors \
+  -e POSTGRES_DB=foundit -e POSTGRES_USER=foundit \
+  -e POSTGRES_PASSWORD=local-development-only \
+  -p 127.0.0.1:5432:5432 -v foundit-vectors:/var/lib/postgresql/data \
+  -d pgvector/pgvector:pg16
+```
+
+Install `requirements.txt`, keep the existing MongoDB/S3 settings, and add this
+to `.env` (use your actual PostgreSQL credentials in deployments):
+
+```dotenv
+VECTOR_DATABASE_URL=postgresql://foundit:local-development-only@localhost:5432/foundit
+```
+
+Initialize the schema and index, then encode existing active reports:
+
+```bash
+flask --app main init-vector-db
+flask --app main backfill-vectors
+```
+
+The schema initialization requires permission to enable `vector` and create tables
+and indexes. Runtime access only needs read/write permissions on `item_embeddings`.
+Backfill skips existing vectors and reports failures; rerun after fixing failures.
+Legacy S3 presigned URLs may have expired and must be refreshed before backfilling.
+Reports written directly to MongoDB outside this app also require backfilling.
+
+Vectors concatenate normalized MiniLM text (384 dimensions) and CLIP image
+(512 dimensions) embeddings with equal weight. Missing modalities use zero blocks.
+HNSW searches cosine distance with `ef_search=200`, retrieves up to 100 candidates
+for the current routes, then fetches only active matching reports from MongoDB.
+Searches reuse the saved lost-report vector; they do not encode targets or download
+images. Similarity scores now represent combined-vector cosine similarity, replacing
+the previous cross-modal scoring and category/color/brand bonuses. The default
+threshold remains 0.5 and should be calibrated against your own labeled matches.
+HNSW is approximate; deleted or inactive candidates can reduce result count.
+
+Model changes require rebuilding **all** vectors with
+`flask --app main backfill-vectors --force`; avoid serving searches during a rebuild
+because embeddings from different model versions are not comparable. Dimensions
+are fixed to the current models. PostgreSQL and MongoDB writes are not one atomic
+transaction: saved reports with failed indexing need `backfill-vectors` to recover.
+Updated vectors are invalidated before report edits to prevent stale matches.
+
+Run dependency-free unit checks with:
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+For live verification, inspect `EXPLAIN (ANALYZE, BUFFERS)` for a representative
+`SELECT item_id FROM item_embeddings WHERE item_type = 'found'
+ORDER BY embedding <=> '[your 896-dimensional vector]'::vector LIMIT 100;`.
+PostgreSQL may choose a sequential scan for very small tables.

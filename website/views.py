@@ -8,11 +8,7 @@ import uuid
 from dotenv import load_dotenv
 from bson import ObjectId
 
-# Import the updated similarity service
-from .similarity_service import FineTunedSimilarityService
-
-# Initialize the fine-tuned similarity service
-similarity_service = FineTunedSimilarityService(fine_tune=False)
+from .indexed_similarity import index_item, find_matches, store
 
 load_dotenv()
 
@@ -295,6 +291,7 @@ def submit_detailed_lost():
         item_id = request.form.get('item_id')
         if item_id:
             from bson import ObjectId
+            store.delete('lost', item_id)
             result = db.lostItems.update_one(
                 {'_id': ObjectId(item_id)}, 
                 {'$set': detailed_data}
@@ -310,32 +307,9 @@ def submit_detailed_lost():
         # NEW: Check for similar items in found items database using fine-tuned models
         print("=== STARTING SIMILARITY CHECK WITH FINE-TUNED MODELS ===")
         try:
-            # Get all found items for comparison
-            found_items = list(db.foundItems.find({'status': 'active'}))
-            print(f"Found {len(found_items)} active found items for comparison")
-            
-            # Create structured query data
-            query_data = {
-                'whatLost': detailed_data['whatLost'],
-                'category': detailed_data['category'],
-                'brand': detailed_data['brand'] or '',
-                'primaryColor': detailed_data['primaryColor'] or '',
-                'secondaryColor': detailed_data['secondaryColor'] or '',
-                'whereLost': detailed_data['whereLost'],
-                'additionalInfo': detailed_data['additionalInfo'] or ''
-            }
-            
-            print(f"Query data: {query_data}")
-            print(f"Query image URL: {image_url}")
-            
-            # Find similar items with fine-tuned models
-            similar_items = similarity_service.find_similar_items_structured(
-                query_image_url=image_url,
-                query_data=query_data,
-                database_items=found_items,
-                top_k=10
-            )
-            
+            index_item('lost', saved_item_id, detailed_data)
+            similar_items = find_matches(db, saved_item_id, top_k=10)
+
             if similar_items:
                 print(f"Found {len(similar_items)} similar items using fine-tuned models")
                 for item, score in similar_items[:3]:
@@ -376,26 +350,8 @@ def suggestions(lost_item_id):
             flash('Lost item not found', 'error')
             return redirect(url_for('views.welcome'))
         
-        # Get all found items
-        found_items = list(db.foundItems.find({'status': 'active'}))
-        
-        # Create query data
-        query_data = {
-            'whatLost': lost_item.get('whatLost', ''),
-            'category': lost_item.get('category', ''),
-            'brand': lost_item.get('brand', ''),
-            'primaryColor': lost_item.get('primaryColor', ''),
-            'additionalInfo': lost_item.get('additionalInfo', '')
-        }
-        
-        # Find similar items using fine-tuned models
-        similar_items = similarity_service.find_similar_items_structured(
-            query_image_url=lost_item.get('imageUrl'),
-            query_data=query_data,
-            database_items=found_items,
-            top_k=10
-        )
-        
+        similar_items = find_matches(db, lost_item_id, top_k=10)
+
         # Filter items with similarity > 0.1
         filtered_suggestions = [(item, score) for item, score in similar_items if score > 0.1]
         
@@ -421,26 +377,8 @@ def api_similar_items(item_id):
         if not item:
             return jsonify({'error': 'Item not found'}), 404
         
-        # Get found items
-        found_items = list(db.foundItems.find({'status': 'active'}))
-        
-        # Create query data
-        query_data = {
-            'whatLost': item.get('whatLost', ''),
-            'category': item.get('category', ''),
-            'brand': item.get('brand', ''),
-            'primaryColor': item.get('primaryColor', ''),
-            'additionalInfo': item.get('additionalInfo', '')
-        }
-        
-        # Find similar items
-        similar_items = similarity_service.find_similar_items_structured(
-            query_image_url=item.get('imageUrl'),
-            query_data=query_data,
-            database_items=found_items,
-            top_k=5
-        )
-        
+        similar_items = find_matches(db, item_id, top_k=5)
+
         # Format response
         response_data = []
         for found_item, score in similar_items:
@@ -654,6 +592,7 @@ def submit_detailed_found():
         item_id = request.form.get('item_id')
         if item_id:
             from bson import ObjectId
+            store.delete('found', item_id)
             result = db.foundItems.update_one(
                 {'_id': ObjectId(item_id)}, 
                 {'$set': detailed_data}
@@ -664,6 +603,13 @@ def submit_detailed_found():
             result = db.foundItems.insert_one(detailed_data)
             print(f"Inserted new found item record with ID: {result.inserted_id}")
         
+        saved_item_id = item_id or str(result.inserted_id)
+        try:
+            index_item('found', saved_item_id, detailed_data)
+        except Exception:
+            current_app.logger.exception('Report saved but vector indexing failed')
+            flash('Report saved. Similarity indexing is pending; an administrator must run backfill-vectors.', 'warning')
+
         flash('Found item submitted successfully! Thank you for helping reunite lost items with their owners.', 'success')
         return redirect(url_for('views.welcome'))
         
@@ -685,6 +631,7 @@ def delete_item(item_type, item_id):
         print(f"Attempting to delete {item_type} item with ID: {item_id}")
         
         if item_type == 'lost':
+            store.delete('lost', item_id)
             result = db.lostItems.delete_one({'_id': ObjectId(item_id)})
             if result.deleted_count > 0:
                 flash('Lost item marked as found and successfully removed!', 'success')
@@ -692,6 +639,7 @@ def delete_item(item_type, item_id):
                 flash('Item not found in database.', 'error')
             
         elif item_type == 'found':
+            store.delete('found', item_id)
             result = db.foundItems.delete_one({'_id': ObjectId(item_id)})
             if result.deleted_count > 0:
                 flash('Found item marked as returned to owner and successfully removed!', 'success')
